@@ -9,7 +9,7 @@ public class TypeUpdateJson implements TypeUpdate {
 	private Long version;
 	private String name;
 
-	@NotNull
+	@NotNull(message = "type.validation.error.version.null")
 	public Long getVersion() {
 		return version;
 	}

@@ -16,7 +16,7 @@ public class TypePatchJson implements TypePatch {
 		return Optional.ofNullable(name);
 	}
 
-	@NotNull
+	@NotNull(message = "type.validation.error.version.null")
 	public Long getVersion() {
 		return version;
 	}

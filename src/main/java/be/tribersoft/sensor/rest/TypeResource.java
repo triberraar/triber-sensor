@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +36,7 @@ public class TypeResource {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{uuid}")
-	public Type get(@PathVariable("uuid") @NotNull @Valid String uuid) {
+	public Type get(@PathVariable("uuid") String uuid) {
 		return typeRepository.getByUuid(uuid);
 	}
 

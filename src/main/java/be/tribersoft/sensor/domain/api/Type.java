@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public interface Type {
 
-	@NotNull
+	@NotNull(message = "type.validation.error.name.null")
 	String getName();
 
 	String getUuid();
