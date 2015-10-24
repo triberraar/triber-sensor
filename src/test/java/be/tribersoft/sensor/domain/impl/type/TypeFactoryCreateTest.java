@@ -12,7 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import be.tribersoft.sensor.domain.api.type.TypeCreate;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TypeFactoryTest {
+public class TypeFactoryCreateTest {
 
 	private static final String NAME = "name";
 
