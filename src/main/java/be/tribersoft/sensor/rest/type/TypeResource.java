@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.rest;
+package be.tribersoft.sensor.rest.type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.tribersoft.sensor.domain.api.Type;
-import be.tribersoft.sensor.domain.api.TypeRepository;
-import be.tribersoft.sensor.service.api.TypeService;
+import be.tribersoft.sensor.domain.api.type.Type;
+import be.tribersoft.sensor.domain.api.type.TypeRepository;
+import be.tribersoft.sensor.service.api.type.TypeService;
 
 @RestController
 @RequestMapping("/type")
@@ -30,13 +30,13 @@ public class TypeResource {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public Resources<Resource<TypeToJsonAdapter>> all() {
-		List<Resource<TypeToJsonAdapter>> sdf = typeRepository.all().stream().map(type -> {
+		List<Resource<TypeToJsonAdapter>> typeResource = typeRepository.all().stream().map(type -> {
 			return new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(this.getClass()).slash(type.getId()).withSelfRel());
 		}).collect(Collectors.toList());
 
-		Resources<Resource<TypeToJsonAdapter>> resourcesType = new Resources<>(sdf);
-		resourcesType.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).all()).withSelfRel());
-		return resourcesType;
+		Resources<Resource<TypeToJsonAdapter>> typeResources = new Resources<>(typeResource);
+		typeResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).all()).withSelfRel());
+		return typeResources;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

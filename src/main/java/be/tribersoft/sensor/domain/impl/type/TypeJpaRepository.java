@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain;
+package be.tribersoft.sensor.domain.impl.type;
 
 import java.util.List;
 import java.util.Optional;

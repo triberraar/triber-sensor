@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain.api;
+package be.tribersoft.sensor.domain.api.type;
 
 public interface TypeFacade {
 

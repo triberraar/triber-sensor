@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain;
+package be.tribersoft.sensor.domain.impl.type;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,9 +6,9 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import be.tribersoft.sensor.domain.api.TypeRepository;
 import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException;
-import be.tribersoft.sensor.domain.api.exception.TypeNotFoundException;
+import be.tribersoft.sensor.domain.api.type.TypeRepository;
+import be.tribersoft.sensor.domain.api.type.exception.TypeNotFoundException;
 
 @Named
 public class TypeRepositoryImpl implements TypeRepository {

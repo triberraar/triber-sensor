@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain.api.exception;
+package be.tribersoft.sensor.domain.api.type.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

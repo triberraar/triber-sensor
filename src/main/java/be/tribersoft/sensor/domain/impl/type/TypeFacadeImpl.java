@@ -1,13 +1,13 @@
-package be.tribersoft.sensor.domain;
+package be.tribersoft.sensor.domain.impl.type;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import be.tribersoft.sensor.domain.api.TypeCreate;
-import be.tribersoft.sensor.domain.api.TypeFacade;
-import be.tribersoft.sensor.domain.api.TypePatch;
-import be.tribersoft.sensor.domain.api.TypeUpdate;
-import be.tribersoft.sensor.domain.api.TypeUpdater;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeFacade;
+import be.tribersoft.sensor.domain.api.type.TypePatch;
+import be.tribersoft.sensor.domain.api.type.TypeUpdate;
+import be.tribersoft.sensor.domain.api.type.TypeUpdater;
 
 @Named
 public class TypeFacadeImpl implements TypeFacade {

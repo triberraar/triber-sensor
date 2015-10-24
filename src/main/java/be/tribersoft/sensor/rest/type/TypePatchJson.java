@@ -1,10 +1,10 @@
-package be.tribersoft.sensor.rest;
+package be.tribersoft.sensor.rest.type;
 
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
-import be.tribersoft.sensor.domain.api.TypePatch;
+import be.tribersoft.sensor.domain.api.type.TypePatch;
 
 public class TypePatchJson implements TypePatch {
 

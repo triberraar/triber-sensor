@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.rest;
+package be.tribersoft.sensor.rest.type;
 
 import javax.validation.constraints.NotNull;
 

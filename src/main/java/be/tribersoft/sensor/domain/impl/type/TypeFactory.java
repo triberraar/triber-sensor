@@ -1,9 +1,9 @@
-package be.tribersoft.sensor.domain;
+package be.tribersoft.sensor.domain.impl.type;
 
 import javax.inject.Named;
 import javax.validation.Valid;
 
-import be.tribersoft.sensor.domain.api.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
 
 @Named
 public class TypeFactory {

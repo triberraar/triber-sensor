@@ -1,14 +1,14 @@
-package be.tribersoft.sensor.service;
+package be.tribersoft.sensor.service.impl.type;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import be.tribersoft.sensor.domain.api.TypeCreate;
-import be.tribersoft.sensor.domain.api.TypeFacade;
-import be.tribersoft.sensor.domain.api.TypePatch;
-import be.tribersoft.sensor.domain.api.TypeUpdate;
-import be.tribersoft.sensor.service.api.TypeService;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeFacade;
+import be.tribersoft.sensor.domain.api.type.TypePatch;
+import be.tribersoft.sensor.domain.api.type.TypeUpdate;
+import be.tribersoft.sensor.service.api.type.TypeService;
 
 @Named
 @Transactional

@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain;
+package be.tribersoft.sensor.domain.impl.type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import be.tribersoft.sensor.domain.api.Type;
+import be.tribersoft.sensor.domain.api.type.Type;
 
 @Entity
 public class TypeEntity implements Type {

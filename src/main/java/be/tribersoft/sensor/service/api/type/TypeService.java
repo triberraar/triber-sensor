@@ -1,8 +1,8 @@
-package be.tribersoft.sensor.service.api;
+package be.tribersoft.sensor.service.api.type;
 
-import be.tribersoft.sensor.domain.api.TypeCreate;
-import be.tribersoft.sensor.domain.api.TypePatch;
-import be.tribersoft.sensor.domain.api.TypeUpdate;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypePatch;
+import be.tribersoft.sensor.domain.api.type.TypeUpdate;
 
 public interface TypeService {
 

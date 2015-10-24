@@ -1,6 +1,6 @@
-package be.tribersoft.sensor.rest;
+package be.tribersoft.sensor.rest.type;
 
-import be.tribersoft.sensor.domain.api.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
 
 public class TypePostJson implements TypeCreate {
 

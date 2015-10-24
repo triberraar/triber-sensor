@@ -1,8 +1,8 @@
-package be.tribersoft.sensor.rest;
+package be.tribersoft.sensor.rest.type;
 
 import org.springframework.hateoas.core.Relation;
 
-import be.tribersoft.sensor.domain.api.Type;
+import be.tribersoft.sensor.domain.api.type.Type;
 
 @Relation(collectionRelation = "types", value = "type")
 public class TypeToJsonAdapter {

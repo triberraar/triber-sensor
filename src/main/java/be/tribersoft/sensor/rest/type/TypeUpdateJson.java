@@ -1,8 +1,8 @@
-package be.tribersoft.sensor.rest;
+package be.tribersoft.sensor.rest.type;
 
 import javax.validation.constraints.NotNull;
 
-import be.tribersoft.sensor.domain.api.TypeUpdate;
+import be.tribersoft.sensor.domain.api.type.TypeUpdate;
 
 public class TypeUpdateJson implements TypeUpdate {
 
