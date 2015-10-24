@@ -29,13 +29,13 @@ public class TypeEntity implements Type {
 	TypeEntity() {
 	}
 
+	public TypeEntity(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public Long getVersion() {
 		return version;
-	}
-
-	public TypeEntity(String name) {
-		this.name = name;
 	}
 
 	public void setName(String name) {
