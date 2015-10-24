@@ -29,8 +29,8 @@ public class TypeRepositoryImpl implements TypeRepository {
 		typeJpaRepository.delete(type);
 	}
 
-	public TypeEntity getByUuidAndVersion(String uuid, Long version) {
-		TypeEntity type = getByUuid(uuid);
+	public TypeEntity getByIdAndVersion(String id, Long version) {
+		TypeEntity type = getById(id);
 		if (!type.getVersion().equals(version)) {
 			throw new ConcurrentModificationException();
 		}
@@ -38,8 +38,8 @@ public class TypeRepositoryImpl implements TypeRepository {
 	}
 
 	@Override
-	public TypeEntity getByUuid(String uuid) {
-		Optional<TypeEntity> type = typeJpaRepository.findByUuid(uuid);
+	public TypeEntity getById(String id) {
+		Optional<TypeEntity> type = typeJpaRepository.findById(id);
 		if (!type.isPresent()) {
 			throw new TypeNotFoundException();
 		}

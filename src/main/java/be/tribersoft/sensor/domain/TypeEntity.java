@@ -16,8 +16,8 @@ public class TypeEntity implements Type {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
-	@Column(name = "uuid", unique = true, nullable = false)
-	private String uuid;
+	@Column(name = "id", unique = true, nullable = false)
+	private String id;
 
 	@Version
 	@Column(nullable = false)
@@ -48,8 +48,8 @@ public class TypeEntity implements Type {
 	}
 
 	@Override
-	public String getUuid() {
-		return uuid;
+	public String getId() {
+		return id;
 	}
 
 }

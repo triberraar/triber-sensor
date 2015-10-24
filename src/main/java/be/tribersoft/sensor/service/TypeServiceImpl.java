@@ -4,7 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import be.tribersoft.sensor.domain.api.Type;
+import be.tribersoft.sensor.domain.api.TypeCreate;
 import be.tribersoft.sensor.domain.api.TypeFacade;
 import be.tribersoft.sensor.domain.api.TypePatch;
 import be.tribersoft.sensor.domain.api.TypeUpdate;
@@ -18,23 +18,23 @@ public class TypeServiceImpl implements TypeService {
 	private TypeFacade typeFacade;
 
 	@Override
-	public void save(Type type) {
-		typeFacade.save(type);
+	public void save(TypeCreate typeCreate) {
+		typeFacade.save(typeCreate);
 	}
 
 	@Override
-	public void update(String uuid, Long version, TypeUpdate typeUpdate) {
-		typeFacade.update(uuid, version, typeUpdate);
+	public void update(String id, Long version, TypeUpdate typeUpdate) {
+		typeFacade.update(id, version, typeUpdate);
 	}
 
 	@Override
-	public void patch(String uuid, Long version, TypePatch typePatch) {
-		typeFacade.patch(uuid, version, typePatch);
+	public void patch(String id, Long version, TypePatch typePatch) {
+		typeFacade.patch(id, version, typePatch);
 	}
 
 	@Override
-	public void delete(String uuid, Long version) {
-		typeFacade.delete(uuid, version);
+	public void delete(String id, Long version) {
+		typeFacade.delete(id, version);
 	}
 
 }

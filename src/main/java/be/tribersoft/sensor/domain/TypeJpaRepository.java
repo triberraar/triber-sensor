@@ -10,7 +10,7 @@ public interface TypeJpaRepository extends Repository<TypeEntity, String> {
 
 	void save(TypeEntity type);
 
-	Optional<TypeEntity> findByUuid(String uuid);
+	Optional<TypeEntity> findById(String id);
 
 	void delete(TypeEntity type);
 }
