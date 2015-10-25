@@ -1,21 +1,16 @@
 package be.tribersoft.sensor.rest.type;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.type.TypeRepository;
 import be.tribersoft.sensor.service.api.type.TypeService;
 
@@ -27,23 +22,17 @@ public class TypeResource {
 	private TypeService typeService;
 	@Inject
 	private TypeRepository typeRepository;
+	@Inject
+	private TypeHateoasBuilder typeHateoasBuilder;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public Resources<Resource<TypeToJsonAdapter>> all() {
-		List<Resource<TypeToJsonAdapter>> typeResource = typeRepository.all().stream().map(type -> {
-			return new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(this.getClass()).slash(type.getId()).withSelfRel());
-		}).collect(Collectors.toList());
-
-		Resources<Resource<TypeToJsonAdapter>> typeResources = new Resources<>(typeResource);
-		typeResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).all()).withSelfRel());
-		return typeResources;
+		return typeHateoasBuilder.build(typeRepository.all());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public Resource<TypeToJsonAdapter> get(@PathVariable("id") String id) {
-		Type type = typeRepository.getById(id);
-		Resource<TypeToJsonAdapter> typeResource = new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(this.getClass()).slash(type.getId()).withSelfRel());
-		return typeResource;
+		return typeHateoasBuilder.build(typeRepository.getById(id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
