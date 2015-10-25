@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ConcurrentModificationExceptionHandlerProcessValidationErrorTest {
+public class ConcurrentModificationExceptionHandlerProcessTest {
 
 	private static final String ERROR_MESSAGE = "validation.concurrent.modification";
 
@@ -36,7 +36,7 @@ public class ConcurrentModificationExceptionHandlerProcessValidationErrorTest {
 
 	@Test
 	public void returnsAnErrorJson() {
-		ErrorJson processedErrorJson = concurrentModificationExceptionHandler.processValidationError(concurrentModificationException);
+		ErrorJson processedErrorJson = concurrentModificationExceptionHandler.process(concurrentModificationException);
 
 		assertThat(processedErrorJson).isSameAs(errorJson);
 	}

@@ -19,7 +19,7 @@ public class MethodArgumentNotValidExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public ErrorJson processValidationError(MethodArgumentNotValidException ex) {
+	public ErrorJson process(MethodArgumentNotValidException ex) {
 		BindingResult result = ex.getBindingResult();
 		FieldError error = result.getFieldError();
 

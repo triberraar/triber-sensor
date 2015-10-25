@@ -20,7 +20,7 @@ public class ConcurrentModificationExceptionHandler {
 	@ExceptionHandler(ConcurrentModificationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public ErrorJson processValidationError(ConcurrentModificationException ex) {
+	public ErrorJson process(ConcurrentModificationException ex) {
 		return errorJsonFactory.create(ERROR_MESSAGE);
 	}
 
