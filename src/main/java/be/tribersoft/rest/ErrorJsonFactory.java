@@ -24,8 +24,7 @@ public class ErrorJsonFactory {
 
 	private String getMessage(String message) {
 		Locale currentLocale = LocaleContextHolder.getLocale();
-		String msg = msgSource.getMessage(message, null, message, currentLocale);
-		return msg;
+		return msgSource.getMessage(message, null, message, currentLocale);
 	}
 
 	public ErrorJson create(FieldError error) {
