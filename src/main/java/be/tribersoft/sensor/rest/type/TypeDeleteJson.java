@@ -6,7 +6,7 @@ public class TypeDeleteJson {
 
 	private Long version;
 
-	@NotNull(message = "type.validation.error.version.null")
+	@NotNull(message = "type.validation.version.null")
 	public Long getVersion() {
 		return version;
 	}

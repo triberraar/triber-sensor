@@ -12,7 +12,7 @@ import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException
 
 @ControllerAdvice
 public class ConcurrentModificationExceptionHandler {
-	private static final String ERROR_MESSAGE = "validation.error.concurrent.modification";
+	private static final String ERROR_MESSAGE = "validation.concurrent.modification";
 
 	@Inject
 	private ErrorJsonFactory errorJsonFactory;

@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.sensor.domain.api.type.Type;
 
-@Entity
+@Entity(name = "type")
 public class TypeEntity implements Type {
 
 	@Id
@@ -23,7 +23,7 @@ public class TypeEntity implements Type {
 	@Column(nullable = false)
 	private Long version;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 255)
 	private String name;
 
 	TypeEntity() {
