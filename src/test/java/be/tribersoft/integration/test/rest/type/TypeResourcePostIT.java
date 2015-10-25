@@ -33,7 +33,7 @@ import be.tribersoft.sensor.rest.type.TypePostJson;
 @WebAppConfiguration // 3
 @IntegrationTest("server.port:0") // 4
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-public class TypeResourcePostTest {
+public class TypeResourcePostIT {
 
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
