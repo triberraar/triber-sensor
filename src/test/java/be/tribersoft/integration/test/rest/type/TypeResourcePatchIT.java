@@ -24,7 +24,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
+import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class) // 1
@@ -32,30 +34,61 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @WebAppConfiguration // 3
 @IntegrationTest("server.port:0") // 4
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-public class TypeResourcePostIT {
+public class TypeResourcePatchIT {
 
-	private static final String ERROR_MESSAGE = "Name can't be null";
+	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String NAME = "name";
+	private static final String UPDATED_NAME = "updated name";
 
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
+	@Inject
+	private TypeFactory typeFactory;
 
 	@Value("${local.server.port}")
 	private int serverPort;
+	private String uuid;
+	private Long version;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
+		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl()));
+		TypeEntity typeEntity = typeJpaRepository.findAll().get(0);
+		uuid = typeEntity.getId();
+		version = typeEntity.getVersion();
 	}
 
 	@Test
-	public void createsANewType() {
+	public void patchesType() {
 		// @formatter:off
-		given(). 
-				body(new TypePostJsonImpl()). 
+		given().
+				pathParam("uuid", uuid).
+				body(new TypePatchJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/type"). 
+				patch("/type/{uuid}"). 
+		then(). 
+				statusCode(HttpStatus.OK.value());
+		// @formatter:on
+
+		List<TypeEntity> types = typeJpaRepository.findAll();
+		assertThat(types.size()).isEqualTo(1);
+		TypeEntity typeEntity = types.get(0);
+		assertThat(typeEntity.getName()).isEqualTo(UPDATED_NAME);
+		assertThat(typeEntity.getId()).isEqualTo(uuid);
+		assertThat(typeEntity.getVersion()).isEqualTo(version + 1);
+	}
+
+	@Test
+	public void succeedsWithOnlyVersionBody() {
+		// @formatter:off
+		given(). 
+				pathParam("uuid", uuid).
+				body(new EmptyPatchJson()). 
+				contentType(ContentType.JSON).
+		when(). 
+				patch("/type/{uuid}"). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -64,34 +97,63 @@ public class TypeResourcePostIT {
 		assertThat(types.size()).isEqualTo(1);
 		TypeEntity typeEntity = types.get(0);
 		assertThat(typeEntity.getName()).isEqualTo(NAME);
-		assertThat(typeEntity.getId()).isNotNull();
-		assertThat(typeEntity.getVersion()).isEqualTo(0L);
+		assertThat(typeEntity.getId()).isEqualTo(uuid);
+		assertThat(typeEntity.getVersion()).isEqualTo(version);
 	}
 
 	@Test
-	public void badRequestWhenTypeIsNotValid() {
+	public void badRequestWhenTypeHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
-				body(new TypePostJsonImplInvalid()). 
+				pathParam("uuid", uuid).
+				body(new TypePatchJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/type"). 
+				patch("/type/{uuid}"). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
-				body("message", equalTo(ERROR_MESSAGE));
+				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
 		// @formatter:on
 	}
 
-	private class TypePostJsonImpl {
+	private class TypePatchJsonImpl {
+
 		public String getName() {
-			return NAME;
+			return UPDATED_NAME;
+		}
+
+		public Long getVersion() {
+			return version;
 		}
 	}
 
-	private class TypePostJsonImplInvalid {
+	private class EmptyPatchJson {
 		public String getName() {
 			return null;
 		}
+
+		public Long getVersion() {
+			return version;
+		}
+	}
+
+	private class TypePatchJsonImplConcurrent {
+		public String getName() {
+			return UPDATED_NAME;
+		}
+
+		public Long getVersion() {
+			return version + 1;
+		}
+	}
+
+	private class TypeCreateImpl implements TypeCreate {
+
+		@Override
+		public String getName() {
+			return NAME;
+		}
+
 	}
 
 }

@@ -28,7 +28,6 @@ import be.tribersoft.sensor.domain.api.type.TypeCreate;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
-import be.tribersoft.sensor.rest.type.TypeUpdateJson;
 
 @RunWith(SpringJUnit4ClassRunner.class) // 1
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class) // 2
@@ -112,38 +111,32 @@ public class TypeResourcePutIT {
 		// @formatter:on
 	}
 
-	private class TypePutJsonImpl extends TypeUpdateJson {
+	private class TypePutJsonImpl {
 
-		@Override
 		public String getName() {
 			return UPDATED_NAME;
 		}
 
-		@Override
 		public Long getVersion() {
 			return version;
 		}
 	}
 
-	private class TypePutJsonImplInvalid extends TypeUpdateJson {
-		@Override
+	private class TypePutJsonImplInvalid {
 		public String getName() {
 			return null;
 		}
 
-		@Override
 		public Long getVersion() {
 			return version;
 		}
 	}
 
-	private class TypePutJsonImplConcurrent extends TypeUpdateJson {
-		@Override
+	private class TypePutJsonImplConcurrent {
 		public String getName() {
 			return UPDATED_NAME;
 		}
 
-		@Override
 		public Long getVersion() {
 			return version + 1;
 		}
