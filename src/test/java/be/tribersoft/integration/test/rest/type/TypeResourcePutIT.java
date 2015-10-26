@@ -62,6 +62,7 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
+	@DirtiesContext
 	public void updatesType() {
 		// @formatter:off
 		given().
@@ -83,6 +84,7 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
+	@DirtiesContext
 	public void badRequestWhenTypeIsNotValid() {
 		// @formatter:off
 		given(). 
@@ -98,6 +100,7 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
+	@DirtiesContext
 	public void badRequestWhenTypeHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
