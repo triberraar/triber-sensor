@@ -17,7 +17,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -63,7 +62,6 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
-	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void updatesType() {
 		// @formatter:off
 		given().
@@ -85,7 +83,6 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
-	@DirtiesContext
 	public void badRequestWhenTypeIsNotValid() {
 		// @formatter:off
 		given(). 
@@ -101,7 +98,6 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
-	@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
 	public void badRequestWhenTypeHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
