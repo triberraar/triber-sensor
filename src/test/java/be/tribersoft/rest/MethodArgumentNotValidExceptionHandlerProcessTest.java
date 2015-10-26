@@ -13,6 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import be.tribersoft.common.rest.ErrorJson;
+import be.tribersoft.common.rest.ErrorJsonFactory;
+import be.tribersoft.common.rest.MethodArgumentNotValidExceptionHandler;
+
 @RunWith(MockitoJUnitRunner.class)
 public class MethodArgumentNotValidExceptionHandlerProcessTest {
 

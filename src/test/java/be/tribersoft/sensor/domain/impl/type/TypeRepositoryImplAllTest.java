@@ -27,14 +27,14 @@ public class TypeRepositoryImplAllTest {
 
 	@Before
 	public void setUp() {
-		when(typeJpaRepository.findAll()).thenReturn(Arrays.asList(typeEntity1, typeEntity2));
+		when(typeJpaRepository.findAllByOrderByCreationDateDesc()).thenReturn(Arrays.asList(typeEntity1, typeEntity2));
 	}
 
 	@Test
 	public void delegatesToSpringDataRepository() {
 		List<TypeEntity> all = typeRepositoryImpl.all();
 
-		verify(typeJpaRepository).findAll();
+		verify(typeJpaRepository).findAllByOrderByCreationDateDesc();
 		assertThat(all).isEqualTo(Arrays.asList(typeEntity1, typeEntity2));
 	}
 

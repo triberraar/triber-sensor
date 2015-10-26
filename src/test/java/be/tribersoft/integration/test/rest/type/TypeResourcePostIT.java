@@ -20,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
@@ -60,7 +61,7 @@ public class TypeResourcePostIT {
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 
-		List<TypeEntity> types = typeJpaRepository.findAll();
+		List<TypeEntity> types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 		assertThat(types.size()).isEqualTo(1);
 		TypeEntity typeEntity = types.get(0);
 		assertThat(typeEntity.getName()).isEqualTo(NAME);
@@ -83,12 +84,14 @@ public class TypeResourcePostIT {
 	}
 
 	private class TypePostJsonImpl {
+		@JsonProperty
 		public String getName() {
 			return NAME;
 		}
 	}
 
 	private class TypePostJsonImplInvalid {
+		@JsonProperty
 		public String getName() {
 			return null;
 		}

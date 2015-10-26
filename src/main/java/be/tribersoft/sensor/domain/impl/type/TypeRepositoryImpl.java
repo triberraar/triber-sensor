@@ -18,7 +18,7 @@ public class TypeRepositoryImpl implements TypeRepository {
 
 	@Override
 	public List<TypeEntity> all() {
-		return typeJpaRepository.findAll();
+		return typeJpaRepository.findAllByOrderByCreationDateDesc();
 	}
 
 	public void save(TypeEntity type) {

@@ -16,6 +16,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 
+import be.tribersoft.common.rest.ErrorJson;
+import be.tribersoft.common.rest.ErrorJsonFactory;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorJsonFactoryCreateTest {
 

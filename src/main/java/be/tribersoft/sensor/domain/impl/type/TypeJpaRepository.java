@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
 public interface TypeJpaRepository extends Repository<TypeEntity, String> {
-	List<TypeEntity> findAll();
+	List<TypeEntity> findAllByOrderByCreationDateDesc();
 
 	void save(TypeEntity type);
 

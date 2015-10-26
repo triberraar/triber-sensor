@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import be.tribersoft.common.rest.ConcurrentModificationExceptionHandler;
+import be.tribersoft.common.rest.ErrorJson;
+import be.tribersoft.common.rest.ErrorJsonFactory;
 import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException;
 
 @RunWith(MockitoJUnitRunner.class)

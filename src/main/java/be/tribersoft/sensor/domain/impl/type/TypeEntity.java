@@ -1,13 +1,18 @@
 package be.tribersoft.sensor.domain.impl.type;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.api.type.Type;
 
 @Entity(name = "type")
@@ -26,11 +31,16 @@ public class TypeEntity implements Type {
 	@Column(nullable = false, length = 255)
 	private String name;
 
+	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date creationDate;
+
 	TypeEntity() {
 	}
 
 	public TypeEntity(String name) {
 		this.name = name;
+		this.creationDate = DateFactory.generate();
 	}
 
 	@Override
@@ -50,6 +60,11 @@ public class TypeEntity implements Type {
 	@Override
 	public String getId() {
 		return id;
+	}
+
+	@Override
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
 }

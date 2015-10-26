@@ -1,4 +1,4 @@
-package be.tribersoft.rest;
+package be.tribersoft.common.rest;
 
 import javax.inject.Inject;
 

@@ -20,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
@@ -54,7 +55,7 @@ public class TypeResourcePatchIT {
 	public void setUp() {
 		RestAssured.port = serverPort;
 		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl()));
-		TypeEntity typeEntity = typeJpaRepository.findAll().get(0);
+		TypeEntity typeEntity = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = typeEntity.getId();
 		version = typeEntity.getVersion();
 	}
@@ -72,7 +73,7 @@ public class TypeResourcePatchIT {
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 
-		List<TypeEntity> types = typeJpaRepository.findAll();
+		List<TypeEntity> types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 		assertThat(types.size()).isEqualTo(1);
 		TypeEntity typeEntity = types.get(0);
 		assertThat(typeEntity.getName()).isEqualTo(UPDATED_NAME);
@@ -93,7 +94,7 @@ public class TypeResourcePatchIT {
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 
-		List<TypeEntity> types = typeJpaRepository.findAll();
+		List<TypeEntity> types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 		assertThat(types.size()).isEqualTo(1);
 		TypeEntity typeEntity = types.get(0);
 		assertThat(typeEntity.getName()).isEqualTo(NAME);
@@ -118,30 +119,37 @@ public class TypeResourcePatchIT {
 
 	private class TypePatchJsonImpl {
 
+		@JsonProperty
 		public String getName() {
 			return UPDATED_NAME;
 		}
 
+		@JsonProperty
 		public Long getVersion() {
 			return version;
 		}
 	}
 
 	private class EmptyPatchJson {
+		@JsonProperty
 		public String getName() {
 			return null;
 		}
 
+		@JsonProperty
 		public Long getVersion() {
 			return version;
 		}
 	}
 
 	private class TypePatchJsonImplConcurrent {
+
+		@JsonProperty
 		public String getName() {
 			return UPDATED_NAME;
 		}
 
+		@JsonProperty
 		public Long getVersion() {
 			return version + 1;
 		}
@@ -153,7 +161,5 @@ public class TypeResourcePatchIT {
 		public String getName() {
 			return NAME;
 		}
-
 	}
-
 }
