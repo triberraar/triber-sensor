@@ -1,10 +1,7 @@
 package be.tribersoft.integration.test.rest.type;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-
-import java.util.List;
+import static org.hamcrest.Matchers.is;
 
 import javax.inject.Inject;
 
@@ -20,12 +17,13 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
+import be.tribersoft.sensor.domain.api.type.TypeCreate;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
+import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,68 +31,65 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-public class TypeResourcePostIT {
+public class TypeResourceGetIT {
 
-	private static final String ERROR_MESSAGE = "Name can't be null";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
+
 	private static final String NAME = "name";
 
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
+	@Inject
+	private TypeFactory typeFactory;
 
 	@Value("${local.server.port}")
-	private int serverPort;
+	private int port;
+	private String uuid;
+	private Long version;
 
 	@Before
 	public void setUp() {
-		RestAssured.port = serverPort;
+		RestAssured.port = port;
+		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl()));
+		TypeEntity typeEntity = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		uuid = typeEntity.getId();
+		version = typeEntity.getVersion();
 	}
 
 	@Test
-	public void createsANewType() {
+	public void getType() {
 		// @formatter:off
-		given(). 
-				body(new TypePostJsonImpl()). 
-				contentType(ContentType.JSON).
+		given().
+				pathParam("uuid", uuid).
 		when(). 
-				post("/type"). 
+				get("/type/{uuid}"). 
 		then(). 
+				contentType(ContentType.JSON).
+				body("name", is(NAME)).
+				body("id", is(uuid)).
+				body("version", is(0)).
+				body("_links.self.href", is("http://localhost:" + port+"/type/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
-
-		List<TypeEntity> types = typeJpaRepository.findAllByOrderByCreationDateDesc();
-		assertThat(types.size()).isEqualTo(1);
-		TypeEntity typeEntity = types.get(0);
-		assertThat(typeEntity.getName()).isEqualTo(NAME);
-		assertThat(typeEntity.getId()).isNotNull();
-		assertThat(typeEntity.getVersion()).isEqualTo(0L);
 	}
 
 	@Test
-	public void badRequestWhenTypeIsNotValid() {
+	public void failsWhenNotFound() {
 		// @formatter:off
-		given(). 
-				body(new TypePostJsonImplInvalid()). 
-				contentType(ContentType.JSON).
+		given().
+				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
-				post("/type"). 
+				get("/type/{uuid}"). 
 		then(). 
-				statusCode(HttpStatus.BAD_REQUEST.value()).
-				body("message", equalTo(ERROR_MESSAGE));
+				statusCode(HttpStatus.NOT_FOUND.value());
 		// @formatter:on
 	}
 
-	private class TypePostJsonImpl {
-		@JsonProperty
+	private class TypeCreateImpl implements TypeCreate {
+
+		@Override
 		public String getName() {
 			return NAME;
 		}
 	}
-
-	private class TypePostJsonImplInvalid {
-		@JsonProperty
-		public String getName() {
-			return null;
-		}
-	}
-
 }

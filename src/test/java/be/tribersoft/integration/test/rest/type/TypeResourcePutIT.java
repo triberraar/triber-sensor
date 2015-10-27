@@ -30,10 +30,10 @@ import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 
-@RunWith(SpringJUnit4ClassRunner.class) // 1
-@SpringApplicationConfiguration(classes = TriberSensorApplication.class) // 2
-@WebAppConfiguration // 3
-@IntegrationTest("server.port:0") // 4
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = TriberSensorApplication.class)
+@WebAppConfiguration
+@IntegrationTest("server.port:0")
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class TypeResourcePutIT {
 
