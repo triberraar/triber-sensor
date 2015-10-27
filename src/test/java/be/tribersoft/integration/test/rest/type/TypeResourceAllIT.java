@@ -1,7 +1,9 @@
 package be.tribersoft.integration.test.rest.type;
 
-import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.is;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,11 +33,10 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
-public class TypeResourceGetIT {
+public class TypeResourceAllIT {
 
-	private static final String NON_EXISTING_UUID = "non existing uuid";
-
-	private static final String NAME = "name";
+	private static final String NAME_1 = "name 1";
+	private static final String NAME_2 = "name 2";
 
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
@@ -44,50 +45,47 @@ public class TypeResourceGetIT {
 
 	@Value("${local.server.port}")
 	private int port;
-	private String uuid;
+	private List<TypeEntity> types;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl()));
-		TypeEntity typeEntity = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = typeEntity.getId();
+		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl(NAME_1)));
+		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl(NAME_2)));
+		types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 	}
 
 	@Test
-	public void getType() {
+	public void getsAllTypes() {
 		// @formatter:off
-		given().
-				pathParam("uuid", uuid).
 		when(). 
-				get("/type/{uuid}"). 
+				get("/type"). 
 		then(). 
 				contentType(ContentType.JSON).
-				body("name", is(NAME)).
-				body("id", is(uuid)).
-				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/type/" + uuid)).
-				statusCode(HttpStatus.OK.value());
-		// @formatter:on
-	}
-
-	@Test
-	public void failsWhenNotFound() {
-		// @formatter:off
-		given().
-				pathParam("uuid", NON_EXISTING_UUID).
-		when(). 
-				get("/type/{uuid}"). 
-		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value());
+				statusCode(HttpStatus.OK.value()).
+				body("_links.self.href", is("http://localhost:" + port + "/type")).
+				body("_embedded.types.size()", is(2)).
+				body("_embedded.types[0].name", is(NAME_2)).
+				body("_embedded.types[0].version", is(0)).
+				body("_embedded.types[0].id", is(types.get(0).getId())).
+				body("_embedded.types[0]._links.self.href", is("http://localhost:" + port + "/type/" + types.get(0).getId())).
+				body("_embedded.types[1].name", is(NAME_1)).
+				body("_embedded.types[1].version", is(0)).
+				body("_embedded.types[1].id", is(types.get(1).getId())).
+				body("_embedded.types[1]._links.self.href", is("http://localhost:" + port + "/type/" + types.get(1).getId()));
 		// @formatter:on
 	}
 
 	private class TypeCreateImpl implements TypeCreate {
+		private String name;
+
+		public TypeCreateImpl(String name) {
+			this.name = name;
+		}
 
 		@Override
 		public String getName() {
-			return NAME;
+			return name;
 		}
 	}
 }
