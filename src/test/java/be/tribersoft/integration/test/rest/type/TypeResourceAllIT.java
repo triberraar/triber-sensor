@@ -65,10 +65,12 @@ public class TypeResourceAllIT {
 				statusCode(HttpStatus.OK.value()).
 				body("_links.self.href", is("http://localhost:" + port + "/type")).
 				body("_embedded.types.size()", is(2)).
+				body("_embedded.types[0].size()", is(4)).
 				body("_embedded.types[0].name", is(NAME_2)).
 				body("_embedded.types[0].version", is(0)).
 				body("_embedded.types[0].id", is(types.get(0).getId())).
 				body("_embedded.types[0]._links.self.href", is("http://localhost:" + port + "/type/" + types.get(0).getId())).
+				body("_embedded.types[1].size()", is(4)).
 				body("_embedded.types[1].name", is(NAME_1)).
 				body("_embedded.types[1].version", is(0)).
 				body("_embedded.types[1].id", is(types.get(1).getId())).
