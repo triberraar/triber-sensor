@@ -10,7 +10,7 @@ public class DateFactoryGenerateTest {
 
 	@Test
 	public void returnsFixatedDate() {
-		Date fixationDate = new Date();
+		Date fixationDate = new Date(2);
 		DateFactory.fixateDate(fixationDate);
 
 		assertThat(DateFactory.generate()).isEqualTo(fixationDate);
