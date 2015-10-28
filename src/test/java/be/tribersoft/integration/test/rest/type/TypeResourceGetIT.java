@@ -63,6 +63,7 @@ public class TypeResourceGetIT {
 				get("/type/{uuid}"). 
 		then(). 
 				contentType(ContentType.JSON).
+				body("size()", is(4)).
 				body("name", is(NAME)).
 				body("id", is(uuid)).
 				body("version", is(0)).
