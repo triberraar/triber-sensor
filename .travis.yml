@@ -11,7 +11,7 @@ env:
 addons:
   coverity_scan:
     project:
-      name: "triber-sensor"
+      name: "triberraar/triber-sensor"
       description: "Build submitted via Travis CI"
     notification_email: geertolaerts@gmail.com
     build_command: "mvn clean package"
