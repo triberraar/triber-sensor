@@ -5,7 +5,6 @@ import javax.inject.Named;
 
 import be.tribersoft.sensor.domain.api.type.TypeCreate;
 import be.tribersoft.sensor.domain.api.type.TypeFacade;
-import be.tribersoft.sensor.domain.api.type.TypePatch;
 import be.tribersoft.sensor.domain.api.type.TypeUpdate;
 import be.tribersoft.sensor.domain.api.type.TypeUpdater;
 
@@ -28,12 +27,6 @@ public class TypeFacadeImpl implements TypeFacade {
 	public void update(String id, Long version, TypeUpdate typeUpdate) {
 		TypeEntity type = typeRepository.getByIdAndVersion(id, version);
 		typeUpdater.update(type, typeUpdate);
-	}
-
-	@Override
-	public void patch(String id, Long version, TypePatch typePatch) {
-		TypeEntity type = typeRepository.getByIdAndVersion(id, version);
-		typeUpdater.patch(type, typePatch);
 	}
 
 	@Override

@@ -45,11 +45,6 @@ public class TypeResource {
 		typeService.update(id, type.getVersion(), type);
 	}
 
-	@RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
-	public void patch(@PathVariable("id") String id, @Valid @RequestBody TypePatchJson type) {
-		typeService.patch(id, type.getVersion(), type);
-	}
-
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public void delete(@PathVariable("id") String id, @Valid @RequestBody TypeDeleteJson type) {
 		typeService.delete(id, type.getVersion());

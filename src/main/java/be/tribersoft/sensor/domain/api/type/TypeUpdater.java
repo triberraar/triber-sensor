@@ -11,10 +11,4 @@ public class TypeUpdater {
 		type.setName(typeUpdate.getName());
 	}
 
-	public void patch(TypeEntity type, TypePatch typePatch) {
-		if (typePatch.getName().isPresent()) {
-			type.setName(typePatch.getName().get());
-		}
-	}
-
 }
