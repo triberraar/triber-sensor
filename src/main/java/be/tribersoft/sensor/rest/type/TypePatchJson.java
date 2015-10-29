@@ -25,4 +25,14 @@ public class TypePatchJson implements TypePatch {
 		return version;
 	}
 
+	@JsonProperty
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@JsonProperty
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
 }

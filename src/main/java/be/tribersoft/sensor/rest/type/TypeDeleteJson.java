@@ -13,4 +13,9 @@ public class TypeDeleteJson {
 	public Long getVersion() {
 		return version;
 	}
+
+	@JsonProperty
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 }

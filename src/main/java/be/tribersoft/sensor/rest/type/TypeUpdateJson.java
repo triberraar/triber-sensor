@@ -22,4 +22,14 @@ public class TypeUpdateJson implements TypeUpdate {
 	public String getName() {
 		return name;
 	}
+
+	@JsonProperty
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	@JsonProperty
+	public void setName(String name) {
+		this.name = name;
+	}
 }
