@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain.impl.type;
+package be.tribersoft.sensor.domain.impl.unit;
 
 import java.util.Date;
 
@@ -13,11 +13,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
-import be.tribersoft.sensor.domain.api.type.Type;
+import be.tribersoft.sensor.domain.api.unit.Unit;
 
-@Entity(name = "type")
-public class TypeEntity implements Type {
-
+@Entity(name = "unit")
+public class UnitEntity implements Unit {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
@@ -35,10 +34,13 @@ public class TypeEntity implements Type {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
 
-	TypeEntity() {
+	@Column(length = 128)
+	private String symbol;
+
+	UnitEntity() {
 	}
 
-	public TypeEntity(String name) {
+	public UnitEntity(String name) {
 		this.name = name;
 		this.creationDate = DateFactory.generate();
 	}
@@ -64,6 +66,15 @@ public class TypeEntity implements Type {
 
 	Date getCreationDate() {
 		return creationDate;
+	}
+
+	@Override
+	public String getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 
 }
