@@ -14,4 +14,9 @@ public class TypePostJson implements TypeCreate {
 		return name;
 	}
 
+	@JsonProperty
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }
