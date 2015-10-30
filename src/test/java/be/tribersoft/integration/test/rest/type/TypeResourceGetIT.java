@@ -21,7 +21,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
@@ -84,7 +84,7 @@ public class TypeResourceGetIT {
 		// @formatter:on
 	}
 
-	private class TypeCreateImpl implements TypeCreate {
+	private class TypeCreateImpl implements TypeMessage {
 
 		@Override
 		public String getName() {

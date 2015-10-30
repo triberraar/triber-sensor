@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeFactoryCreateTest {
@@ -19,7 +19,7 @@ public class TypeFactoryCreateTest {
 	private TypeFactory typeFactory = new TypeFactory();
 
 	@Mock
-	private TypeCreate typeCreate;
+	private TypeMessage typeCreate;
 
 	@Before
 	public void setUp() {

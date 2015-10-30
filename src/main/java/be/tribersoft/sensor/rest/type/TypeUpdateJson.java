@@ -4,9 +4,9 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import be.tribersoft.sensor.domain.api.type.TypeUpdate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
-public class TypeUpdateJson implements TypeUpdate {
+public class TypeUpdateJson implements TypeMessage {
 
 	private Long version;
 	private String name;

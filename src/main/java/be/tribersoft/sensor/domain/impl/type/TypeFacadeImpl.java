@@ -3,9 +3,8 @@ package be.tribersoft.sensor.domain.impl.type;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import be.tribersoft.sensor.domain.api.type.TypeCreate;
 import be.tribersoft.sensor.domain.api.type.TypeFacade;
-import be.tribersoft.sensor.domain.api.type.TypeUpdate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 import be.tribersoft.sensor.domain.api.type.TypeUpdater;
 
 @Named
@@ -19,14 +18,14 @@ public class TypeFacadeImpl implements TypeFacade {
 	private TypeUpdater typeUpdater;
 
 	@Override
-	public void save(TypeCreate typeCreate) {
-		typeRepository.save(typeFactory.create(typeCreate));
+	public void save(TypeMessage typeMessage) {
+		typeRepository.save(typeFactory.create(typeMessage));
 	}
 
 	@Override
-	public void update(String id, Long version, TypeUpdate typeUpdate) {
+	public void update(String id, Long version, TypeMessage typeMessage) {
 		TypeEntity type = typeRepository.getByIdAndVersion(id, version);
-		typeUpdater.update(type, typeUpdate);
+		typeUpdater.update(type, typeMessage);
 	}
 
 	@Override
