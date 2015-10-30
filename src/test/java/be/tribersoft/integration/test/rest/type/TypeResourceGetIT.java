@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -30,7 +30,7 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceGetIT {
 
 	private static final String NON_EXISTING_UUID = "non existing uuid";

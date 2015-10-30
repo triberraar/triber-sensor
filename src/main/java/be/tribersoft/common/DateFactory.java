@@ -1,13 +1,15 @@
 package be.tribersoft.common;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class DateFactory {
 
 	private static Date date;
 
-	public static void fixateDate(Date fixationDate) {
-		date = fixationDate;
+	public static void fixateDate(LocalDateTime fixationDate) {
+		date = Date.from(fixationDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	public static void release() {

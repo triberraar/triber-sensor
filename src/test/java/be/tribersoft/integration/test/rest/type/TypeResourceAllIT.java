@@ -3,6 +3,7 @@ package be.tribersoft.integration.test.rest.type;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.is;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,8 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -23,6 +24,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
+import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.api.type.TypeMessage;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeFactory;
@@ -32,7 +34,7 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceAllIT {
 
 	private static final String NAME_1 = "name 1";
@@ -50,7 +52,10 @@ public class TypeResourceAllIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
+		LocalDateTime now = LocalDateTime.now();
+		DateFactory.fixateDate(now);
 		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl(NAME_1)));
+		DateFactory.fixateDate(now.plusDays(1));
 		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl(NAME_2)));
 		types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 	}
