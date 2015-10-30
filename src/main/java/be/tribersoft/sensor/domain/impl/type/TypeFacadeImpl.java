@@ -5,7 +5,6 @@ import javax.inject.Named;
 
 import be.tribersoft.sensor.domain.api.type.TypeFacade;
 import be.tribersoft.sensor.domain.api.type.TypeMessage;
-import be.tribersoft.sensor.domain.api.type.TypeUpdater;
 
 @Named
 public class TypeFacadeImpl implements TypeFacade {
