@@ -50,8 +50,8 @@ public class TypeResourceAllIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl(NAME_1)));
-		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl(NAME_2)));
+		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl(NAME_1)));
+		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl(NAME_2)));
 		types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 	}
 
@@ -78,10 +78,10 @@ public class TypeResourceAllIT {
 		// @formatter:on
 	}
 
-	private class TypeCreateImpl implements TypeMessage {
+	private class TypeMessageImpl implements TypeMessage {
 		private String name;
 
-		public TypeCreateImpl(String name) {
+		public TypeMessageImpl(String name) {
 			this.name = name;
 		}
 

@@ -9,7 +9,7 @@ import be.tribersoft.sensor.domain.api.type.TypeMessage;
 public class TypeFactory {
 
 	@Valid
-	public TypeEntity create(@Valid TypeMessage typeCreate) {
-		return new TypeEntity(typeCreate.getName());
+	public TypeEntity create(@Valid TypeMessage typeMessage) {
+		return new TypeEntity(typeMessage.getName());
 	}
 }

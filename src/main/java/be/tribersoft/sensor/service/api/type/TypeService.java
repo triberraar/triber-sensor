@@ -4,7 +4,7 @@ import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 public interface TypeService {
 
-	void save(TypeMessage typeCreate);
+	void save(TypeMessage typeMessage);
 
 	void update(String id, Long version, TypeMessage typeMessage);
 

@@ -19,13 +19,13 @@ public class TypeServiceImplSaveTest {
 	@Mock
 	private TypeFacade typeFacade;
 	@Mock
-	private TypeMessage typeCreate;
+	private TypeMessage typeMessage;
 
 	@Test
 	public void delegatesToFacade() {
-		typeService.save(typeCreate);
+		typeService.save(typeMessage);
 
-		verify(typeFacade).save(typeCreate);
+		verify(typeFacade).save(typeMessage);
 	}
 
 }

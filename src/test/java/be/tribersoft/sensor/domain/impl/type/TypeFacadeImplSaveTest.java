@@ -19,7 +19,7 @@ public class TypeFacadeImplSaveTest {
 	@Mock
 	private TypeFactory typeFactory;
 	@Mock
-	private TypeMessage typeCreate;
+	private TypeMessage typeMessage;
 	@Mock
 	private TypeEntity typeEntity;
 	@InjectMocks
@@ -27,12 +27,12 @@ public class TypeFacadeImplSaveTest {
 
 	@Before
 	public void setUp() {
-		when(typeFactory.create(typeCreate)).thenReturn(typeEntity);
+		when(typeFactory.create(typeMessage)).thenReturn(typeEntity);
 	}
 
 	@Test
 	public void savesCreatedType() {
-		typeFacadeImpl.save(typeCreate);
+		typeFacadeImpl.save(typeMessage);
 
 		verify(typeRepository).save(typeEntity);
 	}

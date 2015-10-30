@@ -49,7 +49,7 @@ public class TypeResourceGetIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-		typeJpaRepository.save(typeFactory.create(new TypeCreateImpl()));
+		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl()));
 		TypeEntity typeEntity = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = typeEntity.getId();
 	}
@@ -84,7 +84,7 @@ public class TypeResourceGetIT {
 		// @formatter:on
 	}
 
-	private class TypeCreateImpl implements TypeMessage {
+	private class TypeMessageImpl implements TypeMessage {
 
 		@Override
 		public String getName() {

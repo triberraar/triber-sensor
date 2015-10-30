@@ -19,16 +19,16 @@ public class TypeFactoryCreateTest {
 	private TypeFactory typeFactory = new TypeFactory();
 
 	@Mock
-	private TypeMessage typeCreate;
+	private TypeMessage typeMessage;
 
 	@Before
 	public void setUp() {
-		when(typeCreate.getName()).thenReturn(NAME);
+		when(typeMessage.getName()).thenReturn(NAME);
 	}
 
 	@Test
 	public void createsATypeEntity() {
-		TypeEntity createdTypeEntity = typeFactory.create(typeCreate);
+		TypeEntity createdTypeEntity = typeFactory.create(typeMessage);
 
 		assertThat(createdTypeEntity).isNotNull();
 		assertThat(createdTypeEntity.getName()).isEqualTo(NAME);

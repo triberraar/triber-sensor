@@ -16,8 +16,8 @@ public class TypeServiceImpl implements TypeService {
 	private TypeFacade typeFacade;
 
 	@Override
-	public void save(TypeMessage typeCreate) {
-		typeFacade.save(typeCreate);
+	public void save(TypeMessage typeMessage) {
+		typeFacade.save(typeMessage);
 	}
 
 	@Override
