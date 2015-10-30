@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import be.tribersoft.sensor.domain.api.type.TypeMessage;
-import be.tribersoft.sensor.domain.api.type.TypeUpdater;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeFacadeImplUpdateTest {
