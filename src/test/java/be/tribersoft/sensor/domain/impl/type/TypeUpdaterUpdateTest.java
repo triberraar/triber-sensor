@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain.api.type;
+package be.tribersoft.sensor.domain.impl.type;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.domain.impl.type.TypeEntity;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeUpdaterUpdateTest {
@@ -19,16 +19,16 @@ public class TypeUpdaterUpdateTest {
 	@Mock
 	private TypeEntity type;
 	@Mock
-	private TypeUpdate typeUpdate;
+	private TypeMessage typeMessage;
 
 	@Before
 	public void setup() {
-		when(typeUpdate.getName()).thenReturn(NAME);
+		when(typeMessage.getName()).thenReturn(NAME);
 	}
 
 	@Test
 	public void updatesType() {
-		updater.update(type, typeUpdate);
+		updater.update(type, typeMessage);
 
 		verify(type).setName(NAME);
 	}

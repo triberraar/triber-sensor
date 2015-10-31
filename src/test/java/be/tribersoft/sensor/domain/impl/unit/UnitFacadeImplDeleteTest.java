@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.rest.type;
+package be.tribersoft.sensor.domain.impl.unit;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,28 +10,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.service.api.type.TypeService;
-
 @RunWith(MockitoJUnitRunner.class)
-public class TypeResourcePatchTest {
+public class UnitFacadeImplDeleteTest {
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
+	@Mock
+	private UnitEntity unitEntity;
 	@InjectMocks
-	private TypeResource typeResource;
+	private UnitFacadeImpl unitFacadeImpl;
 	@Mock
-	private TypeService typeService;
-	@Mock
-	private TypePatchJson typePatchJson;
+	private UnitRepositoryImpl UnitRepository;
 
 	@Before
 	public void setUp() {
-		when(typePatchJson.getVersion()).thenReturn(VERSION);
+		when(UnitRepository.getByIdAndVersion(ID, VERSION)).thenReturn(unitEntity);
 	}
 
 	@Test
-	public void delegatesToService() {
-		typeResource.patch(ID, typePatchJson);
+	public void deletesUnitEntity() {
+		unitFacadeImpl.delete(ID, VERSION);
 
-		verify(typeService).patch(ID, VERSION, typePatchJson);
+		verify(UnitRepository).delete(unitEntity);
 	}
+
 }

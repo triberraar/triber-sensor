@@ -10,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.domain.api.type.TypeUpdate;
-import be.tribersoft.sensor.domain.api.type.TypeUpdater;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeFacadeImplUpdateTest {
@@ -24,7 +23,7 @@ public class TypeFacadeImplUpdateTest {
 	@InjectMocks
 	private TypeFacadeImpl typeFacadeImpl;
 	@Mock
-	private TypeUpdate typeUpdate;
+	private TypeMessage typeMessage;
 	@Mock
 	private TypeRepositoryImpl TypeRepository;
 
@@ -35,9 +34,9 @@ public class TypeFacadeImplUpdateTest {
 
 	@Test
 	public void updatesTypeEntity() {
-		typeFacadeImpl.update(ID, VERSION, typeUpdate);
+		typeFacadeImpl.update(ID, VERSION, typeMessage);
 
-		verify(typeUpdater).update(typeEntity, typeUpdate);
+		verify(typeUpdater).update(typeEntity, typeMessage);
 	}
 
 }

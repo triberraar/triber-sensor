@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 import be.tribersoft.sensor.domain.api.type.TypeFacade;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -19,13 +19,13 @@ public class TypeServiceImplSaveTest {
 	@Mock
 	private TypeFacade typeFacade;
 	@Mock
-	private TypeCreate typeCreate;
+	private TypeMessage typeMessage;
 
 	@Test
 	public void delegatesToFacade() {
-		typeService.save(typeCreate);
+		typeService.save(typeMessage);
 
-		verify(typeFacade).save(typeCreate);
+		verify(typeFacade).save(typeMessage);
 	}
 
 }

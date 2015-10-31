@@ -1,7 +1,5 @@
 package be.tribersoft.sensor.domain.api.type;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,5 +13,4 @@ public interface Type extends Identifiable<String> {
 
 	Long getVersion();
 
-	Date getCreationDate();
 }

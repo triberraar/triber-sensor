@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import be.tribersoft.sensor.domain.api.type.TypeFacade;
-import be.tribersoft.sensor.domain.api.type.TypeUpdate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeServiceImplUpdateTest {
@@ -21,13 +21,13 @@ public class TypeServiceImplUpdateTest {
 	@Mock
 	private TypeFacade typeFacade;
 	@Mock
-	private TypeUpdate typeUpdate;
+	private TypeMessage typeMessage;
 
 	@Test
 	public void delegatesToFacade() {
-		typeService.update(ID, VERSION, typeUpdate);
+		typeService.update(ID, VERSION, typeMessage);
 
-		verify(typeFacade).update(ID, VERSION, typeUpdate);
+		verify(typeFacade).update(ID, VERSION, typeMessage);
 	}
 
 }

@@ -62,8 +62,7 @@ public class TypeEntity implements Type {
 		return id;
 	}
 
-	@Override
-	public Date getCreationDate() {
+	Date getCreationDate() {
 		return creationDate;
 	}
 

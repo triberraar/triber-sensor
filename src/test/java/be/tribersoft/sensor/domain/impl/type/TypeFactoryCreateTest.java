@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.domain.api.type.TypeCreate;
+import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeFactoryCreateTest {
@@ -19,16 +19,16 @@ public class TypeFactoryCreateTest {
 	private TypeFactory typeFactory = new TypeFactory();
 
 	@Mock
-	private TypeCreate typeCreate;
+	private TypeMessage typeMessage;
 
 	@Before
 	public void setUp() {
-		when(typeCreate.getName()).thenReturn(NAME);
+		when(typeMessage.getName()).thenReturn(NAME);
 	}
 
 	@Test
 	public void createsATypeEntity() {
-		TypeEntity createdTypeEntity = typeFactory.create(typeCreate);
+		TypeEntity createdTypeEntity = typeFactory.create(typeMessage);
 
 		assertThat(createdTypeEntity).isNotNull();
 		assertThat(createdTypeEntity.getName()).isEqualTo(NAME);

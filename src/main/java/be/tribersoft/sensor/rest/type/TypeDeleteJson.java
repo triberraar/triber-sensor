@@ -6,16 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TypeDeleteJson {
 
+	@JsonProperty
+	@NotNull(message = "type.validation.version.null")
 	private Long version;
 
-	@NotNull(message = "type.validation.version.null")
-	@JsonProperty
 	public Long getVersion() {
 		return version;
 	}
 
-	@JsonProperty
-	public void setVersion(Long version) {
-		this.version = version;
-	}
 }
