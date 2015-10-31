@@ -65,7 +65,7 @@ public class UnitResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/unit/{uuid}"). 
+				get("/api/admin/unit/{uuid}"). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
@@ -73,7 +73,7 @@ public class UnitResourceGetIT {
 				body(SYMBOL, is(SYMBOL)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/unit/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -84,7 +84,7 @@ public class UnitResourceGetIT {
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
-				get("/unit/{uuid}"). 
+				get("/api/admin/unit/{uuid}"). 
 		then(). 
 				statusCode(HttpStatus.NOT_FOUND.value());
 		// @formatter:on
@@ -99,7 +99,7 @@ public class UnitResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/unit/{uuid}"). 
+				get("/api/admin/unit/{uuid}"). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
@@ -107,7 +107,7 @@ public class UnitResourceGetIT {
 				body(SYMBOL, isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/unit/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

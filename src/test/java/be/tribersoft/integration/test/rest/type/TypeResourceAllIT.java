@@ -37,6 +37,7 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceAllIT {
 
+	private static final String URL = "/api/admin/type";
 	private static final String NAME_1 = "name 1";
 	private static final String NAME_2 = "name 2";
 
@@ -64,22 +65,22 @@ public class TypeResourceAllIT {
 	public void getsAllTypes() {
 		// @formatter:off
 		when(). 
-				get("/type"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.self.href", is("http://localhost:" + port + "/type")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/admin/type")).
 				body("_embedded.types.size()", is(2)).
 				body("_embedded.types[0].size()", is(4)).
 				body("_embedded.types[0].name", is(NAME_2)).
 				body("_embedded.types[0].version", is(0)).
 				body("_embedded.types[0].id", is(types.get(0).getId())).
-				body("_embedded.types[0]._links.self.href", is("http://localhost:" + port + "/type/" + types.get(0).getId())).
+				body("_embedded.types[0]._links.self.href", is("http://localhost:" + port + "/api/admin/type/" + types.get(0).getId())).
 				body("_embedded.types[1].size()", is(4)).
 				body("_embedded.types[1].name", is(NAME_1)).
 				body("_embedded.types[1].version", is(0)).
 				body("_embedded.types[1].id", is(types.get(1).getId())).
-				body("_embedded.types[1]._links.self.href", is("http://localhost:" + port + "/type/" + types.get(1).getId()));
+				body("_embedded.types[1]._links.self.href", is("http://localhost:" + port + "/api/admin/type/" + types.get(1).getId()));
 		// @formatter:on
 	}
 

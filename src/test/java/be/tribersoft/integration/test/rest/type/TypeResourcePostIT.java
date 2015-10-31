@@ -35,6 +35,7 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourcePostIT {
 
+	private static final String URL = "/api/admin/type";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 
@@ -56,7 +57,7 @@ public class TypeResourcePostIT {
 				body(new TypePostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/type"). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -76,7 +77,7 @@ public class TypeResourcePostIT {
 				body(new TypePostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/type"). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(ERROR_MESSAGE));

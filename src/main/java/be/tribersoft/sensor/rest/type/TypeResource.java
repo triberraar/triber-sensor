@@ -15,7 +15,7 @@ import be.tribersoft.sensor.domain.api.type.TypeRepository;
 import be.tribersoft.sensor.service.api.type.TypeService;
 
 @RestController
-@RequestMapping("/type")
+@RequestMapping("/api/admin/type")
 public class TypeResource {
 
 	@Inject
@@ -25,27 +25,27 @@ public class TypeResource {
 	@Inject
 	private TypeHateoasBuilder typeHateoasBuilder;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resources<Resource<TypeToJsonAdapter>> all() {
 		return typeHateoasBuilder.build(typeRepository.all());
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
 	public Resource<TypeToJsonAdapter> get(@PathVariable("id") String id) {
 		return typeHateoasBuilder.build(typeRepository.getById(id));
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public void save(@Valid @RequestBody TypePostJson typePostJson) {
 		typeService.save(typePostJson);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", consumes = "application/json")
 	public void update(@PathVariable("id") String id, @Valid @RequestBody TypeUpdateJson type) {
 		typeService.update(id, type.getVersion(), type);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}", consumes = "application/json")
 	public void delete(@PathVariable("id") String id, @Valid @RequestBody TypeDeleteJson type) {
 		typeService.delete(id, type.getVersion());
 	}

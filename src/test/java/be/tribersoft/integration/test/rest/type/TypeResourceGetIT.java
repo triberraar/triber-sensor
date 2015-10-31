@@ -33,6 +33,8 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceGetIT {
 
+	private static final String URL = "/api/admin/type/{uuid}";
+
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 
 	private static final String NAME = "name";
@@ -60,14 +62,14 @@ public class TypeResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/type/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(4)).
 				body("name", is(NAME)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/type/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/admin/type/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -78,7 +80,7 @@ public class TypeResourceGetIT {
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
-				get("/type/{uuid}"). 
+				get(URL). 
 		then(). 
 				statusCode(HttpStatus.NOT_FOUND.value());
 		// @formatter:on

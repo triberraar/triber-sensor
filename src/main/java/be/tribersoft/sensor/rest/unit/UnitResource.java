@@ -15,7 +15,7 @@ import be.tribersoft.sensor.domain.api.unit.UnitRepository;
 import be.tribersoft.sensor.service.api.unit.UnitService;
 
 @RestController
-@RequestMapping("/unit")
+@RequestMapping("/api/admin/unit")
 public class UnitResource {
 
 	@Inject
@@ -25,27 +25,27 @@ public class UnitResource {
 	@Inject
 	private UnitHateoasBuilder unitHateoasBuilder;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resources<Resource<UnitToJsonAdapter>> all() {
 		return unitHateoasBuilder.build(unitRepository.all());
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
 	public Resource<UnitToJsonAdapter> get(@PathVariable("id") String id) {
 		return unitHateoasBuilder.build(unitRepository.getById(id));
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public void save(@Valid @RequestBody UnitPostJson unitPostJson) {
 		unitService.save(unitPostJson);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", consumes = "application/json")
 	public void update(@PathVariable("id") String id, @Valid @RequestBody UnitUpdateJson unit) {
 		unitService.update(id, unit.getVersion(), unit);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}", consumes = "application/json")
 	public void delete(@PathVariable("id") String id, @Valid @RequestBody UnitDeleteJson unit) {
 		unitService.delete(id, unit.getVersion());
 	}

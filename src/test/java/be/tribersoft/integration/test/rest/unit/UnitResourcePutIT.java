@@ -38,6 +38,7 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class UnitResourcePutIT {
 
+	private static final String URL = "/api/admin/unit/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -72,7 +73,7 @@ public class UnitResourcePutIT {
 				body(new UnitPutJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/unit/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -94,7 +95,7 @@ public class UnitResourcePutIT {
 				body(new UnitPutJsonImplWithoutSymbol()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/unit/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -116,7 +117,7 @@ public class UnitResourcePutIT {
 				body(new UnitPutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/unit/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(INVALID_ERROR_MESSAGE));
@@ -131,7 +132,7 @@ public class UnitResourcePutIT {
 				body(new UnitPutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/unit/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));

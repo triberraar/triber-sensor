@@ -37,6 +37,7 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourcePutIT {
 
+	private static final String URL = "/api/admin/type/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -69,7 +70,7 @@ public class TypeResourcePutIT {
 				body(new TypePutJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/type/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -90,7 +91,7 @@ public class TypeResourcePutIT {
 				body(new TypePutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/type/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(INVALID_ERROR_MESSAGE));
@@ -105,7 +106,7 @@ public class TypeResourcePutIT {
 				body(new TypePutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put("/type/{uuid}"). 
+				put(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));

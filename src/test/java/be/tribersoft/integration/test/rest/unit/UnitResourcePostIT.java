@@ -35,6 +35,7 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class UnitResourcePostIT {
 
+	private static final String URL = "/api/admin/unit";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String SYMBOL = "symbol";
@@ -57,7 +58,7 @@ public class UnitResourcePostIT {
 				body(new UnitPostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/unit"). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -78,7 +79,7 @@ public class UnitResourcePostIT {
 				body(new UnitPostJsonImplWithoutSymbol()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/unit"). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -99,7 +100,7 @@ public class UnitResourcePostIT {
 				body(new UnitPostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
-				post("/unit"). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(ERROR_MESSAGE));
