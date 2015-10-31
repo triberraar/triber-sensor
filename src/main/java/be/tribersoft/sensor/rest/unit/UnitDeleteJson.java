@@ -1,13 +1,13 @@
-package be.tribersoft.sensor.rest.type;
+package be.tribersoft.sensor.rest.unit;
 
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TypeDeleteJson {
+public class UnitDeleteJson {
 
 	@JsonProperty
-	@NotNull(message = "type.validation.version.null")
+	@NotNull(message = "unit.validation.version.null")
 	private Long version;
 
 	public Long getVersion() {

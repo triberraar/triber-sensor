@@ -3,6 +3,8 @@ package be.tribersoft.sensor.domain.impl.unit;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +16,7 @@ import be.tribersoft.sensor.domain.api.unit.UnitMessage;
 @RunWith(MockitoJUnitRunner.class)
 public class UnitUpdaterUpdateTest {
 
-	private static final String SYMBOL = "symbol";
+	private static final Optional<String> SYMBOL = Optional.of("symbol");
 	private static final String NAME = "name";
 
 	private UnitUpdater updater = new UnitUpdater();

@@ -1,6 +1,7 @@
 package be.tribersoft.sensor.domain.impl.unit;
 
 import java.util.Date;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -69,12 +70,16 @@ public class UnitEntity implements Unit {
 	}
 
 	@Override
-	public String getSymbol() {
-		return symbol;
+	public Optional<String> getSymbol() {
+		return Optional.ofNullable(symbol);
 	}
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+	public void setSymbol(Optional<String> symbol) {
+		if (symbol.isPresent()) {
+			this.symbol = symbol.get();
+		} else {
+			this.symbol = null;
+		}
 	}
 
 }

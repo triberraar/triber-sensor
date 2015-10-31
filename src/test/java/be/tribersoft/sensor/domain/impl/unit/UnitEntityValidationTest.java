@@ -2,6 +2,7 @@ package be.tribersoft.sensor.domain.impl.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -44,7 +45,7 @@ public class UnitEntityValidationTest {
 	@Test
 	public void failsWhenSymbolIsTooLong() {
 		UnitEntity unitEntity = new UnitEntity(StringUtils.leftPad("a", 255));
-		unitEntity.setSymbol(StringUtils.leftPad("a", 129));
+		unitEntity.setSymbol(Optional.of(StringUtils.leftPad("a", 129)));
 
 		Set<ConstraintViolation<UnitEntity>> constraintViolations = validator.validate(unitEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);

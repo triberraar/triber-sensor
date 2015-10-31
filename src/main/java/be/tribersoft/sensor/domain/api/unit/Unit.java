@@ -1,5 +1,7 @@
 package be.tribersoft.sensor.domain.api.unit;
 
+import java.util.Optional;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,6 +16,6 @@ public interface Unit extends Identifiable<String> {
 	String getName();
 
 	@Size(max = 128, message = "unit.validation.symbol.too.long")
-	String getSymbol();
+	Optional<String> getSymbol();
 
 }

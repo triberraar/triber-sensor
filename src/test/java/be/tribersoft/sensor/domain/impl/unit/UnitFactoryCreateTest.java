@@ -3,6 +3,8 @@ package be.tribersoft.sensor.domain.impl.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +16,7 @@ import be.tribersoft.sensor.domain.api.unit.UnitMessage;
 @RunWith(MockitoJUnitRunner.class)
 public class UnitFactoryCreateTest {
 
-	private static final String SYMBOL = "symbol";
+	private static final Optional<String> SYMBOL = Optional.of("symbol");
 	private static final String NAME = "name";
 
 	private UnitFactory unitFactory = new UnitFactory();
@@ -36,4 +38,5 @@ public class UnitFactoryCreateTest {
 		assertThat(createdUnitEntity.getName()).isEqualTo(NAME);
 		assertThat(createdUnitEntity.getSymbol()).isEqualTo(SYMBOL);
 	}
+
 }

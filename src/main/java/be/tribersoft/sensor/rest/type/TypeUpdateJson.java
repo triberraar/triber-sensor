@@ -8,28 +8,19 @@ import be.tribersoft.sensor.domain.api.type.TypeMessage;
 
 public class TypeUpdateJson implements TypeMessage {
 
-	private Long version;
-	private String name;
-
 	@NotNull(message = "type.validation.version.null")
 	@JsonProperty
+	private Long version;
+	@JsonProperty
+	private String name;
+
 	public Long getVersion() {
 		return version;
 	}
 
 	@Override
-	@JsonProperty
 	public String getName() {
 		return name;
 	}
 
-	@JsonProperty
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
-	@JsonProperty
-	public void setName(String name) {
-		this.name = name;
-	}
 }

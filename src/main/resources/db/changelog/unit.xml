@@ -22,7 +22,7 @@
     			<constraints nullable="false"/>
     		</column>
     		<column name="symbol" type="varchar(128)">
-    			<constraints nullable="false"/>
+    			
     		</column>
     	</createTable>
     </changeSet>
