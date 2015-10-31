@@ -12,7 +12,7 @@ public interface Unit extends Identifiable<String> {
 	Long getVersion();
 
 	@NotNull(message = "unit.validation.name.null")
-	@Size(max = 255, message = "unit.validation.name.too.long")
+	@Size(max = 256, message = "unit.validation.name.too.long")
 	String getName();
 
 	@Size(max = 128, message = "unit.validation.symbol.too.long")
