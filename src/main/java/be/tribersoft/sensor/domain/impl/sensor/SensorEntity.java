@@ -80,7 +80,7 @@ public class SensorEntity implements Sensor {
 		return unit;
 	}
 
-	public Date getCreationDate() {
+	Date getCreationDate() {
 		return creationDate;
 	}
 
@@ -95,7 +95,7 @@ public class SensorEntity implements Sensor {
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
+	public Optional<String> getDescription() {
+		return Optional.ofNullable(description);
 	}
 }
