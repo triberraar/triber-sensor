@@ -98,4 +98,17 @@ public class SensorEntity implements Sensor {
 	public Optional<String> getDescription() {
 		return Optional.ofNullable(description);
 	}
+
+	public void setName(String name) {
+		this.name = name;
+
+	}
+
+	public void setType(TypeEntity typeEntity) {
+		this.type = typeEntity;
+	}
+
+	public void setUnit(UnitEntity unitEntity) {
+		this.unit = unitEntity;
+	}
 }
