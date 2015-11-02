@@ -15,12 +15,12 @@ import be.tribersoft.sensor.domain.api.unit.Unit;
 public class UnitHateoasBuilder {
 
 	public Resource<UnitToJsonAdapter> build(Unit unit) {
-		return new Resource<UnitToJsonAdapter>(new UnitToJsonAdapter(unit), ControllerLinkBuilder.linkTo(UnitResource.class).slash(unit.getId()).withSelfRel());
+		return new Resource<UnitToJsonAdapter>(new UnitToJsonAdapter(unit), ControllerLinkBuilder.linkTo(UnitResource.class).slash(unit).withSelfRel());
 	}
 
 	public Resources<Resource<UnitToJsonAdapter>> build(List<? extends Unit> units) {
 		List<Resource<UnitToJsonAdapter>> transformedUnitResources = units.stream().map(unit -> {
-			return new Resource<UnitToJsonAdapter>(new UnitToJsonAdapter(unit), ControllerLinkBuilder.linkTo(UnitResource.class).slash(unit.getId()).withSelfRel());
+			return build(unit);
 		}).collect(Collectors.toList());
 
 		Resources<Resource<UnitToJsonAdapter>> unitResources = new Resources<>(transformedUnitResources);
