@@ -15,12 +15,12 @@ import be.tribersoft.sensor.domain.api.type.Type;
 public class TypeHateoasBuilder {
 
 	public Resource<TypeToJsonAdapter> build(Type type) {
-		return new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(TypeResource.class).slash(type.getId()).withSelfRel());
+		return new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(TypeResource.class).slash(type).withSelfRel());
 	}
 
 	public Resources<Resource<TypeToJsonAdapter>> build(List<? extends Type> types) {
 		List<Resource<TypeToJsonAdapter>> transformedTypeResources = types.stream().map(type -> {
-			return new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(TypeResource.class).slash(type.getId()).withSelfRel());
+			return build(type);
 		}).collect(Collectors.toList());
 
 		Resources<Resource<TypeToJsonAdapter>> typeResources = new Resources<>(transformedTypeResources);

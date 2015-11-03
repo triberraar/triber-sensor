@@ -70,7 +70,7 @@ public class UnitResourceGetIT {
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
 				body("name", is(NAME)).
-				body(SYMBOL, is(SYMBOL)).
+				body("symbol", is(SYMBOL)).
 				body("id", is(uuid)).
 				body("version", is(0)).
 				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
@@ -104,7 +104,7 @@ public class UnitResourceGetIT {
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
 				body("name", is(NAME)).
-				body(SYMBOL, isEmptyOrNullString()).
+				body("symbol", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
 				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).

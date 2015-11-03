@@ -34,7 +34,7 @@ public class TypeEntityValidationTest {
 
 	@Test
 	public void failsWhenNameIsTooLong() {
-		TypeEntity typeEntity = new TypeEntity(StringUtils.leftPad("a", 256));
+		TypeEntity typeEntity = new TypeEntity(StringUtils.leftPad("a", 257));
 		Set<ConstraintViolation<TypeEntity>> constraintViolations = validator.validate(typeEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);
 		assertThat(constraintViolations.iterator().next().getMessage()).isEqualTo("type.validation.name.too.long");

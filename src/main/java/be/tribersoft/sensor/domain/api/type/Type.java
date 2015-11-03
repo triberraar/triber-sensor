@@ -8,7 +8,7 @@ import org.springframework.hateoas.Identifiable;
 public interface Type extends Identifiable<String> {
 
 	@NotNull(message = "type.validation.name.null")
-	@Size(max = 255, message = "type.validation.name.too.long")
+	@Size(max = 256, message = "type.validation.name.too.long")
 	String getName();
 
 	Long getVersion();

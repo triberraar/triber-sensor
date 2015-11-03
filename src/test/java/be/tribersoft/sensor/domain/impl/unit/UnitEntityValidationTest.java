@@ -35,7 +35,7 @@ public class UnitEntityValidationTest {
 
 	@Test
 	public void failsWhenNameIsTooLong() {
-		UnitEntity unitEntity = new UnitEntity(StringUtils.leftPad("a", 256));
+		UnitEntity unitEntity = new UnitEntity(StringUtils.leftPad("a", 257));
 
 		Set<ConstraintViolation<UnitEntity>> constraintViolations = validator.validate(unitEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);
@@ -44,7 +44,7 @@ public class UnitEntityValidationTest {
 
 	@Test
 	public void failsWhenSymbolIsTooLong() {
-		UnitEntity unitEntity = new UnitEntity(StringUtils.leftPad("a", 255));
+		UnitEntity unitEntity = new UnitEntity(StringUtils.leftPad("a", 256));
 		unitEntity.setSymbol(Optional.of(StringUtils.leftPad("a", 129)));
 
 		Set<ConstraintViolation<UnitEntity>> constraintViolations = validator.validate(unitEntity);

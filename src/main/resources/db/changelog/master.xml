@@ -9,5 +9,6 @@
 
     <include file="/db/changelog/type.xml"/>
     <include file="/db/changelog/unit.xml"/>
+    <include file="/db/changelog/sensor.xml"/>
 
 </databaseChangeLog>

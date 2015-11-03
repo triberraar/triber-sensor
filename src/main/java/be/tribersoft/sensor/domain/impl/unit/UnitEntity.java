@@ -28,7 +28,7 @@ public class UnitEntity implements Unit {
 	@Column(nullable = false)
 	private Long version;
 
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false, length = 256)
 	private String name;
 
 	@Column(nullable = false)
