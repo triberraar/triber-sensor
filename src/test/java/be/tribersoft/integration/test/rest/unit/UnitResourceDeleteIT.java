@@ -1,8 +1,7 @@
 package be.tribersoft.integration.test.rest.unit;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
@@ -34,12 +34,10 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class UnitResourceGetIT {
+public class UnitResourceDeleteIT {
 
 	private static final String SYMBOL = "symbol";
-
 	private static final String NON_EXISTING_UUID = "non existing uuid";
-
 	private static final String NAME = "name";
 
 	@Inject
@@ -50,66 +48,30 @@ public class UnitResourceGetIT {
 	@Value("${local.server.port}")
 	private int port;
 	private String uuid;
+	private Long version;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-	}
-
-	@Test
-	public void getUnit() {
 		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(SYMBOL)));
 		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = unitEntity.getId();
-		// @formatter:off
-		given().
-				pathParam("uuid", uuid).
-		when(). 
-				get("/api/admin/unit/{uuid}"). 
-		then(). 
-				contentType(ContentType.JSON).
-				body("size()", is(5)).
-				body("name", is(NAME)).
-				body("symbol", is(SYMBOL)).
-				body("id", is(uuid)).
-				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
-				statusCode(HttpStatus.OK.value());
-		// @formatter:on
+		version = unitEntity.getVersion();
 	}
 
 	@Test
-	public void failsWhenNotFound() {
-		// @formatter:off
-		given().
-				pathParam("uuid", NON_EXISTING_UUID).
-		when(). 
-				get("/api/admin/unit/{uuid}"). 
-		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value());
-		// @formatter:on
-	}
-
-	@Test
-	public void getUnitWithoutSymbol() {
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(null)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = unitEntity.getId();
+	public void deletesUnit() {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-		when(). 
-				get("/api/admin/unit/{uuid}"). 
-		then(). 
 				contentType(ContentType.JSON).
-				body("size()", is(5)).
-				body("name", is(NAME)).
-				body("symbol", isEmptyOrNullString()).
-				body("id", is(uuid)).
-				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
+				body(new UnitDeleteJsonImpl()).
+		when(). 
+				delete("/api/admin/unit/{uuid}"). 
+		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
+		assertThat(unitJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
 	}
 
 	private class UnitMessageImpl implements UnitMessage {
@@ -128,6 +90,13 @@ public class UnitResourceGetIT {
 		@Override
 		public Optional<String> getSymbol() {
 			return Optional.ofNullable(symbol);
+		}
+	}
+
+	private class UnitDeleteJsonImpl {
+		@JsonProperty
+		public Long getVersion() {
+			return version;
 		}
 	}
 }
