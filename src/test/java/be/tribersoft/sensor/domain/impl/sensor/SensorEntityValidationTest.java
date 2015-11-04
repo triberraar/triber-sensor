@@ -59,7 +59,7 @@ public class SensorEntityValidationTest {
 	@Test
 	public void failsWhenDescriptionIsTooLong() {
 		SensorEntity sensorEntity = new SensorEntity(NAME, type, unit);
-		sensorEntity.setDescription(Optional.of(StringUtils.leftPad("q", 4099)));
+		sensorEntity.setDescription(Optional.of(StringUtils.leftPad("q", 4097)));
 
 		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);

@@ -7,8 +7,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="create sensor" author="tribersoft">
-    	<createTable tableName="sensor" >
+    <changeSet id="create device" author="tribersoft">
+    	<createTable tableName="device" >
     		<column name="id" type="varchar(255)">
     			<constraints primaryKey="true" nullable="false"/>
     		</column>
@@ -23,18 +23,10 @@
     		</column>
     		<column name="description" type="varchar(4096)">
     		</column>
-    		<column name="type_id" type="varchar(255)">
-    			<constraints nullable="false"/>
+    		<column name="location" type="varchar(256)">
     		</column>
-    		<column name="unit_id" type="varchar(255)">
-    			<constraints nullable="false"/>
-    		</column>
+    		
     	</createTable>
     </changeSet>
     
-    <changeSet id="create sensor foreign keys" author="tribersoft">
-    	<addForeignKeyConstraint constraintName="sensor_type_fk" baseTableName="sensor" baseColumnNames="type_id" referencedTableName="type" referencedColumnNames="id"/>
-    	<addForeignKeyConstraint constraintName="sensor_unit_fk" baseTableName="sensor" baseColumnNames="unit_id" referencedTableName="unit" referencedColumnNames="id"/>
-    </changeSet>
-
 </databaseChangeLog>

@@ -17,7 +17,7 @@ public interface Sensor extends Identifiable<String> {
 
 	Long getVersion();
 
-	@Size(max = 2048, message = "sensor.validation.description.too.long")
+	@Size(max = 4096, message = "sensor.validation.description.too.long")
 	Optional<String> getDescription();
 
 	@NotNull(message = "sensor.validation.type.null")

@@ -1,4 +1,4 @@
-package be.tribersoft.sensor.domain.impl.sensor;
+package be.tribersoft.sensor.domain.impl.device;
 
 import java.util.Date;
 import java.util.Optional;
@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -15,12 +14,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
-import be.tribersoft.sensor.domain.api.sensor.Sensor;
-import be.tribersoft.sensor.domain.impl.type.TypeEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
+import be.tribersoft.sensor.domain.api.device.Device;
 
-@Entity(name = "sensor")
-public class SensorEntity implements Sensor {
+@Entity(name = "device")
+public class DeviceEntity implements Device {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
@@ -38,22 +35,17 @@ public class SensorEntity implements Sensor {
 	@Column(nullable = false, length = 256)
 	private String name;
 
-	@Column(length = 4096)
+	@Column(length = 4098)
 	private String description;
 
-	@ManyToOne(optional = false)
-	private TypeEntity type;
+	@Column(length = 256)
+	private String location;
 
-	@ManyToOne(optional = false)
-	private UnitEntity unit;
-
-	SensorEntity() {
+	DeviceEntity() {
 	}
 
-	public SensorEntity(String name, TypeEntity type, UnitEntity unit) {
+	public DeviceEntity(String name) {
 		this.name = name;
-		this.type = type;
-		this.unit = unit;
 		this.creationDate = DateFactory.generate();
 	}
 
@@ -65,19 +57,17 @@ public class SensorEntity implements Sensor {
 		}
 	}
 
+	public void setLocation(Optional<String> location) {
+		if (location.isPresent()) {
+			this.location = location.get();
+		} else {
+			this.location = null;
+		}
+	}
+
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	@Override
-	public TypeEntity getType() {
-		return type;
-	}
-
-	@Override
-	public UnitEntity getUnit() {
-		return unit;
 	}
 
 	Date getCreationDate() {
@@ -104,11 +94,8 @@ public class SensorEntity implements Sensor {
 
 	}
 
-	public void setType(TypeEntity typeEntity) {
-		this.type = typeEntity;
-	}
-
-	public void setUnit(UnitEntity unitEntity) {
-		this.unit = unitEntity;
+	@Override
+	public Optional<String> getLocation() {
+		return Optional.ofNullable(location);
 	}
 }
