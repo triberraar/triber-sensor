@@ -5,7 +5,9 @@ import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public interface Device {
+import org.springframework.hateoas.Identifiable;
+
+public interface Device extends Identifiable<String> {
 
 	@Size(max = 256, message = "device.validation.location.too.long")
 	Optional<String> getLocation();

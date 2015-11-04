@@ -28,8 +28,8 @@ public class SensorHateoasBuilder {
 			return build(sensor);
 		}).collect(Collectors.toList());
 
-		Resources<Resource<SensorToJsonAdapter>> unitResources = new Resources<>(transformedUnitResources);
-		unitResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).all()).withSelfRel());
-		return unitResources;
+		Resources<Resource<SensorToJsonAdapter>> sensorResources = new Resources<>(transformedUnitResources);
+		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).all()).withSelfRel());
+		return sensorResources;
 	}
 }
