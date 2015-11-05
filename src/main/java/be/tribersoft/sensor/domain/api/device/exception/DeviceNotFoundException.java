@@ -1,9 +1,12 @@
 package be.tribersoft.sensor.domain.api.device.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import be.tribersoft.sensor.domain.api.exception.NotFoundException;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Device not found")
-public class DeviceNotFoundException extends RuntimeException {
+public class DeviceNotFoundException extends NotFoundException {
+
+	@Override
+	public String getMessage() {
+		return "device.validation.not.found";
+	}
 
 }
