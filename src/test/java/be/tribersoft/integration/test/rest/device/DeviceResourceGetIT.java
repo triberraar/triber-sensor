@@ -1,7 +1,6 @@
-package be.tribersoft.integration.test.rest.unit;
+package be.tribersoft.integration.test.rest.device;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -25,28 +24,29 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.unit.UnitMessage;
-import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitFactory;
-import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.sensor.domain.api.type.DeviceMessage;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceFactory;
+import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class UnitResourceGetIT {
+public class DeviceResourceGetIT {
 
-	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
-	private static final String URL = "/api/admin/unit/{uuid}";
-	private static final String SYMBOL = "symbol";
+	private static final String URL = "/api/device/{uuid}";
+	private static final String DESCRIPTION = "description";
+	private static final String LOCATION = "location";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
 
 	@Inject
-	private UnitJpaRepository unitJpaRepository;
+	private DeviceFactory deviceFactory;
+
 	@Inject
-	private UnitFactory unitFactory;
+	private DeviceJpaRepository deviceJpaRepository;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -58,10 +58,10 @@ public class UnitResourceGetIT {
 	}
 
 	@Test
-	public void getUnit() {
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(SYMBOL)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = unitEntity.getId();
+	public void getDevice() {
+		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl(DESCRIPTION, LOCATION)));
+		DeviceEntity deviceEntity = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		uuid = deviceEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
@@ -69,34 +69,34 @@ public class UnitResourceGetIT {
 				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
-				body("size()", is(5)).
+				body("size()", is(6)).
 				body("name", is(NAME)).
-				body("symbol", is(SYMBOL)).
+				body("description", is(DESCRIPTION)).
+				body("location", is(LOCATION)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
 
 	@Test
-	public void notFoundWhenUnitDoesntExist() {
+	public void failsWhenNotFound() {
 		// @formatter:off
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
 				get(URL). 
 		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value()).
-				body("message", equalTo(UNIT_NOT_FOUND_EXCEPTION));
+				statusCode(HttpStatus.NOT_FOUND.value());
 		// @formatter:on
 	}
 
 	@Test
-	public void getUnitWithoutSymbol() {
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(null)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = unitEntity.getId();
+	public void getUnitWithoutDescriptionOrLocation() {
+		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl(null, null)));
+		DeviceEntity deviceEntity = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		uuid = deviceEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
@@ -104,22 +104,25 @@ public class UnitResourceGetIT {
 				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
-				body("size()", is(5)).
+				body("size()", is(6)).
 				body("name", is(NAME)).
-				body("symbol", isEmptyOrNullString()).
+				body("description", isEmptyOrNullString()).
+				body("location", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
 
-	private class UnitMessageImpl implements UnitMessage {
+	private class DeviceMessageImpl implements DeviceMessage {
 
-		private String symbol;
+		private String description;
+		private String location;
 
-		public UnitMessageImpl(String symbol) {
-			this.symbol = symbol;
+		public DeviceMessageImpl(String description, String location) {
+			this.description = description;
+			this.location = location;
 		}
 
 		@Override
@@ -128,8 +131,14 @@ public class UnitResourceGetIT {
 		}
 
 		@Override
-		public Optional<String> getSymbol() {
-			return Optional.ofNullable(symbol);
+		public Optional<String> getDescription() {
+			return Optional.ofNullable(description);
 		}
+
+		@Override
+		public Optional<String> getLocation() {
+			return Optional.ofNullable(location);
+		}
+
 	}
 }

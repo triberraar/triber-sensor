@@ -1,4 +1,4 @@
-package be.tribersoft.integration.test.rest.unit;
+package be.tribersoft.integration.test.rest.device;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,28 +25,29 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.unit.UnitMessage;
-import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitFactory;
-import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.sensor.domain.api.type.DeviceMessage;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceFactory;
+import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class UnitResourceDeleteIT {
+public class DeviceResourceDeleteIT {
 
-	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
-	private static final String API_ADMIN_UNIT_UUID = "/api/admin/unit/{uuid}";
-	private static final String SYMBOL = "symbol";
-	private static final String NON_EXISTING_UUID = "non existing uuid";
+	private static final String URL = "/api/device/{uuid}";
+	private static final String DESCRIPTION = "description";
+	private static final String LOCATION = "location";
 	private static final String NAME = "name";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
 
 	@Inject
-	private UnitJpaRepository unitJpaRepository;
+	private DeviceFactory deviceFactory;
+
 	@Inject
-	private UnitFactory unitFactory;
+	private DeviceJpaRepository deviceJpaRepository;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -56,50 +57,46 @@ public class UnitResourceDeleteIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(SYMBOL)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = unitEntity.getId();
-		version = unitEntity.getVersion();
+
+		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl()));
+		DeviceEntity deviceEntity = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		uuid = deviceEntity.getId();
+		version = deviceEntity.getVersion();
 	}
 
 	@Test
-	public void deletesUnit() {
+	public void deletesDevice() {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
+				body(new DeviceDeleteJsonImpl()).
 				contentType(ContentType.JSON).
-				body(new UnitDeleteJsonImpl()).
 		when(). 
-				delete(API_ADMIN_UNIT_UUID). 
+				delete(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
-		assertThat(unitJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
+		assertThat(deviceJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
 	}
 
 	@Test
-	public void notFoundWhenDeviceDoesntExist() {
+	public void failsWhenDeviceNotFound() {
 		// @formatter:off
 		given().
 			pathParam("uuid", NON_EXISTING_UUID).
-			contentType(ContentType.JSON).
-			body(new UnitDeleteJsonImpl()).
+			body(new DeviceDeleteJsonImpl()).
+		contentType(ContentType.JSON).
 		when(). 
-			delete(API_ADMIN_UNIT_UUID). 
+			delete(URL). 
 		then(). 
 			statusCode(HttpStatus.NOT_FOUND.value()).
-			body("message", equalTo(UNIT_NOT_FOUND_EXCEPTION));
+			body("message", equalTo("Device not found"));
 		// @formatter:on
-		assertThat(unitJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
+
+		assertThat(deviceJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
 	}
 
-	private class UnitMessageImpl implements UnitMessage {
-
-		private String symbol;
-
-		public UnitMessageImpl(String symbol) {
-			this.symbol = symbol;
-		}
+	private class DeviceMessageImpl implements DeviceMessage {
 
 		@Override
 		public String getName() {
@@ -107,12 +104,18 @@ public class UnitResourceDeleteIT {
 		}
 
 		@Override
-		public Optional<String> getSymbol() {
-			return Optional.ofNullable(symbol);
+		public Optional<String> getDescription() {
+			return Optional.of(DESCRIPTION);
 		}
+
+		@Override
+		public Optional<String> getLocation() {
+			return Optional.of(LOCATION);
+		}
+
 	}
 
-	private class UnitDeleteJsonImpl {
+	private class DeviceDeleteJsonImpl {
 		@JsonProperty
 		public Long getVersion() {
 			return version;

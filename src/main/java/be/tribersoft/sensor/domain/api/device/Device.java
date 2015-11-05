@@ -17,6 +17,7 @@ public interface Device extends Identifiable<String> {
 
 	Long getVersion();
 
+	@Override
 	String getId();
 
 	@NotNull(message = "device.validation.name.null")

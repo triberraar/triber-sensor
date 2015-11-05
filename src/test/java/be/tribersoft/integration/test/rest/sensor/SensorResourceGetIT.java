@@ -1,6 +1,7 @@
 package be.tribersoft.integration.test.rest.sensor;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -40,6 +41,8 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourceGetIT {
 
+	private static final String URL = "/api/sensor/{uuid}";
+	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
@@ -81,7 +84,7 @@ public class SensorResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/api/sensor/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
@@ -102,9 +105,10 @@ public class SensorResourceGetIT {
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
-				get("/api/sensor/{uuid}"). 
+				get(URL). 
 		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value());
+				statusCode(HttpStatus.NOT_FOUND.value()).
+				body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 	}
 
@@ -117,7 +121,7 @@ public class SensorResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/api/sensor/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).

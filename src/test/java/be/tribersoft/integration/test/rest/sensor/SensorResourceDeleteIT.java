@@ -2,6 +2,7 @@ package be.tribersoft.integration.test.rest.sensor;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.Optional;
 
@@ -40,10 +41,13 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourceDeleteIT {
 
+	private static final String URL = "/api/sensor/{uuid}";
+	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NAME = "name";
 	private static final String UNIT_NAME = "unit name";
 	private static final String TYPE_NAME = "type name";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
 
 	@Inject
 	private SensorFactory sensorFactory;
@@ -84,11 +88,28 @@ public class SensorResourceDeleteIT {
 				body(new SensorDeleteJsonImpl()).
 				contentType(ContentType.JSON).
 		when(). 
-				delete("/api/sensor/{uuid}"). 
+				delete(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 		assertThat(sensorJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
+	}
+
+	@Test
+	public void notFoundWhenSensorDoesntExist() {
+		// @formatter:off
+		given().
+				pathParam("uuid", NON_EXISTING_UUID).
+				body(new SensorDeleteJsonImpl()).
+				contentType(ContentType.JSON).
+		when(). 
+				delete(URL). 
+		then(). 
+				statusCode(HttpStatus.NOT_FOUND.value()).
+				body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
+		
+		// @formatter:on
+		assertThat(sensorJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
 	}
 
 	private class SensorMessageImpl implements SensorMessage {

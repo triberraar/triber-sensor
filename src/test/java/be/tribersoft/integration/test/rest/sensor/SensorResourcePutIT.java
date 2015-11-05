@@ -42,6 +42,8 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourcePutIT {
 
+	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String URL = "/api/sensor/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
@@ -108,11 +110,11 @@ public class SensorResourcePutIT {
 	}
 
 	@Test
-	public void updatesSensorWithoutSymbol() {
+	public void updatesSensorWithoutDescription() {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-				body(new SensorPutJsonImplWithoutSymbol()). 
+				body(new SensorPutJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
 				put(URL). 
@@ -158,6 +160,21 @@ public class SensorResourcePutIT {
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
+		// @formatter:on
+	}
+
+	@Test
+	public void notFoundWhenSensorDoesntExist() {
+		// @formatter:off
+		given(). 
+			pathParam("uuid", NON_EXISTING_UUID).
+			body(new SensorPutJsonImpl()). 
+			contentType(ContentType.JSON).
+		when(). 
+			put(URL). 
+		then(). 
+			statusCode(HttpStatus.NOT_FOUND.value()).
+			body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 	}
 
@@ -233,7 +250,7 @@ public class SensorResourcePutIT {
 		}
 	}
 
-	private class SensorPutJsonImplWithoutSymbol {
+	private class SensorPutJsonImplWithoutDescription {
 		@JsonProperty
 		public String getName() {
 			return UPDATED_NAME;

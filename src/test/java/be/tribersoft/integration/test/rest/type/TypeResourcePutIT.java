@@ -37,6 +37,8 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourcePutIT {
 
+	private static final String TYPE_NOT_FOUND_EXCEPTION = "Type not found";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String URL = "/api/admin/type/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
@@ -110,6 +112,21 @@ public class TypeResourcePutIT {
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
+		// @formatter:on
+	}
+
+	@Test
+	public void notFoundWhenTypeDoesntExist() {
+		// @formatter:off
+		given(). 
+			pathParam("uuid", NON_EXISTING_UUID).
+			body(new TypePutJsonImpl()). 
+			contentType(ContentType.JSON).
+		when(). 
+			put(URL). 
+		then(). 
+			statusCode(HttpStatus.NOT_FOUND.value()).
+			body("message", equalTo(TYPE_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 	}
 
