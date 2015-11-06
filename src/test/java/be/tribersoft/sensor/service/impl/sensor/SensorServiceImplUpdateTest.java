@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
-import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SensorServiceImplUpdateTest {
@@ -21,13 +21,13 @@ public class SensorServiceImplUpdateTest {
 	@Mock
 	private SensorFacade sensorFacade;
 	@Mock
-	private SensorMessage sensorMessage;
+	private SensorUpdateMessage sensorUpdateMessage;
 
 	@Test
 	public void delegatesToFacade() {
-		sensorService.update(ID, VERSION, sensorMessage);
+		sensorService.update(ID, VERSION, sensorUpdateMessage);
 
-		verify(sensorFacade).update(ID, VERSION, sensorMessage);
+		verify(sensorFacade).update(ID, VERSION, sensorUpdateMessage);
 	}
 
 }

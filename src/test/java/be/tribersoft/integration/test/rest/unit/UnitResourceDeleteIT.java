@@ -2,6 +2,7 @@ package be.tribersoft.integration.test.rest.unit;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.Optional;
 
@@ -36,6 +37,8 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class UnitResourceDeleteIT {
 
+	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
+	private static final String API_ADMIN_UNIT_UUID = "/api/admin/unit/{uuid}";
 	private static final String SYMBOL = "symbol";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
@@ -67,11 +70,27 @@ public class UnitResourceDeleteIT {
 				contentType(ContentType.JSON).
 				body(new UnitDeleteJsonImpl()).
 		when(). 
-				delete("/api/admin/unit/{uuid}"). 
+				delete(API_ADMIN_UNIT_UUID). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 		assertThat(unitJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
+	}
+
+	@Test
+	public void notFoundWhenDeviceDoesntExist() {
+		// @formatter:off
+		given().
+			pathParam("uuid", NON_EXISTING_UUID).
+			contentType(ContentType.JSON).
+			body(new UnitDeleteJsonImpl()).
+		when(). 
+			delete(API_ADMIN_UNIT_UUID). 
+		then(). 
+			statusCode(HttpStatus.NOT_FOUND.value()).
+			body("message", equalTo(UNIT_NOT_FOUND_EXCEPTION));
+		// @formatter:on
+		assertThat(unitJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
 	}
 
 	private class UnitMessageImpl implements UnitMessage {

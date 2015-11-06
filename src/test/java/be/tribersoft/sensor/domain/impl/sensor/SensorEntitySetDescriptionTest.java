@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 
@@ -21,8 +22,10 @@ public class SensorEntitySetDescriptionTest {
 	private TypeEntity type;
 	@Mock
 	private UnitEntity unit;
+	@Mock
+	private DeviceEntity device;
 
-	private SensorEntity sensor = new SensorEntity(NAME, type, unit);
+	private SensorEntity sensor = new SensorEntity(NAME, device, type, unit);
 
 	@Test
 	public void setsDescriptionToNullWhenEmpty() {

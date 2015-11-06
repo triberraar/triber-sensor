@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import be.tribersoft.sensor.domain.api.device.Device;
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.unit.Unit;
@@ -38,6 +39,8 @@ public class SensorHateoasBuilderBuildTest {
 	private static String TYPE_ID_2 = "typeId2";
 	private static String UNIT_ID_1 = "sensorId1";
 	private static String UNIT_ID_2 = "sensorId2";
+	private static String DEVICE_ID_1 = "deviceId1";
+	private static String DEVICE_ID_2 = "deviceIdd";
 
 	protected MockHttpServletRequest request;
 
@@ -50,6 +53,8 @@ public class SensorHateoasBuilderBuildTest {
 	private Type type1, type2;
 	@Mock
 	private Unit unit1, unit2;
+	@Mock
+	private Device device1, device2;
 
 	@Before
 	public void setUp() {
@@ -63,12 +68,16 @@ public class SensorHateoasBuilderBuildTest {
 		when(unit1.getId()).thenReturn(UNIT_ID_1);
 		when(unit2.getId()).thenReturn(UNIT_ID_2);
 
+		when(device1.getId()).thenReturn(DEVICE_ID_1);
+		when(device2.getId()).thenReturn(DEVICE_ID_2);
+
 		when(sensor1.getId()).thenReturn(ID_1);
 		when(sensor1.getName()).thenReturn(NAME_1);
 		when(sensor1.getVersion()).thenReturn(VERSION_1);
 		when(sensor1.getDescription()).thenReturn(Optional.of(DESCRIPTION_1));
 		when(sensor1.getType()).thenReturn(type1);
 		when(sensor1.getUnit()).thenReturn(unit1);
+		when(sensor1.getDevice()).thenReturn(device1);
 		when(sensor1.getDescription()).thenReturn(Optional.of(DESCRIPTION_1));
 		when(sensor2.getId()).thenReturn(ID_2);
 		when(sensor2.getName()).thenReturn(NAME_2);
@@ -76,6 +85,7 @@ public class SensorHateoasBuilderBuildTest {
 		when(sensor2.getDescription()).thenReturn(Optional.ofNullable(null));
 		when(sensor2.getType()).thenReturn(type2);
 		when(sensor2.getUnit()).thenReturn(unit2);
+		when(sensor2.getDevice()).thenReturn(device2);
 	}
 
 	@Test
@@ -88,13 +98,15 @@ public class SensorHateoasBuilderBuildTest {
 		assertThat(content.getName()).isEqualTo(NAME_1);
 		assertThat(content.getDescription().get()).isEqualTo(DESCRIPTION_1);
 		List<Link> links = sensorResource.getLinks();
-		assertThat(links.size()).isEqualTo(3);
+		assertThat(links.size()).isEqualTo(4);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(links.get(0).getHref()).endsWith("/api/sensor/" + ID_1);
 		assertThat(links.get(1).getRel()).isEqualTo("type");
 		assertThat(links.get(1).getHref()).endsWith("/api/admin/type/" + TYPE_ID_1);
 		assertThat(links.get(2).getRel()).isEqualTo("unit");
 		assertThat(links.get(2).getHref()).endsWith("/api/admin/unit/" + UNIT_ID_1);
+		assertThat(links.get(3).getRel()).isEqualTo("device");
+		assertThat(links.get(3).getHref()).endsWith("/api/device/" + DEVICE_ID_1);
 	}
 
 	@Test
@@ -116,13 +128,15 @@ public class SensorHateoasBuilderBuildTest {
 		assertThat(first.getContent().getName()).isEqualTo(NAME_1);
 		assertThat(first.getContent().getDescription().get()).isEqualTo(DESCRIPTION_1);
 		List<Link> firstLinks = first.getLinks();
-		assertThat(firstLinks.size()).isEqualTo(3);
+		assertThat(firstLinks.size()).isEqualTo(4);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(firstLinks.get(0).getHref()).endsWith("/api/sensor/" + ID_1);
 		assertThat(firstLinks.get(1).getRel()).isEqualTo("type");
 		assertThat(firstLinks.get(1).getHref()).endsWith("/api/admin/type/" + TYPE_ID_1);
 		assertThat(firstLinks.get(2).getRel()).isEqualTo("unit");
 		assertThat(firstLinks.get(2).getHref()).endsWith("/api/admin/unit/" + UNIT_ID_1);
+		assertThat(firstLinks.get(3).getRel()).isEqualTo("device");
+		assertThat(firstLinks.get(3).getHref()).endsWith("/api/device/" + DEVICE_ID_1);
 
 		Resource<SensorToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -130,13 +144,15 @@ public class SensorHateoasBuilderBuildTest {
 		assertThat(second.getContent().getName()).isEqualTo(NAME_2);
 		assertThat(second.getContent().getDescription().isPresent()).isFalse();
 		List<Link> secondLinks = second.getLinks();
-		assertThat(secondLinks.size()).isEqualTo(3);
+		assertThat(secondLinks.size()).isEqualTo(4);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(secondLinks.get(0).getHref()).endsWith("/api/sensor/" + ID_2);
 		assertThat(secondLinks.get(1).getRel()).isEqualTo("type");
 		assertThat(secondLinks.get(1).getHref()).endsWith("/api/admin/type/" + TYPE_ID_2);
 		assertThat(secondLinks.get(2).getRel()).isEqualTo("unit");
 		assertThat(secondLinks.get(2).getHref()).endsWith("/api/admin/unit/" + UNIT_ID_2);
+		assertThat(secondLinks.get(3).getRel()).isEqualTo("device");
+		assertThat(secondLinks.get(3).getHref()).endsWith("/api/device/" + DEVICE_ID_2);
 	}
 
 }

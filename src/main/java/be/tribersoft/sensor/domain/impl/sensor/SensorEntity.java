@@ -16,6 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 
@@ -38,7 +39,7 @@ public class SensorEntity implements Sensor {
 	@Column(nullable = false, length = 256)
 	private String name;
 
-	@Column(length = 4098)
+	@Column(length = 4096)
 	private String description;
 
 	@ManyToOne(optional = false)
@@ -47,10 +48,14 @@ public class SensorEntity implements Sensor {
 	@ManyToOne(optional = false)
 	private UnitEntity unit;
 
+	@ManyToOne(optional = false)
+	private DeviceEntity device;
+
 	SensorEntity() {
 	}
 
-	public SensorEntity(String name, TypeEntity type, UnitEntity unit) {
+	public SensorEntity(String name, DeviceEntity device, TypeEntity type, UnitEntity unit) {
+		this.device = device;
 		this.name = name;
 		this.type = type;
 		this.unit = unit;
@@ -80,6 +85,11 @@ public class SensorEntity implements Sensor {
 		return unit;
 	}
 
+	@Override
+	public DeviceEntity getDevice() {
+		return device;
+	}
+
 	Date getCreationDate() {
 		return creationDate;
 	}
@@ -101,14 +111,6 @@ public class SensorEntity implements Sensor {
 
 	public void setName(String name) {
 		this.name = name;
-
 	}
 
-	public void setType(TypeEntity typeEntity) {
-		this.type = typeEntity;
-	}
-
-	public void setUnit(UnitEntity unitEntity) {
-		this.unit = unitEntity;
-	}
 }

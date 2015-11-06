@@ -1,6 +1,7 @@
 package be.tribersoft.integration.test.rest.unit;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -36,10 +37,10 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class UnitResourceGetIT {
 
+	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
+	private static final String URL = "/api/admin/unit/{uuid}";
 	private static final String SYMBOL = "symbol";
-
 	private static final String NON_EXISTING_UUID = "non existing uuid";
-
 	private static final String NAME = "name";
 
 	@Inject
@@ -65,7 +66,7 @@ public class UnitResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/api/admin/unit/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
@@ -79,14 +80,15 @@ public class UnitResourceGetIT {
 	}
 
 	@Test
-	public void failsWhenNotFound() {
+	public void notFoundWhenUnitDoesntExist() {
 		// @formatter:off
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
-				get("/api/admin/unit/{uuid}"). 
+				get(URL). 
 		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value());
+				statusCode(HttpStatus.NOT_FOUND.value()).
+				body("message", equalTo(UNIT_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 	}
 
@@ -99,7 +101,7 @@ public class UnitResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/api/admin/unit/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).

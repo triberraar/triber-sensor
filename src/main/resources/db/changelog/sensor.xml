@@ -21,12 +21,15 @@
     		<column name="name" type="varchar(256)">
     			<constraints nullable="false"/>
     		</column>
-    		<column name="description" type="varchar(4098)">
+    		<column name="description" type="varchar(4096)">
     		</column>
     		<column name="type_id" type="varchar(255)">
     			<constraints nullable="false"/>
     		</column>
     		<column name="unit_id" type="varchar(255)">
+    			<constraints nullable="false"/>
+    		</column>
+    		<column name="device_id" type="varchar(255)">
     			<constraints nullable="false"/>
     		</column>
     	</createTable>
@@ -35,6 +38,7 @@
     <changeSet id="create sensor foreign keys" author="tribersoft">
     	<addForeignKeyConstraint constraintName="sensor_type_fk" baseTableName="sensor" baseColumnNames="type_id" referencedTableName="type" referencedColumnNames="id"/>
     	<addForeignKeyConstraint constraintName="sensor_unit_fk" baseTableName="sensor" baseColumnNames="unit_id" referencedTableName="unit" referencedColumnNames="id"/>
+    	<addForeignKeyConstraint constraintName="sensor_device_fk" baseTableName="sensor" baseColumnNames="device_id" referencedTableName="device" referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

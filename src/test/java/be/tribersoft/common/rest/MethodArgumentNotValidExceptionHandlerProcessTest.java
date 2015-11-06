@@ -1,4 +1,4 @@
-package be.tribersoft.rest;
+package be.tribersoft.common.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;

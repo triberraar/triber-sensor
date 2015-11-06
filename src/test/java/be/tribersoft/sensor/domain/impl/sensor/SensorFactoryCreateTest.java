@@ -17,6 +17,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceRepositoryImpl;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeRepositoryImpl;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
@@ -28,6 +30,7 @@ public class SensorFactoryCreateTest {
 	private static final String NAME = "name";
 	private static final String UNIT_ID = "unit id";
 	private static final String TYPE_ID = "type id";
+	private static final String DEVICE_ID = "device id";
 	private static final Optional<String> DESCRIPTION = Optional.of("description");
 	private static final LocalDateTime DATE = LocalDateTime.now();
 
@@ -41,10 +44,16 @@ public class SensorFactoryCreateTest {
 	private UnitRepositoryImpl unitRepository;
 
 	@Mock
+	private DeviceRepositoryImpl deviceRepository;
+
+	@Mock
 	private TypeEntity type;
 
 	@Mock
 	private UnitEntity unit;
+
+	@Mock
+	private DeviceEntity device;
 
 	@Mock
 	private SensorMessage sensorMessage;
@@ -54,6 +63,7 @@ public class SensorFactoryCreateTest {
 		DateFactory.fixateDate(DATE);
 		when(typeRepository.getById(TYPE_ID)).thenReturn(type);
 		when(unitRepository.getById(UNIT_ID)).thenReturn(unit);
+		when(deviceRepository.getById(DEVICE_ID)).thenReturn(device);
 		when(sensorMessage.getDescription()).thenReturn(DESCRIPTION);
 		when(sensorMessage.getName()).thenReturn(NAME);
 		when(sensorMessage.getTypeId()).thenReturn(TYPE_ID);

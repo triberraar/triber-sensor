@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 
@@ -31,6 +32,8 @@ public class SensorEntityValidationTest {
 	private UnitEntity unit;
 	@Mock
 	private TypeEntity type;
+	@Mock
+	private DeviceEntity device;
 
 	@BeforeClass
 	public static void setUp() {
@@ -40,7 +43,7 @@ public class SensorEntityValidationTest {
 
 	@Test
 	public void failsWhenNameIsNull() {
-		SensorEntity sensorEntity = new SensorEntity(null, type, unit);
+		SensorEntity sensorEntity = new SensorEntity(null, device, type, unit);
 
 		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);
@@ -49,7 +52,7 @@ public class SensorEntityValidationTest {
 
 	@Test
 	public void failsWhenNameIsTooLong() {
-		SensorEntity sensorEntity = new SensorEntity(StringUtils.leftPad("a", 257), type, unit);
+		SensorEntity sensorEntity = new SensorEntity(StringUtils.leftPad("a", 257), device, type, unit);
 
 		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);
@@ -58,8 +61,8 @@ public class SensorEntityValidationTest {
 
 	@Test
 	public void failsWhenDescriptionIsTooLong() {
-		SensorEntity sensorEntity = new SensorEntity(NAME, type, unit);
-		sensorEntity.setDescription(Optional.of(StringUtils.leftPad("q", 4099)));
+		SensorEntity sensorEntity = new SensorEntity(NAME, device, type, unit);
+		sensorEntity.setDescription(Optional.of(StringUtils.leftPad("q", 4097)));
 
 		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);
@@ -67,8 +70,17 @@ public class SensorEntityValidationTest {
 	}
 
 	@Test
+	public void failsWhenDeviceIsNull() {
+		SensorEntity sensorEntity = new SensorEntity(NAME, null, type, unit);
+
+		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
+		assertThat(constraintViolations.size()).isEqualTo(1);
+		assertThat(constraintViolations.iterator().next().getMessage()).isEqualTo("sensor.validation.device.null");
+	}
+
+	@Test
 	public void failsWhenTypeIsNull() {
-		SensorEntity sensorEntity = new SensorEntity(NAME, null, unit);
+		SensorEntity sensorEntity = new SensorEntity(NAME, device, null, unit);
 
 		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);
@@ -77,7 +89,7 @@ public class SensorEntityValidationTest {
 
 	@Test
 	public void failsWhenUnitIsNull() {
-		SensorEntity sensorEntity = new SensorEntity(NAME, type, null);
+		SensorEntity sensorEntity = new SensorEntity(NAME, device, type, null);
 
 		Set<ConstraintViolation<SensorEntity>> constraintViolations = validator.validate(sensorEntity);
 		assertThat(constraintViolations.size()).isEqualTo(1);

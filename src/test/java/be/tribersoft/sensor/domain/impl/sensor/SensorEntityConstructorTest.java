@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 
@@ -25,6 +26,8 @@ public class SensorEntityConstructorTest {
 	private TypeEntity type;
 	@Mock
 	private UnitEntity unit;
+	@Mock
+	private DeviceEntity device;
 
 	@Before
 	public void setUp() {
@@ -33,11 +36,12 @@ public class SensorEntityConstructorTest {
 
 	@Test
 	public void constructsSuccessfully() {
-		SensorEntity sensor = new SensorEntity(NAME, type, unit);
+		SensorEntity sensor = new SensorEntity(NAME, device, type, unit);
 
 		assertThat(sensor.getName()).isEqualTo(NAME);
 		assertThat(sensor.getType()).isSameAs(type);
 		assertThat(sensor.getUnit()).isSameAs(unit);
+		assertThat(sensor.getDevice()).isSameAs(device);
 		assertThat(sensor.getCreationDate()).isEqualTo(Date.from(DATE.atZone(ZoneId.systemDefault()).toInstant()));
 	}
 

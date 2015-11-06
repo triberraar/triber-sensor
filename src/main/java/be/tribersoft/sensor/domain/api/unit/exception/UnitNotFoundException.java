@@ -1,9 +1,12 @@
 package be.tribersoft.sensor.domain.api.unit.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import be.tribersoft.sensor.domain.api.exception.NotFoundException;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Unit not found")
-public class UnitNotFoundException extends RuntimeException {
+public class UnitNotFoundException extends NotFoundException {
+
+	@Override
+	public String getMessage() {
+		return "unit.validation.not.found";
+	}
 
 }

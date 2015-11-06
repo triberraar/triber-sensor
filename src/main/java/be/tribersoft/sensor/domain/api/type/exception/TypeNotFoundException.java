@@ -1,9 +1,12 @@
 package be.tribersoft.sensor.domain.api.type.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import be.tribersoft.sensor.domain.api.exception.NotFoundException;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Type not found")
-public class TypeNotFoundException extends RuntimeException {
+public class TypeNotFoundException extends NotFoundException {
+
+	@Override
+	public String getMessage() {
+		return "type.validation.not.found";
+	}
 
 }

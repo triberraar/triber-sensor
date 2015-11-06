@@ -1,6 +1,7 @@
 package be.tribersoft.integration.test.rest.type;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import javax.inject.Inject;
@@ -33,10 +34,9 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceGetIT {
 
+	private static final String TYPE_NOT_FOUND_EXCPETION = "Type not found";
 	private static final String URL = "/api/admin/type/{uuid}";
-
 	private static final String NON_EXISTING_UUID = "non existing uuid";
-
 	private static final String NAME = "name";
 
 	@Inject
@@ -82,7 +82,8 @@ public class TypeResourceGetIT {
 		when(). 
 				get(URL). 
 		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value());
+				statusCode(HttpStatus.NOT_FOUND.value()).
+				body("message", equalTo(TYPE_NOT_FOUND_EXCPETION));
 		// @formatter:on
 	}
 

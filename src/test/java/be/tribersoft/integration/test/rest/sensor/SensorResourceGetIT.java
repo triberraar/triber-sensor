@@ -1,6 +1,7 @@
 package be.tribersoft.integration.test.rest.sensor;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -25,6 +26,8 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
 import be.tribersoft.sensor.domain.impl.sensor.SensorFactory;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
@@ -40,6 +43,9 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourceGetIT {
 
+	private static final String DEVICE_NAME = "device name";
+	private static final String URL = "/api/sensor/{uuid}";
+	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
@@ -54,6 +60,8 @@ public class SensorResourceGetIT {
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
 	@Inject
+	private DeviceJpaRepository deviceJpaRepository;
+	@Inject
 	private SensorJpaRepository sensorJpaRepository;
 
 	@Value("${local.server.port}")
@@ -61,6 +69,7 @@ public class SensorResourceGetIT {
 	private String uuid;
 	private String typeId;
 	private String unitId;
+	private String deviceId;
 
 	@Before
 	public void setUp() {
@@ -70,6 +79,8 @@ public class SensorResourceGetIT {
 		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
 		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
+		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 	}
 
 	@Test
@@ -81,7 +92,7 @@ public class SensorResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/api/sensor/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
@@ -92,6 +103,7 @@ public class SensorResourceGetIT {
 				body("_links.self.href", is("http://localhost:" + port+"/api/sensor/" + uuid)).
 				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
 				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
+				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -102,9 +114,10 @@ public class SensorResourceGetIT {
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
-				get("/api/sensor/{uuid}"). 
+				get(URL). 
 		then(). 
-				statusCode(HttpStatus.NOT_FOUND.value());
+				statusCode(HttpStatus.NOT_FOUND.value()).
+				body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 	}
 
@@ -117,7 +130,7 @@ public class SensorResourceGetIT {
 		given().
 				pathParam("uuid", uuid).
 		when(). 
-				get("/api/sensor/{uuid}"). 
+				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(5)).
@@ -128,6 +141,7 @@ public class SensorResourceGetIT {
 				body("_links.self.href", is("http://localhost:" + port+"/api/sensor/" + uuid)).
 				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
 				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
+				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -158,6 +172,11 @@ public class SensorResourceGetIT {
 		@Override
 		public String getUnitId() {
 			return unitId;
+		}
+
+		@Override
+		public String getDeviceId() {
+			return deviceId;
 		}
 	}
 }

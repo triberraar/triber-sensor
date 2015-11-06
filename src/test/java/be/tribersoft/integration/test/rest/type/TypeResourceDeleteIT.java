@@ -2,6 +2,7 @@ package be.tribersoft.integration.test.rest.type;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import javax.inject.Inject;
 
@@ -34,6 +35,7 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceDeleteIT {
 
+	private static final String TYPE_NOT_FOUND_EXCEPTION = "Type not found";
 	private static final String URL = "/api/admin/type/{uuid}";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
@@ -71,6 +73,23 @@ public class TypeResourceDeleteIT {
 		// @formatter:on
 
 		assertThat(typeJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
+	}
+
+	@Test
+	public void failsWhenTypeNotFound() {
+		// @formatter:off
+		given().
+				pathParam("uuid", NON_EXISTING_UUID).
+				body(new TypeDeleteJsonImpl()).
+				contentType(ContentType.JSON).
+		when(). 
+				delete(URL). 
+		then(). 
+				statusCode(HttpStatus.NOT_FOUND.value()).
+				body("message", equalTo(TYPE_NOT_FOUND_EXCEPTION));
+		// @formatter:on
+
+		assertThat(typeJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
 	}
 
 	private class TypeMessageImpl implements TypeMessage {

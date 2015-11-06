@@ -27,6 +27,8 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
 import be.tribersoft.sensor.domain.impl.sensor.SensorFactory;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
@@ -42,6 +44,9 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourcePutIT {
 
+	private static final String DEVICE_NAME = "device name";
+	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String URL = "/api/sensor/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
@@ -60,6 +65,8 @@ public class SensorResourcePutIT {
 	private UnitJpaRepository unitJpaRepository;
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
+	@Inject
+	private DeviceJpaRepository deviceJpaRepository;
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -67,6 +74,7 @@ public class SensorResourcePutIT {
 	private Long version;
 	private String typeId;
 	private String unitId;
+	private String deviceId;
 
 	@Before
 	public void setUp() {
@@ -76,6 +84,8 @@ public class SensorResourcePutIT {
 		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
 		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
+		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 
 		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl()));
 		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
@@ -103,16 +113,17 @@ public class SensorResourcePutIT {
 		assertThat(sensorEntity.getDescription().get()).isEqualTo(UPDATED_DESCRIPTION);
 		assertThat(sensorEntity.getType().getId()).isEqualTo(typeId);
 		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitId);
+		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceId);
 		assertThat(sensorEntity.getId()).isEqualTo(uuid);
 		assertThat(sensorEntity.getVersion()).isEqualTo(version + 1);
 	}
 
 	@Test
-	public void updatesSensorWithoutSymbol() {
+	public void updatesSensorWithoutDescription() {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-				body(new SensorPutJsonImplWithoutSymbol()). 
+				body(new SensorPutJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
 				put(URL). 
@@ -127,6 +138,7 @@ public class SensorResourcePutIT {
 		assertThat(sensorEntity.getDescription().isPresent()).isFalse();
 		assertThat(sensorEntity.getType().getId()).isEqualTo(typeId);
 		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitId);
+		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceId);
 		assertThat(sensorEntity.getId()).isEqualTo(uuid);
 		assertThat(sensorEntity.getVersion()).isEqualTo(version + 1);
 	}
@@ -158,6 +170,21 @@ public class SensorResourcePutIT {
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
+		// @formatter:on
+	}
+
+	@Test
+	public void notFoundWhenSensorDoesntExist() {
+		// @formatter:off
+		given(). 
+			pathParam("uuid", NON_EXISTING_UUID).
+			body(new SensorPutJsonImpl()). 
+			contentType(ContentType.JSON).
+		when(). 
+			put(URL). 
+		then(). 
+			statusCode(HttpStatus.NOT_FOUND.value()).
+			body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 	}
 
@@ -233,7 +260,7 @@ public class SensorResourcePutIT {
 		}
 	}
 
-	private class SensorPutJsonImplWithoutSymbol {
+	private class SensorPutJsonImplWithoutDescription {
 		@JsonProperty
 		public String getName() {
 			return UPDATED_NAME;
@@ -275,6 +302,11 @@ public class SensorResourcePutIT {
 		@Override
 		public String getUnitId() {
 			return unitId;
+		}
+
+		@Override
+		public String getDeviceId() {
+			return deviceId;
 		}
 
 	}
