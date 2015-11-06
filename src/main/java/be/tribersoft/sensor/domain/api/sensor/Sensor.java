@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.Identifiable;
 
+import be.tribersoft.sensor.domain.api.device.Device;
 import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.unit.Unit;
 
@@ -25,5 +26,8 @@ public interface Sensor extends Identifiable<String> {
 
 	@NotNull(message = "sensor.validation.unit.null")
 	Unit getUnit();
+
+	@NotNull(message = "sensor.validation.device.null")
+	Device getDevice();
 
 }

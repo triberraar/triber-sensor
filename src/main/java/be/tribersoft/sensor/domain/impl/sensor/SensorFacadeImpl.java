@@ -5,6 +5,7 @@ import javax.inject.Named;
 
 import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 
 @Named
 public class SensorFacadeImpl implements SensorFacade {
@@ -22,9 +23,9 @@ public class SensorFacadeImpl implements SensorFacade {
 	}
 
 	@Override
-	public void update(String id, Long version, SensorMessage sensorMessage) {
+	public void update(String id, Long version, SensorUpdateMessage sensorUpdateMessage) {
 		SensorEntity sensor = sensorRepository.getByIdAndVersion(id, version);
-		sensorUpdater.update(sensor, sensorMessage);
+		sensorUpdater.update(sensor, sensorUpdateMessage);
 	}
 
 	@Override

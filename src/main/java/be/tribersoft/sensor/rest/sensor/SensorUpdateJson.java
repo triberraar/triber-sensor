@@ -2,16 +2,13 @@ package be.tribersoft.sensor.rest.sensor;
 
 import java.util.Optional;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 
-public class SensorUpdateJson implements SensorMessage {
+public class SensorUpdateJson implements SensorUpdateMessage {
 
 	@JsonProperty
-	@NotNull(message = "sensor.validation.version.null")
 	private Long version;
 	@JsonProperty
 	private String name;
@@ -37,16 +34,6 @@ public class SensorUpdateJson implements SensorMessage {
 			description = Optional.empty();
 		}
 		return description;
-	}
-
-	@Override
-	public String getTypeId() {
-		return typeId;
-	}
-
-	@Override
-	public String getUnitId() {
-		return unitId;
 	}
 
 }

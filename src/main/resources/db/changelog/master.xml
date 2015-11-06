@@ -9,7 +9,7 @@
 
     <include file="/db/changelog/type.xml"/>
     <include file="/db/changelog/unit.xml"/>
-    <include file="/db/changelog/sensor.xml"/>
     <include file="/db/changelog/device.xml"/>
+    <include file="/db/changelog/sensor.xml"/>
 
 </databaseChangeLog>

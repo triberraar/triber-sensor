@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 import be.tribersoft.sensor.service.api.sensor.SensorService;
 
 @Named
@@ -21,8 +22,8 @@ public class SensorServiceImpl implements SensorService {
 	}
 
 	@Override
-	public void update(String id, Long version, SensorMessage sensorMessage) {
-		sensorFacade.update(id, version, sensorMessage);
+	public void update(String id, Long version, SensorUpdateMessage sensorUpdateMessage) {
+		sensorFacade.update(id, version, sensorUpdateMessage);
 	}
 
 	@Override

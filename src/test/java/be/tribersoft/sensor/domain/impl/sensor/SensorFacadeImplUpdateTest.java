@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SensorFacadeImplUpdateTest {
@@ -24,7 +24,7 @@ public class SensorFacadeImplUpdateTest {
 	@Mock
 	private SensorUpdater sensorUpdater;
 	@Mock
-	private SensorMessage sensorMessage;
+	private SensorUpdateMessage sensorUpdateMessage;
 	@Mock
 	private SensorEntity sensor;
 	@Mock
@@ -37,9 +37,9 @@ public class SensorFacadeImplUpdateTest {
 
 	@Test
 	public void savesCreatedSensor() {
-		sensorFacade.update(ID, VERSION, sensorMessage);
+		sensorFacade.update(ID, VERSION, sensorUpdateMessage);
 
-		verify(sensorUpdater).update(sensor, sensorMessage);
+		verify(sensorUpdater).update(sensor, sensorUpdateMessage);
 	}
 
 }

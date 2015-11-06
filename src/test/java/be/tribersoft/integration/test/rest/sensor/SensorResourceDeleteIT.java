@@ -26,6 +26,8 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
 import be.tribersoft.sensor.domain.impl.sensor.SensorFactory;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
@@ -41,6 +43,7 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourceDeleteIT {
 
+	private static final String DEVICE_NAME = "device name";
 	private static final String URL = "/api/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
@@ -57,6 +60,8 @@ public class SensorResourceDeleteIT {
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
 	@Inject
+	private DeviceJpaRepository deviceJpaRepository;
+	@Inject
 	private SensorJpaRepository sensorJpaRepository;
 
 	@Value("${local.server.port}")
@@ -64,6 +69,7 @@ public class SensorResourceDeleteIT {
 	private String uuid;
 	private String typeId;
 	private String unitId;
+	private String deviceId;
 	private Long version;
 
 	@Before
@@ -74,6 +80,8 @@ public class SensorResourceDeleteIT {
 		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
 		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
+		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl(DESCRIPTION)));
 		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = sensorEntity.getId();
@@ -138,6 +146,11 @@ public class SensorResourceDeleteIT {
 		@Override
 		public String getUnitId() {
 			return unitId;
+		}
+
+		@Override
+		public String getDeviceId() {
+			return deviceId;
 		}
 	}
 

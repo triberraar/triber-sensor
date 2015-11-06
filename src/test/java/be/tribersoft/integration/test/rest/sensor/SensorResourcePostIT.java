@@ -25,6 +25,8 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
+import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
+import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
@@ -45,6 +47,7 @@ public class SensorResourcePostIT {
 	private static final String DESCRIPTION = "description";
 	private static final String UNIT_NAME = "unit name";
 	private static final String TYPE_NAME = "type name";
+	private static final String DEVICE_NAME = "device name";
 
 	@Inject
 	private SensorJpaRepository sensorJpaRepository;
@@ -52,11 +55,14 @@ public class SensorResourcePostIT {
 	private UnitJpaRepository unitJpaRepository;
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
+	@Inject
+	private DeviceJpaRepository deviceJpaRepository;
 
 	@Value("${local.server.port}")
 	private int serverPort;
 	private String typeId;
 	private String unitId;
+	private String deviceId;
 
 	@Before
 	public void setUp() {
@@ -66,6 +72,8 @@ public class SensorResourcePostIT {
 		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
 		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
+		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 	}
 
 	@Test
@@ -148,6 +156,11 @@ public class SensorResourcePostIT {
 		public String getUnitId() {
 			return unitId;
 		}
+
+		@JsonProperty
+		public String getDeviceId() {
+			return deviceId;
+		}
 	}
 
 	private class SensorPostJsonImplWithoutDescription {
@@ -166,6 +179,11 @@ public class SensorResourcePostIT {
 			return unitId;
 		}
 
+		@JsonProperty
+		public String getDeviceId() {
+			return deviceId;
+		}
+
 	}
 
 	private class SensorPostJsonImplInvalid {
@@ -182,6 +200,11 @@ public class SensorResourcePostIT {
 		@JsonProperty
 		public String getUnitId() {
 			return unitId;
+		}
+
+		@JsonProperty
+		public String getDeviceId() {
+			return deviceId;
 		}
 	}
 
