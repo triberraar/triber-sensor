@@ -44,4 +44,14 @@ public class SensorRepositoryImpl implements SensorRepository {
 		}
 		return sensor.get();
 	}
+
+	@Override
+	public boolean unitInUse(String unitId) {
+		return sensorJpaRepository.countByUnitId(unitId) != 0;
+	}
+
+	@Override
+	public boolean typeInUse(String typeId) {
+		return sensorJpaRepository.countByTypeId(typeId) != 0;
+	}
 }

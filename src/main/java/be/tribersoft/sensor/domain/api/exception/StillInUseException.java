@@ -1,5 +1,5 @@
 package be.tribersoft.sensor.domain.api.exception;
 
-public class StillInUseException extends RuntimeException {
+public abstract class StillInUseException extends RuntimeException {
 
 }

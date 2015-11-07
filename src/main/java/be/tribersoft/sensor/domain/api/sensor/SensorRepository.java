@@ -10,4 +10,7 @@ public interface SensorRepository {
 
 	List<? extends SensorEntity> all();
 
+	boolean unitInUse(String unitId);
+
+	boolean typeInUse(String typeId);
 }
