@@ -46,7 +46,7 @@ public class SensorRepositoryImpl implements SensorRepository {
 
 	public SensorEntity getByDeviceIdAndIdAndVersion(String deviceId, String id, Long version) {
 		SensorEntity sensorEntity = getByDeviceIdAndId(deviceId, id);
-		if (sensorEntity.getVersion() != version) {
+		if (!sensorEntity.getVersion().equals(version)) {
 			throw new ConcurrentModificationException();
 		}
 		return sensorEntity;
