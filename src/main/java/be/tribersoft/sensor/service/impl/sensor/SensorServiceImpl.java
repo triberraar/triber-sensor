@@ -17,18 +17,18 @@ public class SensorServiceImpl implements SensorService {
 	private SensorFacade sensorFacade;
 
 	@Override
-	public void save(SensorMessage sensorMessage) {
-		sensorFacade.save(sensorMessage);
+	public void save(String deviceId, SensorMessage sensorMessage) {
+		sensorFacade.save(deviceId, sensorMessage);
 	}
 
 	@Override
-	public void update(String id, Long version, SensorUpdateMessage sensorUpdateMessage) {
-		sensorFacade.update(id, version, sensorUpdateMessage);
+	public void update(String deviceId, String id, Long version, SensorUpdateMessage sensorUpdateMessage) {
+		sensorFacade.update(deviceId, id, version, sensorUpdateMessage);
 	}
 
 	@Override
-	public void delete(String id, Long version) {
-		sensorFacade.delete(id, version);
+	public void delete(String deviceId, String id, Long version) {
+		sensorFacade.delete(deviceId, id, version);
 	}
 
 }

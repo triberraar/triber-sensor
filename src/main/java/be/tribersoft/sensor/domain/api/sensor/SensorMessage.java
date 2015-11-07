@@ -10,6 +10,4 @@ public interface SensorMessage extends SensorUpdateMessage {
 	@NotNull(message = "sensor.validation.unit.null")
 	String getUnitId();
 
-	@NotNull(message = "sensor.validation.device.null")
-	String getDeviceId();
 }

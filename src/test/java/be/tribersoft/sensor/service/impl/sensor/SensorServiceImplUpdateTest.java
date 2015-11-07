@@ -14,6 +14,7 @@ import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 @RunWith(MockitoJUnitRunner.class)
 public class SensorServiceImplUpdateTest {
 
+	private static final String DEVICE_ID = "device id";
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
 	@InjectMocks
@@ -25,9 +26,9 @@ public class SensorServiceImplUpdateTest {
 
 	@Test
 	public void delegatesToFacade() {
-		sensorService.update(ID, VERSION, sensorUpdateMessage);
+		sensorService.update(DEVICE_ID, ID, VERSION, sensorUpdateMessage);
 
-		verify(sensorFacade).update(ID, VERSION, sensorUpdateMessage);
+		verify(sensorFacade).update(DEVICE_ID, ID, VERSION, sensorUpdateMessage);
 	}
 
 }

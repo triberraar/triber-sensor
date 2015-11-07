@@ -8,20 +8,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException;
+import be.tribersoft.sensor.domain.api.exception.StillInUseException;
 
 @ControllerAdvice
-public class ConcurrentModificationExceptionHandler {
-	private static final String ERROR_MESSAGE = "validation.concurrent.modification";
-
+public class StillInUseExceptionHandler {
 	@Inject
 	private ErrorJsonFactory errorJsonFactory;
 
-	@ExceptionHandler(ConcurrentModificationException.class)
+	@ExceptionHandler(StillInUseException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	@ResponseBody
-	public ErrorJson process(ConcurrentModificationException ex) {
-		return errorJsonFactory.create(ERROR_MESSAGE);
+	public ErrorJson process(StillInUseException ex) {
+		return errorJsonFactory.create(ex.getMessage());
 	}
 
 }

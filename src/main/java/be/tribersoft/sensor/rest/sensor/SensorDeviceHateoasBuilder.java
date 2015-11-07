@@ -15,9 +15,9 @@ import be.tribersoft.sensor.rest.type.TypeResource;
 import be.tribersoft.sensor.rest.unit.UnitResource;
 
 @Named
-public class SensorHateoasBuilder {
+public class SensorDeviceHateoasBuilder {
 
-	private Resource<SensorToJsonAdapter> build(Sensor sensor) {
+	public Resource<SensorToJsonAdapter> build(Sensor sensor) {
 		Resource<SensorToJsonAdapter> resource = new Resource<SensorToJsonAdapter>(new SensorToJsonAdapter(sensor));
 		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(sensor.getDevice().getId(), sensor.getId())).withSelfRel());
 		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).get(sensor.getType().getId())).withRel("type"));
@@ -27,12 +27,16 @@ public class SensorHateoasBuilder {
 	}
 
 	public Resources<Resource<SensorToJsonAdapter>> build(List<? extends Sensor> sensors) {
+		String deviceId = "";
 		List<Resource<SensorToJsonAdapter>> transformedUnitResources = sensors.stream().map(sensor -> {
 			return build(sensor);
 		}).collect(Collectors.toList());
+		if (!sensors.isEmpty()) {
+			deviceId = sensors.get(0).getDevice().getId();
+		}
 
 		Resources<Resource<SensorToJsonAdapter>> sensorResources = new Resources<>(transformedUnitResources);
-		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).all()).withSelfRel());
+		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).all(deviceId)).withSelfRel());
 		return sensorResources;
 	}
 }

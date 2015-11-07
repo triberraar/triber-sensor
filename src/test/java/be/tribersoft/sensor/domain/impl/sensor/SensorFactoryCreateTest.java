@@ -72,12 +72,13 @@ public class SensorFactoryCreateTest {
 
 	@Test
 	public void createsASensor() {
-		SensorEntity createdSensor = sensorFactory.create(sensorMessage);
+		SensorEntity createdSensor = sensorFactory.create(DEVICE_ID, sensorMessage);
 
 		assertThat(createdSensor.getName()).isEqualTo(NAME);
 		assertThat(createdSensor.getDescription()).isEqualTo(DESCRIPTION);
 		assertThat(createdSensor.getType()).isEqualTo(type);
 		assertThat(createdSensor.getUnit()).isEqualTo(unit);
+		assertThat(createdSensor.getDevice()).isEqualTo(device);
 		assertThat(createdSensor.getCreationDate()).isEqualTo(Date.from(DATE.atZone(ZoneId.systemDefault()).toInstant()));
 	}
 }

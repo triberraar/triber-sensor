@@ -3,8 +3,10 @@ package be.tribersoft.sensor.domain.impl.unit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 import be.tribersoft.sensor.domain.api.unit.UnitFacade;
 import be.tribersoft.sensor.domain.api.unit.UnitMessage;
+import be.tribersoft.sensor.domain.api.unit.exception.UnitStillInUseException;
 
 @Named
 public class UnitFacadeImpl implements UnitFacade {
@@ -15,6 +17,8 @@ public class UnitFacadeImpl implements UnitFacade {
 	private UnitFactory unitFactory;
 	@Inject
 	private UnitUpdater unitUpdater;
+	@Inject
+	private SensorRepository sensorRepository;
 
 	@Override
 	public void save(UnitMessage unitMessage) {
@@ -29,6 +33,9 @@ public class UnitFacadeImpl implements UnitFacade {
 
 	@Override
 	public void delete(String id, Long version) {
+		if (sensorRepository.unitInUse(id)) {
+			throw new UnitStillInUseException();
+		}
 		UnitEntity unit = unitRepository.getByIdAndVersion(id, version);
 		unitRepository.delete(unit);
 	}

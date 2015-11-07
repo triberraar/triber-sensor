@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SensorFacadeImplDeleteTest {
 
+	private static final String DEVICE_ID = "device id";
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
 
@@ -26,12 +27,12 @@ public class SensorFacadeImplDeleteTest {
 
 	@Before
 	public void setUp() {
-		when(sensorRepositoryImpl.getByIdAndVersion(ID, VERSION)).thenReturn(sensor);
+		when(sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION)).thenReturn(sensor);
 	}
 
 	@Test
 	public void savesCreatedSensor() {
-		sensorFacade.delete(ID, VERSION);
+		sensorFacade.delete(DEVICE_ID, ID, VERSION);
 
 		verify(sensorRepositoryImpl).delete(sensor);
 	}

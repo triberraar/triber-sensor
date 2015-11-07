@@ -101,7 +101,7 @@ public class TypeResourcePutIT {
 	}
 
 	@Test
-	public void badRequestWhenTypeHasConcurrentChanges() {
+	public void conflictWhenTypeHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
@@ -110,7 +110,7 @@ public class TypeResourcePutIT {
 		when(). 
 				put(URL). 
 		then(). 
-				statusCode(HttpStatus.BAD_REQUEST.value()).
+				statusCode(HttpStatus.CONFLICT.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
 		// @formatter:on
 	}

@@ -27,7 +27,7 @@ import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.unit.Unit;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorHateoasBuilderBuildTest {
+public class SensorDeviceHateoasBuilderBuildTest {
 	private static Long VERSION_1 = 0l;
 	private static Long VERSION_2 = 1l;
 	private static String ID_1 = "id1";
@@ -43,7 +43,7 @@ public class SensorHateoasBuilderBuildTest {
 
 	protected MockHttpServletRequest request;
 
-	private SensorHateoasBuilder builder = new SensorHateoasBuilder();
+	private SensorDeviceHateoasBuilder builder = new SensorDeviceHateoasBuilder();
 
 	@Mock
 	private Sensor sensor1, sensor2;
@@ -87,13 +87,34 @@ public class SensorHateoasBuilderBuildTest {
 	}
 
 	@Test
+	public void buildsLinksForASensor() {
+		Resource<SensorToJsonAdapter> sensorResource = builder.build(sensor1);
+
+		SensorToJsonAdapter content = sensorResource.getContent();
+		assertThat(content.getId()).isEqualTo(ID_1);
+		assertThat(content.getVersion()).isEqualTo(VERSION_1);
+		assertThat(content.getName()).isEqualTo(NAME_1);
+		assertThat(content.getDescription().get()).isEqualTo(DESCRIPTION_1);
+		List<Link> links = sensorResource.getLinks();
+		assertThat(links.size()).isEqualTo(4);
+		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
+		assertThat(links.get(0).getHref()).endsWith("/api/device/" + DEVICE_ID + "/sensor/" + ID_1);
+		assertThat(links.get(1).getRel()).isEqualTo("type");
+		assertThat(links.get(1).getHref()).endsWith("/api/admin/type/" + TYPE_ID_1);
+		assertThat(links.get(2).getRel()).isEqualTo("unit");
+		assertThat(links.get(2).getHref()).endsWith("/api/admin/unit/" + UNIT_ID_1);
+		assertThat(links.get(3).getRel()).isEqualTo("device");
+		assertThat(links.get(3).getHref()).endsWith("/api/device/" + DEVICE_ID);
+	}
+
+	@Test
 	public void buildsLinksForSensors() {
 		Resources<Resource<SensorToJsonAdapter>> sensorResources = builder.build(Arrays.asList(sensor1, sensor2));
 
 		List<Link> links = sensorResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/api/sensor");
+		assertThat(links.get(0).getHref()).endsWith("/api/device/" + DEVICE_ID + "/sensor");
 
 		assertThat(sensorResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<SensorToJsonAdapter>> content = sensorResources.getContent();

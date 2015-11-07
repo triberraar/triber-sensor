@@ -14,6 +14,7 @@ import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
 @RunWith(MockitoJUnitRunner.class)
 public class SensorServiceImplSaveTest {
 
+	private static final String DEVICE_ID = "device id";
 	@InjectMocks
 	private SensorServiceImpl sensorService;
 	@Mock
@@ -23,9 +24,9 @@ public class SensorServiceImplSaveTest {
 
 	@Test
 	public void delegatesToFacade() {
-		sensorService.save(sensorMessage);
+		sensorService.save(DEVICE_ID, sensorMessage);
 
-		verify(sensorFacade).save(sensorMessage);
+		verify(sensorFacade).save(DEVICE_ID, sensorMessage);
 	}
 
 }

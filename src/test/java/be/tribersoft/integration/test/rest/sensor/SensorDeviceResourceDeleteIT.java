@@ -1,9 +1,8 @@
 package be.tribersoft.integration.test.rest.sensor;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 
 import java.util.Optional;
 
@@ -21,6 +20,7 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
@@ -41,16 +41,16 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorResourceGetIT {
+public class SensorDeviceResourceDeleteIT {
 
 	private static final String DEVICE_NAME = "device name";
-	private static final String URL = "/api/sensor/{uuid}";
+	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
-	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
 	private static final String UNIT_NAME = "unit name";
 	private static final String TYPE_NAME = "type name";
+	private static final String NON_EXISTING_UUID = "non existing uuid";
 
 	@Inject
 	private SensorFactory sensorFactory;
@@ -70,6 +70,7 @@ public class SensorResourceGetIT {
 	private String typeId;
 	private String unitId;
 	private String deviceId;
+	private Long version;
 
 	@Before
 	public void setUp() {
@@ -81,69 +82,44 @@ public class SensorResourceGetIT {
 		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
 		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl(DESCRIPTION)));
+		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		uuid = sensorEntity.getId();
+		version = sensorEntity.getVersion();
 	}
 
 	@Test
-	public void getSensor() {
-		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl(DESCRIPTION)));
-		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = sensorEntity.getId();
+	public void deletesSensor() {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-		when(). 
-				get(URL). 
-		then(). 
+				pathParam("deviceId", deviceId).
+				body(new SensorDeleteJsonImpl()).
 				contentType(ContentType.JSON).
-				body("size()", is(5)).
-				body("name", is(NAME)).
-				body("description", is(DESCRIPTION)).
-				body("id", is(uuid)).
-				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/sensor/" + uuid)).
-				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
-				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
-				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
+		when(). 
+				delete(URL). 
+		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
+		assertThat(sensorJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isTrue();
 	}
 
 	@Test
-	public void failsWhenNotFound() {
+	public void notFoundWhenSensorDoesntExist() {
 		// @formatter:off
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
+				pathParam("deviceId", deviceId).
+				body(new SensorDeleteJsonImpl()).
+				contentType(ContentType.JSON).
 		when(). 
-				get(URL). 
+				delete(URL). 
 		then(). 
 				statusCode(HttpStatus.NOT_FOUND.value()).
 				body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
+		
 		// @formatter:on
-	}
-
-	@Test
-	public void getUnitWithoutDescription() {
-		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl(null)));
-		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = sensorEntity.getId();
-		// @formatter:off
-		given().
-				pathParam("uuid", uuid).
-		when(). 
-				get(URL). 
-		then(). 
-				contentType(ContentType.JSON).
-				body("size()", is(5)).
-				body("name", is(NAME)).
-				body("description", isEmptyOrNullString()).
-				body("id", is(uuid)).
-				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/sensor/" + uuid)).
-				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
-				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
-				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
-				statusCode(HttpStatus.OK.value());
-		// @formatter:on
+		assertThat(sensorJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
 	}
 
 	private class SensorMessageImpl implements SensorMessage {
@@ -173,10 +149,12 @@ public class SensorResourceGetIT {
 		public String getUnitId() {
 			return unitId;
 		}
+	}
 
-		@Override
-		public String getDeviceId() {
-			return deviceId;
+	private class SensorDeleteJsonImpl {
+		@JsonProperty
+		public Long getVersion() {
+			return version;
 		}
 	}
 }

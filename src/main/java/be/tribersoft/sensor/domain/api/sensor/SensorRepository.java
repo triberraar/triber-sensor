@@ -2,12 +2,15 @@ package be.tribersoft.sensor.domain.api.sensor;
 
 import java.util.List;
 
-import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
-
 public interface SensorRepository {
 
-	Sensor getById(String id);
+	Sensor getByDeviceIdAndId(String deviceId, String id);
 
-	List<? extends SensorEntity> all();
+	List<? extends Sensor> all();
 
+	boolean unitInUse(String unitId);
+
+	boolean typeInUse(String typeId);
+
+	List<? extends Sensor> allByDevice(String deviceId);
 }

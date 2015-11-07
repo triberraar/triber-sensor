@@ -15,9 +15,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import be.tribersoft.sensor.domain.api.sensor.exception.SensorNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorRepositoryImplGetByIdTest {
+public class SensorRepositoryImplGetDeviceIdAndByIdTest {
 
+	private static final long DIFFERENT_VERSION = 3L;
 	private static final String ID = "id";
+	private static final String DEVICE_ID = "device id";
 
 	@InjectMocks
 	private SensorRepositoryImpl sensorRepositoryImpl;
@@ -29,22 +31,20 @@ public class SensorRepositoryImplGetByIdTest {
 
 	@Before
 	public void setUp() {
-		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.of(sensorEntity));
+		when(sensorJpaRepository.findByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(Optional.of(sensorEntity));
 	}
 
 	@Test(expected = SensorNotFoundException.class)
-	public void failsWhenNoEntityWithId() {
-		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.<SensorEntity> empty());
+	public void failsWhenNoEntityWithDeviceIdAndId() {
+		when(sensorJpaRepository.findByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(Optional.<SensorEntity> empty());
 
-		sensorRepositoryImpl.getById(ID);
+		sensorRepositoryImpl.getByDeviceIdAndId(DEVICE_ID, ID);
 	}
 
 	@Test
-	public void returnsEntityWithIdAndVersion() {
-		SensorEntity foundSensorEntity = sensorRepositoryImpl.getById(ID);
+	public void returnsEntityWithId() {
+		SensorEntity foundSensorEntity = sensorRepositoryImpl.getByDeviceIdAndId(DEVICE_ID, ID);
 
 		assertThat(foundSensorEntity).isEqualTo(sensorEntity);
-
 	}
-
 }

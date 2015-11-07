@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
+import be.tribersoft.sensor.domain.api.unit.exception.UnitStillInUseException;
+
 @RunWith(MockitoJUnitRunner.class)
 public class UnitFacadeImplDeleteTest {
 	private static final long VERSION = 2L;
@@ -20,6 +23,8 @@ public class UnitFacadeImplDeleteTest {
 	private UnitFacadeImpl unitFacadeImpl;
 	@Mock
 	private UnitRepositoryImpl UnitRepository;
+	@Mock
+	private SensorRepository sensorRepository;
 
 	@Before
 	public void setUp() {
@@ -31,6 +36,13 @@ public class UnitFacadeImplDeleteTest {
 		unitFacadeImpl.delete(ID, VERSION);
 
 		verify(UnitRepository).delete(unitEntity);
+	}
+
+	@Test(expected = UnitStillInUseException.class)
+	public void failsWhenUnitIsStillBeingUsedByASensor() {
+		when(sensorRepository.unitInUse(ID)).thenReturn(true);
+
+		unitFacadeImpl.delete(ID, VERSION);
 	}
 
 }

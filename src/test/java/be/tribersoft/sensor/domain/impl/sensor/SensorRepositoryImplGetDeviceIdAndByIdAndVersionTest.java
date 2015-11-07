@@ -16,11 +16,12 @@ import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException
 import be.tribersoft.sensor.domain.api.sensor.exception.SensorNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorRepositoryImplGetByIdAndVersionTest {
+public class SensorRepositoryImplGetDeviceIdAndByIdAndVersionTest {
 
 	private static final long DIFFERENT_VERSION = 3L;
 	private static final long VERSION = 2l;
 	private static final String ID = "id";
+	private static final String DEVICE_ID = "device id";
 
 	@InjectMocks
 	private SensorRepositoryImpl sensorRepositoryImpl;
@@ -32,27 +33,27 @@ public class SensorRepositoryImplGetByIdAndVersionTest {
 
 	@Before
 	public void setUp() {
-		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.of(sensorEntity));
+		when(sensorJpaRepository.findByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(Optional.of(sensorEntity));
 		when(sensorEntity.getVersion()).thenReturn(VERSION);
 	}
 
 	@Test(expected = SensorNotFoundException.class)
-	public void failsWhenNoEntityWithId() {
-		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.<SensorEntity> empty());
+	public void failsWhenNoEntityWithDeviceIdAndId() {
+		when(sensorJpaRepository.findByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(Optional.<SensorEntity> empty());
 
-		sensorRepositoryImpl.getByIdAndVersion(ID, VERSION);
+		sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION);
 	}
 
 	@Test(expected = ConcurrentModificationException.class)
 	public void failsWhenEntityWithIdHasDifferentVersion() {
 		when(sensorEntity.getVersion()).thenReturn(DIFFERENT_VERSION);
 
-		sensorRepositoryImpl.getByIdAndVersion(ID, VERSION);
+		sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION);
 	}
 
 	@Test
 	public void returnsEntityWithIdAndVersion() {
-		SensorEntity foundSensorEntity = sensorRepositoryImpl.getByIdAndVersion(ID, VERSION);
+		SensorEntity foundSensorEntity = sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION);
 
 		assertThat(foundSensorEntity).isEqualTo(sensorEntity);
 

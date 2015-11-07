@@ -19,10 +19,12 @@ import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorResourceAllTest {
+public class SensorDeviceResourceAllTest {
+
+	private static final String DEVICE_ID = "device id";
 
 	@InjectMocks
-	private SensorResource sensorResource;
+	private SensorDeviceResource sensorDeviceResource;
 	@Mock
 	private SensorRepository sensorRepository;
 	@Mock
@@ -34,15 +36,15 @@ public class SensorResourceAllTest {
 
 	@Before
 	public void setUp() {
-		doReturn(Arrays.<Sensor> asList(sensor1, sensor2)).when(sensorRepository).all();
+		doReturn(Arrays.asList(sensor1, sensor2)).when(sensorRepository).allByDevice(DEVICE_ID);
 		when(sensorHateosBuilder.build(Arrays.asList(sensor1, sensor2))).thenReturn(resources);
 	}
 
 	@Test
 	public void delegatesToService() {
-		Resources<Resource<SensorToJsonAdapter>> sensorResources = sensorResource.all();
+		Resources<Resource<SensorToJsonAdapter>> returnedResource = sensorDeviceResource.all(DEVICE_ID);
 
-		assertThat(sensorResources).isSameAs(resources);
+		assertThat(returnedResource).isSameAs(resources);
 	}
 
 }

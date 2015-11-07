@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException;
+import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 import be.tribersoft.sensor.domain.api.sensor.exception.SensorNotFoundException;
 
@@ -28,20 +29,35 @@ public class SensorRepositoryImpl implements SensorRepository {
 		sensorJpaRepository.delete(sensor);
 	}
 
-	public SensorEntity getByIdAndVersion(String id, Long version) {
-		SensorEntity sensor = getById(id);
-		if (!sensor.getVersion().equals(version)) {
-			throw new ConcurrentModificationException();
-		}
-		return sensor;
+	@Override
+	public boolean unitInUse(String unitId) {
+		return sensorJpaRepository.countByUnitId(unitId) != 0;
 	}
 
 	@Override
-	public SensorEntity getById(String id) {
-		Optional<SensorEntity> sensor = sensorJpaRepository.findById(id);
-		if (!sensor.isPresent()) {
+	public boolean typeInUse(String typeId) {
+		return sensorJpaRepository.countByTypeId(typeId) != 0;
+	}
+
+	@Override
+	public List<? extends Sensor> allByDevice(String deviceId) {
+		return sensorJpaRepository.findAllByDeviceIdOrderByCreationDateDesc(deviceId);
+	}
+
+	public SensorEntity getByDeviceIdAndIdAndVersion(String deviceId, String id, Long version) {
+		SensorEntity sensorEntity = getByDeviceIdAndId(deviceId, id);
+		if (!sensorEntity.getVersion().equals(version)) {
+			throw new ConcurrentModificationException();
+		}
+		return sensorEntity;
+	}
+
+	@Override
+	public SensorEntity getByDeviceIdAndId(String deviceId, String id) {
+		Optional<SensorEntity> sensorEntity = sensorJpaRepository.findByDeviceIdAndId(deviceId, id);
+		if (!sensorEntity.isPresent()) {
 			throw new SensorNotFoundException();
 		}
-		return sensor.get();
+		return sensorEntity.get();
 	}
 }

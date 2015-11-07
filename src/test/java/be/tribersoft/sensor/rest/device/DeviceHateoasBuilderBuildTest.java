@@ -71,9 +71,12 @@ public class DeviceHateoasBuilderBuildTest {
 		assertThat(content.getDescription().get()).isEqualTo(DESCRIPTION_1);
 		assertThat(content.getLocation().get()).isEqualTo(LOCATION_1);
 		List<Link> links = deviceResource.getLinks();
-		assertThat(links.size()).isEqualTo(1);
+		assertThat(links.size()).isEqualTo(2);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(links.get(0).getHref()).endsWith("/api/device/" + ID_1);
+		assertThat(links.get(1).getRel()).isEqualTo("sensors");
+		assertThat(links.get(1).getHref()).endsWith("/api/device/" + ID_1 + "/sensor");
+
 	}
 
 	@Test
@@ -96,9 +99,11 @@ public class DeviceHateoasBuilderBuildTest {
 		assertThat(first.getContent().getDescription().get()).isEqualTo(DESCRIPTION_1);
 		assertThat(first.getContent().getLocation().get()).isEqualTo(LOCATION_1);
 		List<Link> firstLinks = first.getLinks();
-		assertThat(firstLinks.size()).isEqualTo(1);
+		assertThat(firstLinks.size()).isEqualTo(2);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(firstLinks.get(0).getHref()).endsWith("/api/device/" + ID_1);
+		assertThat(firstLinks.get(1).getRel()).isEqualTo("sensors");
+		assertThat(firstLinks.get(1).getHref()).endsWith("/api/device/" + ID_1 + "/sensor");
 
 		Resource<DeviceToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -107,9 +112,11 @@ public class DeviceHateoasBuilderBuildTest {
 		assertThat(second.getContent().getDescription().isPresent()).isFalse();
 		assertThat(second.getContent().getLocation().isPresent()).isFalse();
 		List<Link> secondLinks = second.getLinks();
-		assertThat(secondLinks.size()).isEqualTo(1);
+		assertThat(secondLinks.size()).isEqualTo(2);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(secondLinks.get(0).getHref()).endsWith("/api/device/" + ID_2);
+		assertThat(secondLinks.get(1).getRel()).isEqualTo("sensors");
+		assertThat(secondLinks.get(1).getHref()).endsWith("/api/device/" + ID_2 + "/sensor");
 	}
 
 }

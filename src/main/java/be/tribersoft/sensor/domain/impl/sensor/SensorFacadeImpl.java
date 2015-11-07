@@ -18,19 +18,19 @@ public class SensorFacadeImpl implements SensorFacade {
 	private SensorUpdater sensorUpdater;
 
 	@Override
-	public void save(SensorMessage sensorMessage) {
-		sensorRepository.save(sensorFactory.create(sensorMessage));
+	public void save(String deviceId, SensorMessage sensorMessage) {
+		sensorRepository.save(sensorFactory.create(deviceId, sensorMessage));
 	}
 
 	@Override
-	public void update(String id, Long version, SensorUpdateMessage sensorUpdateMessage) {
-		SensorEntity sensor = sensorRepository.getByIdAndVersion(id, version);
+	public void update(String deviceId, String id, Long version, SensorUpdateMessage sensorUpdateMessage) {
+		SensorEntity sensor = sensorRepository.getByDeviceIdAndIdAndVersion(deviceId, id, version);
 		sensorUpdater.update(sensor, sensorUpdateMessage);
 	}
 
 	@Override
-	public void delete(String id, Long version) {
-		SensorEntity sensor = sensorRepository.getByIdAndVersion(id, version);
+	public void delete(String deviceId, String id, Long version) {
+		SensorEntity sensor = sensorRepository.getByDeviceIdAndIdAndVersion(deviceId, id, version);
 		sensorRepository.delete(sensor);
 	}
 

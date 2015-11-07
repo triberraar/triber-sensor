@@ -132,7 +132,7 @@ public class DeviceResourcePutIT {
 	}
 
 	@Test
-	public void badRequestWhenDeviceHasConcurrentChanges() {
+	public void conflictWhenDeviceHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
@@ -141,7 +141,7 @@ public class DeviceResourcePutIT {
 		when(). 
 				put(URL). 
 		then(). 
-				statusCode(HttpStatus.BAD_REQUEST.value()).
+				statusCode(HttpStatus.CONFLICT.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
 		// @formatter:on
 	}

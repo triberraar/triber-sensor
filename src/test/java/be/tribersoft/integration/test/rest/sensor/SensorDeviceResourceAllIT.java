@@ -1,6 +1,6 @@
 package be.tribersoft.integration.test.rest.sensor;
 
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -43,10 +43,10 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorResourceAllIT {
+public class SensorDeviceResourceAllIT {
 
 	private static final String DEVICE_NAME = "device name";
-	private static final String URL = "/api/sensor";
+	private static final String URL = "/api/device/{deviceId}/sensor";
 	private static final String UNIT_NAME = "unit name";
 	private static final String TYPE_NAME = "type name";
 	private static final String NAME_1 = "NAME 1";
@@ -91,12 +91,15 @@ public class SensorResourceAllIT {
 	@Test
 	public void getsAllSensors() {
 		// @formatter:off
+		given().
+			pathParam("deviceId", deviceId).
 		when(). 
+				
 				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.self.href", is("http://localhost:" + port + "/api/device/" + deviceId + "/sensor")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/device/" + deviceId+ "/sensor")).
 				body("_embedded.sensors.size()", is(2)).
 				body("_embedded.sensors[0].size()", is(5)).
 				body("_embedded.sensors[0].name", is(NAME_2)).
@@ -112,7 +115,7 @@ public class SensorResourceAllIT {
 				body("_embedded.sensors[1].description", is(DESCRIPTION)).
 				body("_embedded.sensors[1].version", is(0)).
 				body("_embedded.sensors[1].id", is(sensors.get(1).getId())).
-				body("_embedded.sensors[1]._links.self.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId() + "/sensor/" + sensors.get(1).getId())).
+				body("_embedded.sensors[1]._links.self.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId() + "/sensor/" + sensors.get(1).getId())).
 				body("_embedded.sensors[1]._links.type.href", is("http://localhost:" + port + "/api/admin/type/" + sensors.get(1).getType().getId())).
 				body("_embedded.sensors[1]._links.unit.href", is("http://localhost:" + port + "/api/admin/unit/" + sensors.get(1).getUnit().getId())).
 				body("_embedded.sensors[1]._links.device.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId())).

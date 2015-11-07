@@ -10,7 +10,13 @@ public interface SensorJpaRepository extends Repository<SensorEntity, String> {
 
 	void save(SensorEntity sensor);
 
-	Optional<SensorEntity> findById(String id);
-
 	void delete(SensorEntity sensor);
+
+	Long countByUnitId(String unitId);
+
+	Long countByTypeId(String typeId);
+
+	List<SensorEntity> findAllByDeviceIdOrderByCreationDateDesc(String deviceId);
+
+	Optional<SensorEntity> findByDeviceIdAndId(String deviceId, String id);
 }
