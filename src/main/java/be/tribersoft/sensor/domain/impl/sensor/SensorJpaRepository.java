@@ -17,4 +17,6 @@ public interface SensorJpaRepository extends Repository<SensorEntity, String> {
 	Long countByUnitId(String unitId);
 
 	Long countByTypeId(String typeId);
+
+	List<SensorEntity> findAllByDeviceId(String deviceId);
 }
