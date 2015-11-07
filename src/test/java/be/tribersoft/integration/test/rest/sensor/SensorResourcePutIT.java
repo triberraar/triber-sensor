@@ -159,7 +159,7 @@ public class SensorResourcePutIT {
 	}
 
 	@Test
-	public void badRequestWhenSensorHasConcurrentChanges() {
+	public void conflictWhenSensorHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
@@ -168,7 +168,7 @@ public class SensorResourcePutIT {
 		when(). 
 				put(URL). 
 		then(). 
-				statusCode(HttpStatus.BAD_REQUEST.value()).
+				statusCode(HttpStatus.CONFLICT.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
 		// @formatter:on
 	}

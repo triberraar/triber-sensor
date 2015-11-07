@@ -142,7 +142,7 @@ public class UnitResourcePutIT {
 	}
 
 	@Test
-	public void badRequestWhenUnitHasConcurrentChanges() {
+	public void conflictWhenUnitHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
@@ -151,7 +151,7 @@ public class UnitResourcePutIT {
 		when(). 
 				put(URL). 
 		then(). 
-				statusCode(HttpStatus.BAD_REQUEST.value()).
+				statusCode(HttpStatus.CONFLICT.value()).
 				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
 		// @formatter:on
 	}
