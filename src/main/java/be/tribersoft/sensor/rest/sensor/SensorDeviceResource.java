@@ -20,7 +20,7 @@ public class SensorDeviceResource {
 	@Inject
 	private SensorRepository sensorRepository;
 	@Inject
-	private SensorHateoasBuilder sensorHateoasBuilder;
+	private SensorDeviceHateoasBuilder sensorHateoasBuilder;
 	@Inject
 	private SensorService sensorService;
 

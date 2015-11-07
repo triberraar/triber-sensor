@@ -30,7 +30,7 @@ public class SensorDeviceResourceAllTest {
 	@Mock
 	private Sensor sensor1, sensor2;
 	@Mock
-	private SensorHateoasBuilder sensorHateosBuilder;
+	private SensorDeviceHateoasBuilder sensorHateosBuilder;
 	@Mock
 	private Resources<Resource<SensorToJsonAdapter>> resources;
 

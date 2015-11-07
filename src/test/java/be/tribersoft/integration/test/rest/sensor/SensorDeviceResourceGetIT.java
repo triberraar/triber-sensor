@@ -101,7 +101,7 @@ public class SensorDeviceResourceGetIT {
 				body("description", is(DESCRIPTION)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/sensor/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceId+"/sensor/" + uuid)).
 				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
 				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
 				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
@@ -141,7 +141,7 @@ public class SensorDeviceResourceGetIT {
 				body("description", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/sensor/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceId + "/sensor/" + uuid)).
 				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
 				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
 				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).

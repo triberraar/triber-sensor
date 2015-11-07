@@ -27,7 +27,7 @@ public class SensorDeviceResourceGetTest {
 	@Mock
 	private Sensor sensor;
 	@Mock
-	private SensorHateoasBuilder sensorHateosBuilder;
+	private SensorDeviceHateoasBuilder sensorHateosBuilder;
 	@Mock
 	private Resource<SensorToJsonAdapter> resource;
 

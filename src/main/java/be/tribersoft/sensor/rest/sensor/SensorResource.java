@@ -17,7 +17,7 @@ public class SensorResource {
 	@Inject
 	private SensorRepository sensorRepository;
 	@Inject
-	private SensorHateoasBuilder sensorHateoasBuilder;
+	private SensorDeviceHateoasBuilder sensorHateoasBuilder;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resources<Resource<SensorToJsonAdapter>> all() {
