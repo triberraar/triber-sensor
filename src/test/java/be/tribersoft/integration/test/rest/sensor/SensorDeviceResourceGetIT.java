@@ -41,10 +41,10 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorResourceGetIT {
+public class SensorDeviceResourceGetIT {
 
 	private static final String DEVICE_NAME = "device name";
-	private static final String URL = "/api/sensor/{uuid}";
+	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
@@ -85,12 +85,13 @@ public class SensorResourceGetIT {
 
 	@Test
 	public void getSensor() {
-		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl(DESCRIPTION)));
+		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl(DESCRIPTION)));
 		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = sensorEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
+				pathParam("deviceId", deviceId).
 		when(). 
 				get(URL). 
 		then(). 
@@ -113,6 +114,7 @@ public class SensorResourceGetIT {
 		// @formatter:off
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
+				pathParam("deviceId", deviceId).
 		when(). 
 				get(URL). 
 		then(). 
@@ -123,12 +125,13 @@ public class SensorResourceGetIT {
 
 	@Test
 	public void getUnitWithoutDescription() {
-		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl(null)));
+		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl(null)));
 		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = sensorEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
+				pathParam("deviceId", deviceId).
 		when(). 
 				get(URL). 
 		then(). 
@@ -172,11 +175,6 @@ public class SensorResourceGetIT {
 		@Override
 		public String getUnitId() {
 			return unitId;
-		}
-
-		@Override
-		public String getDeviceId() {
-			return deviceId;
 		}
 	}
 }

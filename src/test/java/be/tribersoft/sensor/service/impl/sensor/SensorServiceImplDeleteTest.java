@@ -13,6 +13,7 @@ import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
 @RunWith(MockitoJUnitRunner.class)
 public class SensorServiceImplDeleteTest {
 
+	private static final String DEVICE_ID = "device id";
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
 	@InjectMocks
@@ -22,9 +23,9 @@ public class SensorServiceImplDeleteTest {
 
 	@Test
 	public void delegatesToFacade() {
-		sensorService.delete(ID, VERSION);
+		sensorService.delete(DEVICE_ID, ID, VERSION);
 
-		verify(sensorFacade).delete(ID, VERSION);
+		verify(sensorFacade).delete(DEVICE_ID, ID, VERSION);
 	}
 
 }

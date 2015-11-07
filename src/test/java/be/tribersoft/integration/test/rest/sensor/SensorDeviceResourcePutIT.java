@@ -42,12 +42,12 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorResourcePutIT {
+public class SensorDeviceResourcePutIT {
 
 	private static final String DEVICE_NAME = "device name";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
-	private static final String URL = "/api/sensor/{uuid}";
+	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -87,7 +87,7 @@ public class SensorResourcePutIT {
 		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
 		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
 
-		sensorJpaRepository.save(sensorFactory.create(new SensorMessageImpl()));
+		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl()));
 		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
 		uuid = sensorEntity.getId();
 		version = sensorEntity.getVersion();
@@ -98,6 +98,7 @@ public class SensorResourcePutIT {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
+				pathParam("deviceId", deviceId).
 				body(new SensorPutJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -123,6 +124,7 @@ public class SensorResourcePutIT {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
+				pathParam("deviceId", deviceId).
 				body(new SensorPutJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -148,6 +150,7 @@ public class SensorResourcePutIT {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
+				pathParam("deviceId", deviceId).
 				body(new SensorPutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -163,6 +166,7 @@ public class SensorResourcePutIT {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
+				pathParam("deviceId", deviceId).
 				body(new SensorPutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -178,6 +182,7 @@ public class SensorResourcePutIT {
 		// @formatter:off
 		given(). 
 			pathParam("uuid", NON_EXISTING_UUID).
+			pathParam("deviceId", deviceId).
 			body(new SensorPutJsonImpl()). 
 			contentType(ContentType.JSON).
 		when(). 
@@ -303,12 +308,5 @@ public class SensorResourcePutIT {
 		public String getUnitId() {
 			return unitId;
 		}
-
-		@Override
-		public String getDeviceId() {
-			return deviceId;
-		}
-
 	}
-
 }

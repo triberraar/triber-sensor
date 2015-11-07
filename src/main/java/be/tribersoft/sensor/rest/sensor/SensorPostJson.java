@@ -16,8 +16,6 @@ public class SensorPostJson implements SensorMessage {
 	private String typeId;
 	@JsonProperty
 	private String unitId;
-	@JsonProperty
-	private String deviceId;
 
 	@Override
 	public String getName() {
@@ -40,11 +38,6 @@ public class SensorPostJson implements SensorMessage {
 	@Override
 	public String getUnitId() {
 		return unitId;
-	}
-
-	@Override
-	public String getDeviceId() {
-		return deviceId;
 	}
 
 }

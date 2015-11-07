@@ -13,11 +13,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import be.tribersoft.sensor.service.api.sensor.SensorService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorResourceDeleteTest {
+public class SensorDeviceResourceDeleteTest {
+	private static final String DEVICE_ID = "device id";
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
 	@InjectMocks
-	private SensorResource sensorResource;
+	private SensorDeviceResource sensorDeviceResource;
 	@Mock
 	private SensorService sensorService;
 	@Mock
@@ -30,8 +31,8 @@ public class SensorResourceDeleteTest {
 
 	@Test
 	public void delegatesToService() {
-		sensorResource.delete(ID, sensorDeleteJson);
+		sensorDeviceResource.delete(DEVICE_ID, ID, sensorDeleteJson);
 
-		verify(sensorService).delete(ID, VERSION);
+		verify(sensorService).delete(DEVICE_ID, ID, VERSION);
 	}
 }

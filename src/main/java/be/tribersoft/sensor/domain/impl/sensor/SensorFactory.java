@@ -18,8 +18,8 @@ public class SensorFactory {
 	@Inject
 	private DeviceRepositoryImpl deviceRepository;
 
-	public SensorEntity create(SensorMessage sensorMessage) {
-		SensorEntity sensorEntity = new SensorEntity(sensorMessage.getName(), deviceRepository.getById(sensorMessage.getDeviceId()), typeRepository.getById(sensorMessage.getTypeId()), unitRepository.getById(sensorMessage.getUnitId()));
+	public SensorEntity create(String deviceId, SensorMessage sensorMessage) {
+		SensorEntity sensorEntity = new SensorEntity(sensorMessage.getName(), deviceRepository.getById(deviceId), typeRepository.getById(sensorMessage.getTypeId()), unitRepository.getById(sensorMessage.getUnitId()));
 		sensorEntity.setDescription(sensorMessage.getDescription());
 		return sensorEntity;
 	}

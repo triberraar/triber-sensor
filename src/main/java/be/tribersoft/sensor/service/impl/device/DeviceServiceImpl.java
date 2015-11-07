@@ -33,7 +33,7 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Override
 	public void delete(String id, Long version) {
-		sensorRepository.allByDevice(id).stream().forEach(s -> sensorFacade.delete(s.getId(), s.getVersion()));
+		sensorRepository.allByDevice(id).stream().forEach(s -> sensorFacade.delete(id, s.getId(), s.getVersion()));
 		deviceFacade.delete(id, version);
 	}
 

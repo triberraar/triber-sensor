@@ -52,8 +52,8 @@ public class DeviceServiceImplDeleteTest {
 		deviceService.delete(DEVICE_ID, DEVICE_VERSION);
 
 		verify(deviceFacade).delete(DEVICE_ID, DEVICE_VERSION);
-		verify(sensorFacade).delete(SENSOR_ID_1, SENSOR_VERSION_1);
-		verify(sensorFacade).delete(SENSOR_ID_2, SENSOR_VERSION_2);
+		verify(sensorFacade).delete(DEVICE_ID, SENSOR_ID_1, SENSOR_VERSION_1);
+		verify(sensorFacade).delete(DEVICE_ID, SENSOR_ID_2, SENSOR_VERSION_2);
 	}
 
 }

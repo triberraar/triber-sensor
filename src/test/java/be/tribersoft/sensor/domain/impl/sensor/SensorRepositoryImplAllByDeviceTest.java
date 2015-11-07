@@ -31,14 +31,14 @@ public class SensorRepositoryImplAllByDeviceTest {
 
 	@Before
 	public void setUp() {
-		when(sensorJpaRepository.findAllByDeviceId(DEVICE_ID)).thenReturn(Arrays.asList(sensorEntity1, sensorEntity2));
+		when(sensorJpaRepository.findAllByDeviceIdOrderByCreationDateDesc(DEVICE_ID)).thenReturn(Arrays.asList(sensorEntity1, sensorEntity2));
 	}
 
 	@Test
 	public void delegatesToSpringDataRepository() {
 		List<? extends Sensor> all = sensorRepositoryImpl.allByDevice(DEVICE_ID);
 
-		verify(sensorJpaRepository).findAllByDeviceId(DEVICE_ID);
+		verify(sensorJpaRepository).findAllByDeviceIdOrderByCreationDateDesc(DEVICE_ID);
 		assertThat(all).isEqualTo(Arrays.asList(sensorEntity1, sensorEntity2));
 	}
 

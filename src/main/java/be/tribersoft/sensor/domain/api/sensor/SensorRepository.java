@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface SensorRepository {
 
-	Sensor getById(String id);
+	Sensor getByDeviceIdAndId(String deviceId, String id);
 
 	List<? extends Sensor> all();
 

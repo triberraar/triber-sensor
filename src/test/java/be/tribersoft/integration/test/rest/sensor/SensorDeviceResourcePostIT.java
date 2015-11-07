@@ -39,9 +39,9 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorResourcePostIT {
+public class SensorDeviceResourcePostIT {
 
-	private static final String URL = "/api/sensor";
+	private static final String URL = "/api/device/{deviceId}/sensor";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
@@ -80,6 +80,7 @@ public class SensorResourcePostIT {
 	public void createsANewSensor() {
 		// @formatter:off
 		given(). 
+				pathParam("deviceId", deviceId).
 				body(new SensorPostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -103,6 +104,7 @@ public class SensorResourcePostIT {
 	public void createsANewSensorWithoutDescription() {
 		// @formatter:off
 		given(). 
+				pathParam("deviceId", deviceId).
 				body(new SensorPostJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -126,6 +128,7 @@ public class SensorResourcePostIT {
 	public void badRequestWhenSensorIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("deviceId", deviceId).
 				body(new SensorPostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -157,10 +160,6 @@ public class SensorResourcePostIT {
 			return unitId;
 		}
 
-		@JsonProperty
-		public String getDeviceId() {
-			return deviceId;
-		}
 	}
 
 	private class SensorPostJsonImplWithoutDescription {
@@ -178,12 +177,6 @@ public class SensorResourcePostIT {
 		public String getUnitId() {
 			return unitId;
 		}
-
-		@JsonProperty
-		public String getDeviceId() {
-			return deviceId;
-		}
-
 	}
 
 	private class SensorPostJsonImplInvalid {
@@ -202,10 +195,6 @@ public class SensorResourcePostIT {
 			return unitId;
 		}
 
-		@JsonProperty
-		public String getDeviceId() {
-			return deviceId;
-		}
 	}
 
 }
