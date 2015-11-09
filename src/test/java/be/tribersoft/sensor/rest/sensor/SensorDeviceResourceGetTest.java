@@ -36,7 +36,7 @@ public class SensorDeviceResourceGetTest {
 
 	@Before
 	public void setUp() {
-		when(sensorRepository.getByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(sensor);
+		when(sensorRepository.getBydId(ID)).thenReturn(sensor);
 		when(sensorHateosBuilder.build(sensor)).thenReturn(resource);
 	}
 

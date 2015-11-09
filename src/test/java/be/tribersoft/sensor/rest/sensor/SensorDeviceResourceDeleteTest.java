@@ -35,7 +35,7 @@ public class SensorDeviceResourceDeleteTest {
 	public void delegatesToService() {
 		sensorDeviceResource.delete(DEVICE_ID, ID, sensorDeleteJson);
 
-		verify(sensorService).delete(DEVICE_ID, ID, VERSION);
+		verify(sensorService).delete(ID, VERSION);
 		verify(sensorValidator).validate(DEVICE_ID, ID);
 	}
 }

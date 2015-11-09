@@ -15,7 +15,6 @@ import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 @RunWith(MockitoJUnitRunner.class)
 public class SensorFacadeImplUpdateTest {
 
-	private static final String DEVICE_ID = "device id";
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
 
@@ -33,12 +32,12 @@ public class SensorFacadeImplUpdateTest {
 
 	@Before
 	public void setUp() {
-		when(sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION)).thenReturn(sensor);
+		when(sensorRepositoryImpl.getByIdAndVersion(ID, VERSION)).thenReturn(sensor);
 	}
 
 	@Test
 	public void savesCreatedSensor() {
-		sensorFacade.update(DEVICE_ID, ID, VERSION, sensorUpdateMessage);
+		sensorFacade.update(ID, VERSION, sensorUpdateMessage);
 
 		verify(sensorUpdater).update(sensor, sensorUpdateMessage);
 	}

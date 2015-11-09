@@ -15,9 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import be.tribersoft.sensor.domain.api.sensor.exception.SensorNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorRepositoryImplGetDeviceIdAndByIdTest {
+public class SensorRepositoryImplGetByDeviceIdAndIdTest {
 
-	private static final long DIFFERENT_VERSION = 3L;
 	private static final String ID = "id";
 	private static final String DEVICE_ID = "device id";
 

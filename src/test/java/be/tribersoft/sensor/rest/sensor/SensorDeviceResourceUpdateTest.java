@@ -35,7 +35,7 @@ public class SensorDeviceResourceUpdateTest {
 	public void delegatesToService() {
 		sensorDeviceResource.update(DEVICE_ID, ID, sensorUpdateJson);
 
-		verify(sensorService).update(DEVICE_ID, ID, VERSION, sensorUpdateJson);
+		verify(sensorService).update(ID, VERSION, sensorUpdateJson);
 		verify(sensorValidator).validate(DEVICE_ID, ID);
 	}
 }

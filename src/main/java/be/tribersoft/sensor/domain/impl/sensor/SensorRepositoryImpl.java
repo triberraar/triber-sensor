@@ -44,19 +44,32 @@ public class SensorRepositoryImpl implements SensorRepository {
 		return sensorJpaRepository.findAllByDeviceIdOrderByCreationDateDesc(deviceId);
 	}
 
-	public SensorEntity getByDeviceIdAndIdAndVersion(String deviceId, String id, Long version) {
-		SensorEntity sensorEntity = getByDeviceIdAndId(deviceId, id);
-		if (!sensorEntity.getVersion().equals(version)) {
-			throw new ConcurrentModificationException();
-		}
-		return sensorEntity;
-	}
-
 	@Override
 	public SensorEntity getByDeviceIdAndId(String deviceId, String id) {
 		Optional<SensorEntity> sensorEntity = sensorJpaRepository.findByDeviceIdAndId(deviceId, id);
 		if (!sensorEntity.isPresent()) {
 			throw new SensorNotFoundException();
+		}
+		return sensorEntity.get();
+	}
+
+	@Override
+	public SensorEntity getBydId(String id) {
+		Optional<SensorEntity> sensorEntity = sensorJpaRepository.findById(id);
+		if (!sensorEntity.isPresent()) {
+			throw new SensorNotFoundException();
+		}
+		return sensorEntity.get();
+	}
+
+	@Override
+	public SensorEntity getByIdAndVersion(String id, Long version) {
+		Optional<SensorEntity> sensorEntity = sensorJpaRepository.findById(id);
+		if (!sensorEntity.isPresent()) {
+			throw new SensorNotFoundException();
+		}
+		if (!sensorEntity.get().getVersion().equals(version)) {
+			throw new ConcurrentModificationException();
 		}
 		return sensorEntity.get();
 	}

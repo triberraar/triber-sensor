@@ -16,16 +16,13 @@ import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException
 import be.tribersoft.sensor.domain.api.sensor.exception.SensorNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorRepositoryImplGetDeviceIdAndByIdAndVersionTest {
+public class SensorRepositoryImplGetByIdAndVersionTest {
 
-	private static final long DIFFERENT_VERSION = 3L;
-	private static final long VERSION = 2l;
 	private static final String ID = "id";
-	private static final String DEVICE_ID = "device id";
-
+	private static final long VERSION = 3L;
+	private static final long DIFFERENT_VERSION = 4L;
 	@InjectMocks
 	private SensorRepositoryImpl sensorRepositoryImpl;
-
 	@Mock
 	private SensorJpaRepository sensorJpaRepository;
 	@Mock
@@ -33,30 +30,24 @@ public class SensorRepositoryImplGetDeviceIdAndByIdAndVersionTest {
 
 	@Before
 	public void setUp() {
-		when(sensorJpaRepository.findByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(Optional.of(sensorEntity));
 		when(sensorEntity.getVersion()).thenReturn(VERSION);
+		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.of(sensorEntity));
 	}
 
 	@Test(expected = SensorNotFoundException.class)
-	public void failsWhenNoEntityWithDeviceIdAndId() {
-		when(sensorJpaRepository.findByDeviceIdAndId(DEVICE_ID, ID)).thenReturn(Optional.<SensorEntity> empty());
+	public void failsWhenSensorDoesnExist() {
+		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.empty());
 
-		sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION);
+		sensorRepositoryImpl.getByIdAndVersion(ID, VERSION);
 	}
 
 	@Test(expected = ConcurrentModificationException.class)
-	public void failsWhenEntityWithIdHasDifferentVersion() {
-		when(sensorEntity.getVersion()).thenReturn(DIFFERENT_VERSION);
-
-		sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION);
+	public void failsWhenSensorHasDifferentVersion() {
+		sensorRepositoryImpl.getByIdAndVersion(ID, DIFFERENT_VERSION);
 	}
 
 	@Test
-	public void returnsEntityWithIdAndVersion() {
-		SensorEntity foundSensorEntity = sensorRepositoryImpl.getByDeviceIdAndIdAndVersion(DEVICE_ID, ID, VERSION);
-
-		assertThat(foundSensorEntity).isEqualTo(sensorEntity);
-
+	public void returnsSensor() {
+		assertThat(sensorRepositoryImpl.getByIdAndVersion(ID, VERSION)).isSameAs(sensorEntity);
 	}
-
 }
