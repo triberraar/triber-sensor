@@ -13,4 +13,8 @@ public interface SensorRepository {
 	boolean typeInUse(String typeId);
 
 	List<? extends Sensor> allByDevice(String deviceId);
+
+	Sensor getBydId(String id);
+
+	Sensor getByIdAndVersion(String id, Long version);
 }

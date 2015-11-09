@@ -23,6 +23,8 @@ public class SensorDeviceResourceDeleteTest {
 	private SensorService sensorService;
 	@Mock
 	private SensorDeleteJson sensorDeleteJson;
+	@Mock
+	private SensorValidator sensorValidator;
 
 	@Before
 	public void setUp() {
@@ -33,6 +35,7 @@ public class SensorDeviceResourceDeleteTest {
 	public void delegatesToService() {
 		sensorDeviceResource.delete(DEVICE_ID, ID, sensorDeleteJson);
 
-		verify(sensorService).delete(DEVICE_ID, ID, VERSION);
+		verify(sensorService).delete(ID, VERSION);
+		verify(sensorValidator).validate(DEVICE_ID, ID);
 	}
 }

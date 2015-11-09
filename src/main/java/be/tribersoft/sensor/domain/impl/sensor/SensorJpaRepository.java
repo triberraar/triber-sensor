@@ -19,4 +19,6 @@ public interface SensorJpaRepository extends Repository<SensorEntity, String> {
 	List<SensorEntity> findAllByDeviceIdOrderByCreationDateDesc(String deviceId);
 
 	Optional<SensorEntity> findByDeviceIdAndId(String deviceId, String id);
+
+	Optional<SensorEntity> findById(String id);
 }
