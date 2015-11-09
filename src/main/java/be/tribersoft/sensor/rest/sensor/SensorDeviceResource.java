@@ -23,6 +23,8 @@ public class SensorDeviceResource {
 	private SensorDeviceHateoasBuilder sensorHateoasBuilder;
 	@Inject
 	private SensorService sensorService;
+	@Inject
+	private SensorValidator sensorValidator;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resources<Resource<SensorToJsonAdapter>> all(@PathVariable("deviceId") String deviceId) {
@@ -31,6 +33,7 @@ public class SensorDeviceResource {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
 	public Resource<SensorToJsonAdapter> get(@PathVariable("deviceId") String deviceId, @PathVariable("id") String id) {
+		sensorValidator.validate(deviceId, id);
 		return sensorHateoasBuilder.build(sensorRepository.getByDeviceIdAndId(deviceId, id));
 	}
 
@@ -41,11 +44,13 @@ public class SensorDeviceResource {
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", consumes = "application/json")
 	public void update(@PathVariable("deviceId") String deviceId, @PathVariable("id") String id, @Valid @RequestBody SensorUpdateJson sensor) {
+		sensorValidator.validate(deviceId, id);
 		sensorService.update(deviceId, id, sensor.getVersion(), sensor);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}", consumes = "application/json")
 	public void delete(@PathVariable("deviceId") String deviceId, @PathVariable("id") String id, @Valid @RequestBody SensorDeleteJson sensor) {
+		sensorValidator.validate(deviceId, id);
 		sensorService.delete(deviceId, id, sensor.getVersion());
 	}
 }

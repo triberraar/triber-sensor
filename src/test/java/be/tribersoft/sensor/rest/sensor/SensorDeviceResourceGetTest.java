@@ -1,6 +1,7 @@
 package be.tribersoft.sensor.rest.sensor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -30,6 +31,8 @@ public class SensorDeviceResourceGetTest {
 	private SensorDeviceHateoasBuilder sensorHateosBuilder;
 	@Mock
 	private Resource<SensorToJsonAdapter> resource;
+	@Mock
+	private SensorValidator sensorValidator;
 
 	@Before
 	public void setUp() {
@@ -42,6 +45,7 @@ public class SensorDeviceResourceGetTest {
 		Resource<SensorToJsonAdapter> returnedResource = sensorDeviceResource.get(DEVICE_ID, ID);
 
 		assertThat(returnedResource).isSameAs(resource);
+		verify(sensorValidator).validate(DEVICE_ID, ID);
 	}
 
 }

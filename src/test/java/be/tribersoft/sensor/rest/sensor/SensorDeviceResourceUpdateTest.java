@@ -23,6 +23,8 @@ public class SensorDeviceResourceUpdateTest {
 	private SensorService sensorService;
 	@Mock
 	private SensorUpdateJson sensorUpdateJson;
+	@Mock
+	private SensorValidator sensorValidator;
 
 	@Before
 	public void setUp() {
@@ -34,5 +36,6 @@ public class SensorDeviceResourceUpdateTest {
 		sensorDeviceResource.update(DEVICE_ID, ID, sensorUpdateJson);
 
 		verify(sensorService).update(DEVICE_ID, ID, VERSION, sensorUpdateJson);
+		verify(sensorValidator).validate(DEVICE_ID, ID);
 	}
 }
