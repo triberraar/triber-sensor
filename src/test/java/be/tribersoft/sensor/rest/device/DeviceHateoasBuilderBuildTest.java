@@ -73,9 +73,9 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> links = deviceResource.getLinks();
 		assertThat(links.size()).isEqualTo(2);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/api/device/" + ID_1);
+		assertThat(links.get(0).getHref()).endsWith("/device/" + ID_1);
 		assertThat(links.get(1).getRel()).isEqualTo("sensors");
-		assertThat(links.get(1).getHref()).endsWith("/api/device/" + ID_1 + "/sensor");
+		assertThat(links.get(1).getHref()).endsWith("/device/" + ID_1 + "/sensor");
 
 	}
 
@@ -86,7 +86,7 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> links = deviceResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/api/device");
+		assertThat(links.get(0).getHref()).endsWith("/device");
 
 		assertThat(deviceResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<DeviceToJsonAdapter>> content = deviceResources.getContent();
@@ -101,9 +101,9 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> firstLinks = first.getLinks();
 		assertThat(firstLinks.size()).isEqualTo(2);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(firstLinks.get(0).getHref()).endsWith("/api/device/" + ID_1);
+		assertThat(firstLinks.get(0).getHref()).endsWith("/device/" + ID_1);
 		assertThat(firstLinks.get(1).getRel()).isEqualTo("sensors");
-		assertThat(firstLinks.get(1).getHref()).endsWith("/api/device/" + ID_1 + "/sensor");
+		assertThat(firstLinks.get(1).getHref()).endsWith("/device/" + ID_1 + "/sensor");
 
 		Resource<DeviceToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -114,9 +114,9 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> secondLinks = second.getLinks();
 		assertThat(secondLinks.size()).isEqualTo(2);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(secondLinks.get(0).getHref()).endsWith("/api/device/" + ID_2);
+		assertThat(secondLinks.get(0).getHref()).endsWith("/device/" + ID_2);
 		assertThat(secondLinks.get(1).getRel()).isEqualTo("sensors");
-		assertThat(secondLinks.get(1).getHref()).endsWith("/api/device/" + ID_2 + "/sensor");
+		assertThat(secondLinks.get(1).getHref()).endsWith("/device/" + ID_2 + "/sensor");
 	}
 
 }

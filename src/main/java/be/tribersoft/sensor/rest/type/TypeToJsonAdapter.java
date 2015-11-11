@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import be.tribersoft.sensor.domain.api.type.Type;
 
-@Relation(collectionRelation = "types", value = "type")
+@Relation(collectionRelation = TypeToJsonAdapter.TYPES, value = TypeToJsonAdapter.TYPE)
 public class TypeToJsonAdapter {
+	public final static String TYPES = "types";
+	public final static String TYPE = "type";
 
 	private Type type;
 

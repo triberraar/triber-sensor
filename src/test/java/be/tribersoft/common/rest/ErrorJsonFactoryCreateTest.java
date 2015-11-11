@@ -16,18 +16,19 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 
-import be.tribersoft.common.rest.ErrorJson;
-import be.tribersoft.common.rest.ErrorJsonFactory;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ErrorJsonFactoryCreateTest {
 
+	private static final String TRANSLATED_VALUE_WITH_PARAMETERS = "translated value with parameters";
 	private static final String TRANSLATED_UNKNOWN_ERROR = "translated unknown error";
 	private static final String TRANSLATED_DEFAULT_MESSAGE = "translated default message";
 	private static final String DEFAULT_MESSAGE = "default message";
 	private static final String TRANSLATED_VALUE = "translatedValue";
 	private static final String KEY = "key";
+	private static final String KEY_WITH_PARAMETERS = "key with parameters";
 	private static final String UNKNOWN_ERROR = "validation.error.unknown";
+	private static final String[] PARAMETERS = { "param1" };
+	private static final String[] NO_PARAMETERS = {};
 
 	@InjectMocks
 	private ErrorJsonFactory errorJsonFactory;
@@ -40,10 +41,12 @@ public class ErrorJsonFactoryCreateTest {
 
 	@Before
 	public void setup() {
-		when(msgSource.getMessage(eq(KEY), eq(null), eq(KEY), any(Locale.class))).thenReturn(TRANSLATED_VALUE);
+		when(msgSource.getMessage(eq(KEY), eq(NO_PARAMETERS), eq(KEY), any(Locale.class))).thenReturn(TRANSLATED_VALUE);
+
+		when(msgSource.getMessage(eq(KEY_WITH_PARAMETERS), eq(PARAMETERS), eq(KEY_WITH_PARAMETERS), any(Locale.class))).thenReturn(TRANSLATED_VALUE_WITH_PARAMETERS);
 		when(fieldError.getDefaultMessage()).thenReturn(DEFAULT_MESSAGE);
-		when(msgSource.getMessage(eq(DEFAULT_MESSAGE), eq(null), eq(DEFAULT_MESSAGE), any(Locale.class))).thenReturn(TRANSLATED_DEFAULT_MESSAGE);
-		when(msgSource.getMessage(eq(UNKNOWN_ERROR), eq(null), eq(UNKNOWN_ERROR), any(Locale.class))).thenReturn(TRANSLATED_UNKNOWN_ERROR);
+		when(msgSource.getMessage(eq(DEFAULT_MESSAGE), eq(NO_PARAMETERS), eq(DEFAULT_MESSAGE), any(Locale.class))).thenReturn(TRANSLATED_DEFAULT_MESSAGE);
+		when(msgSource.getMessage(eq(UNKNOWN_ERROR), eq(NO_PARAMETERS), eq(UNKNOWN_ERROR), any(Locale.class))).thenReturn(TRANSLATED_UNKNOWN_ERROR);
 	}
 
 	@Test
@@ -52,6 +55,14 @@ public class ErrorJsonFactoryCreateTest {
 
 		assertThat(errorJson.getKey()).isEqualTo(KEY);
 		assertThat(errorJson.getMessage()).isEqualTo(TRANSLATED_VALUE);
+	}
+
+	@Test
+	public void returnsTranslatedMessage_forKeyWithParameters() {
+		ErrorJson errorJson = errorJsonFactory.create(KEY_WITH_PARAMETERS, PARAMETERS);
+
+		assertThat(errorJson.getKey()).isEqualTo(KEY_WITH_PARAMETERS);
+		assertThat(errorJson.getMessage()).isEqualTo(TRANSLATED_VALUE_WITH_PARAMETERS);
 	}
 
 	@Test

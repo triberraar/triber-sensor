@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 
 @RestController
-@RequestMapping("/api/sensor")
+@RequestMapping("/sensor")
 public class SensorResource {
 
 	@Inject
