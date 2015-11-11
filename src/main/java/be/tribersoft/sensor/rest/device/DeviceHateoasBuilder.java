@@ -11,13 +11,14 @@ import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 import be.tribersoft.sensor.domain.api.device.Device;
 import be.tribersoft.sensor.rest.sensor.SensorDeviceResource;
+import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 
 @Named
 public class DeviceHateoasBuilder {
 
 	public Resource<DeviceToJsonAdapter> build(Device device) {
 		Resource<DeviceToJsonAdapter> resource = new Resource<DeviceToJsonAdapter>(new DeviceToJsonAdapter(device), ControllerLinkBuilder.linkTo(DeviceResource.class).slash(device).withSelfRel());
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).all(device.getId())).withRel("sensors"));
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).all(device.getId())).withRel(SensorToJsonAdapter.SENSORS));
 		return resource;
 	}
 
