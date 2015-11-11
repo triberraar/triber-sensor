@@ -8,18 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.hateoas.Resource;
 
-import be.tribersoft.common.rest.IncorrectApiVersionException;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ApiResourceGetTest {
-
-	private static final String DIFFERENT_VERSION = "different version";
-
-	private static final String API_VERSION = "apiVersion";
 
 	@InjectMocks
 	private ApiResource apiResource;
@@ -32,18 +25,12 @@ public class ApiResourceGetTest {
 
 	@Before
 	public void setUp() {
-		Whitebox.setInternalState(apiResource, API_VERSION, API_VERSION);
-		when(apiHateoasBuilder.build(API_VERSION)).thenReturn(apiToJsoAdapterResource);
-	}
-
-	@Test(expected = IncorrectApiVersionException.class)
-	public void failsWhenVersionIsDifferent() {
-		apiResource.get(DIFFERENT_VERSION);
+		when(apiHateoasBuilder.build()).thenReturn(apiToJsoAdapterResource);
 	}
 
 	@Test
 	public void returnsApi() {
-		Resource<ApiToJsonAdapter> resource = apiResource.get(API_VERSION);
+		Resource<ApiToJsonAdapter> resource = apiResource.get();
 
 		assertThat(resource).isSameAs(apiToJsoAdapterResource);
 	}

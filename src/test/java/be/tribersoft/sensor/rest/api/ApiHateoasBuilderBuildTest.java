@@ -50,8 +50,10 @@ public class ApiHateoasBuilderBuildTest {
 
 		assertThat(result.getContent().getVersion()).isEqualTo(VERSION);
 		List<Link> links = result.getLinks();
-		assertThat(links.size()).isEqualTo(1);
+		assertThat(links.size()).isEqualTo(2);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/" + VERSION);
+		assertThat(links.get(0).getHref()).endsWith("/");
+		assertThat(links.get(1).getRel()).isEqualTo("api");
+		assertThat(links.get(1).getHref()).endsWith("/" + VERSION);
 	}
 }

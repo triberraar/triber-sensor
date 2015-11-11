@@ -1,6 +1,7 @@
 package be.tribersoft.integration.test.rest.api;
 
 import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -29,7 +30,8 @@ import be.tribersoft.TriberSensorApplication;
 public class APIResourceGetIT {
 
 	private static final String INCORRECT_VERSION_MESSAGE = "You tried to use version 'wrong' while we provide version '1'";
-	private static final String URL = "/api/{apiVersion}";
+	private static final String URL_WITH_VERSION = "/api/{apiVersion}";
+	private static final String URL = "/api";
 	private static final String WRONG_VERSION = "wrong";
 
 	@Value("${local.server.port}")
@@ -43,12 +45,12 @@ public class APIResourceGetIT {
 	}
 
 	@Test
-	public void getApi() {
+	public void getApiWithVersion() {
 		// @formatter:off
 		given().
 				pathParam("apiVersion", apiVersion).
 		when(). 
-				get(URL). 
+				get(URL_WITH_VERSION). 
 		then(). 
 				contentType(ContentType.JSON).
 				body("size()", is(2)).
@@ -63,12 +65,28 @@ public class APIResourceGetIT {
 	}
 
 	@Test
+	public void getApi() {
+		// @formatter:off
+		when(). 
+				get(URL). 
+		then(). 
+				contentType(ContentType.JSON).
+				body("size()", is(2)).
+				body("version", is(apiVersion)).
+				body("_links.size()", is(2)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/")).
+				body("_links.api.href", is("http://localhost:" + port+"/api/" + apiVersion)).
+				statusCode(HttpStatus.OK.value());
+		// @formatter:on
+	}
+
+	@Test
 	public void failsWhenWrongVersion() {
 		// @formatter:off
 		given().
 				pathParam("apiVersion", WRONG_VERSION).
 		when(). 
-				get(URL). 
+				get(URL_WITH_VERSION). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
 				body("message", equalTo(INCORRECT_VERSION_MESSAGE));
