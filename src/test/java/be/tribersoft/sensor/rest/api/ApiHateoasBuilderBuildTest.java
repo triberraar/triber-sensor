@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -23,10 +24,11 @@ public class ApiHateoasBuilderBuildTest {
 		request = new MockHttpServletRequest();
 		ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
 		RequestContextHolder.setRequestAttributes(requestAttributes);
+		Whitebox.setInternalState(builder, "apiVersion", VERSION);
 	}
 
 	@Test
-	public void buildsLinksToRootResources() {
+	public void buildsLinksToApiResourceWithVersion() {
 		Resource<ApiToJsonAdapter> result = builder.build(VERSION);
 
 		assertThat(result.getContent().getVersion()).isEqualTo(VERSION);
@@ -40,5 +42,16 @@ public class ApiHateoasBuilderBuildTest {
 		assertThat(links.get(2).getHref()).endsWith("/admin/unit");
 		assertThat(links.get(3).getRel()).isEqualTo("devices");
 		assertThat(links.get(3).getHref()).endsWith("/device");
+	}
+
+	@Test
+	public void buildsLinksToApiResource() {
+		Resource<ApiToJsonAdapter> result = builder.build();
+
+		assertThat(result.getContent().getVersion()).isEqualTo(VERSION);
+		List<Link> links = result.getLinks();
+		assertThat(links.size()).isEqualTo(1);
+		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
+		assertThat(links.get(0).getHref()).endsWith("/" + VERSION);
 	}
 }

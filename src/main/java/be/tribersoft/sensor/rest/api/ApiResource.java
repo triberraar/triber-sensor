@@ -29,4 +29,9 @@ public class ApiResource {
 		return apiHateoasBuilder.build(apiVersion);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+	public Resource<ApiToJsonAdapter> get() {
+		return apiHateoasBuilder.build();
+	}
+
 }
