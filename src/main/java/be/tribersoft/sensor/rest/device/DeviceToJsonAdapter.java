@@ -8,8 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import be.tribersoft.sensor.domain.api.device.Device;
 
-@Relation(collectionRelation = "devices", value = "device")
+@Relation(collectionRelation = DeviceToJsonAdapter.DEVICES, value = DeviceToJsonAdapter.DEVICE)
 public class DeviceToJsonAdapter {
+
+	public static final String DEVICES = "devices";
+	public static final String DEVICE = "device";
 
 	private Device device;
 

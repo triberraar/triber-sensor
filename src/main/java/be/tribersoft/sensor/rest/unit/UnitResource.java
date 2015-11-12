@@ -15,7 +15,7 @@ import be.tribersoft.sensor.domain.api.unit.UnitRepository;
 import be.tribersoft.sensor.service.api.unit.UnitService;
 
 @RestController
-@RequestMapping("/api/admin/unit")
+@RequestMapping("/admin/unit")
 public class UnitResource {
 
 	@Inject

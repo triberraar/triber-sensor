@@ -18,13 +18,13 @@ public class ErrorJsonFactory {
 	@Qualifier("validationMessageSource")
 	private MessageSource msgSource;
 
-	public ErrorJson create(String key) {
-		return new ErrorJson(key, getMessage(key));
+	public ErrorJson create(String key, String... parameters) {
+		return new ErrorJson(key, getMessage(key, parameters));
 	}
 
-	private String getMessage(String message) {
+	private String getMessage(String message, String... parameters) {
 		Locale currentLocale = LocaleContextHolder.getLocale();
-		return msgSource.getMessage(message, null, message, currentLocale);
+		return msgSource.getMessage(message, parameters, message, currentLocale);
 	}
 
 	public ErrorJson create(FieldError error) {

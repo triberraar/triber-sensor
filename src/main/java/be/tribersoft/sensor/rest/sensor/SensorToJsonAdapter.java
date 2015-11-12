@@ -8,8 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 
-@Relation(collectionRelation = "sensors", value = "sensor")
+@Relation(collectionRelation = SensorToJsonAdapter.SENSORS, value = SensorToJsonAdapter.SENSOR)
 public class SensorToJsonAdapter {
+
+	public static final String SENSORS = "sensors";
+	public static final String SENSOR = "sensor";
 
 	private Sensor sensor;
 

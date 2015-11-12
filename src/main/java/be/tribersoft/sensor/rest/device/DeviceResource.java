@@ -15,7 +15,7 @@ import be.tribersoft.sensor.domain.api.device.DeviceRepository;
 import be.tribersoft.sensor.service.api.device.DeviceService;
 
 @RestController
-@RequestMapping("/api/device")
+@RequestMapping("/device")
 public class DeviceResource {
 
 	@Inject
