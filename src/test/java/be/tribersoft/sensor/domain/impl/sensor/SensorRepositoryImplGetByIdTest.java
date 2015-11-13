@@ -36,11 +36,11 @@ public class SensorRepositoryImplGetByIdTest {
 	public void failsWhenSensorDoesnExist() {
 		when(sensorJpaRepository.findById(ID)).thenReturn(Optional.empty());
 
-		sensorRepositoryImpl.getBydId(ID);
+		sensorRepositoryImpl.getById(ID);
 	}
 
 	@Test
 	public void returnsSensor() {
-		assertThat(sensorRepositoryImpl.getBydId(ID)).isSameAs(sensorEntity);
+		assertThat(sensorRepositoryImpl.getById(ID)).isSameAs(sensorEntity);
 	}
 }

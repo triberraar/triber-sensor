@@ -54,7 +54,7 @@ public class SensorRepositoryImpl implements SensorRepository {
 	}
 
 	@Override
-	public SensorEntity getBydId(String id) {
+	public SensorEntity getById(String id) {
 		Optional<SensorEntity> sensorEntity = sensorJpaRepository.findById(id);
 		if (!sensorEntity.isPresent()) {
 			throw new SensorNotFoundException();
