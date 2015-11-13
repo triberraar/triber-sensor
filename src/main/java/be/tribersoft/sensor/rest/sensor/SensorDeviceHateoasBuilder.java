@@ -31,14 +31,14 @@ public class SensorDeviceHateoasBuilder {
 
 	public Resources<Resource<SensorToJsonAdapter>> build(List<? extends Sensor> sensors) {
 		String deviceId = "";
-		List<Resource<SensorToJsonAdapter>> transformedUnitResources = sensors.stream().map(sensor -> {
+		List<Resource<SensorToJsonAdapter>> transformedSensorResources = sensors.stream().map(sensor -> {
 			return build(sensor);
 		}).collect(Collectors.toList());
 		if (!sensors.isEmpty()) {
 			deviceId = sensors.get(0).getDevice().getId();
 		}
 
-		Resources<Resource<SensorToJsonAdapter>> sensorResources = new Resources<>(transformedUnitResources);
+		Resources<Resource<SensorToJsonAdapter>> sensorResources = new Resources<>(transformedSensorResources);
 		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).all(deviceId)).withSelfRel());
 		return sensorResources;
 	}
