@@ -10,6 +10,8 @@ import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
+import be.tribersoft.sensor.rest.sensor.SensorDeviceResource;
+import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 
 @Named
 public class ReadingHateoasBuilder {
@@ -18,7 +20,9 @@ public class ReadingHateoasBuilder {
 		String deviceId = "";
 		String sensorId = "";
 		List<Resource<ReadingToJsonAdapter>> transformedReadingResources = readings.stream().map(reading -> {
-			return new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
+			Resource<ReadingToJsonAdapter> resource = new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
+			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(reading.getSensor().getDevice().getId(), reading.getSensor().getId())).withRel(SensorToJsonAdapter.SENSOR));
+			return resource;
 		}).collect(Collectors.toList());
 		if (!readings.isEmpty()) {
 			deviceId = readings.get(0).getSensor().getDevice().getId();

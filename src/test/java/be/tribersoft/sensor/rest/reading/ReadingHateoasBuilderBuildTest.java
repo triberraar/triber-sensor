@@ -22,10 +22,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import be.tribersoft.sensor.domain.api.device.Device;
-import be.tribersoft.sensor.domain.api.sensor.Sensor;
-import be.tribersoft.sensor.rest.reading.ReadingHateoasBuilder;
-import be.tribersoft.sensor.rest.reading.ReadingToJsonAdapter;
 import be.tribersoft.sensor.domain.api.reading.Reading;
+import be.tribersoft.sensor.domain.api.sensor.Sensor;
+import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReadingHateoasBuilderBuildTest {
@@ -76,7 +75,7 @@ public class ReadingHateoasBuilderBuildTest {
 		List<Link> links = sensorResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/reading");
+		assertThat(links.get(0).getHref()).endsWith("/device/" + DEVICE_ID + "/sensor/" + SENSOR_ID + "/reading");
 
 		assertThat(sensorResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<ReadingToJsonAdapter>> content = sensorResources.getContent();
@@ -88,12 +87,16 @@ public class ReadingHateoasBuilderBuildTest {
 		assertThat(first.getContent().getVersion()).isEqualTo(VERSION_1);
 		assertThat(first.getContent().getValue()).isEqualTo(VALUE_1);
 		List<Link> firstLinks = first.getLinks();
-		assertThat(firstLinks.size()).isEqualTo(0);
+		assertThat(firstLinks.size()).isEqualTo(1);
+		assertThat(firstLinks.get(0).getRel()).isEqualTo(SensorToJsonAdapter.SENSOR);
+		assertThat(firstLinks.get(0).getHref()).endsWith("/device/" + DEVICE_ID + "/sensor/" + SENSOR_ID);
 		Resource<ReadingToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getVersion()).isEqualTo(VERSION_2);
 		assertThat(second.getContent().getValue()).isEqualTo(VALUE_2);
 		List<Link> secondLinks = second.getLinks();
-		assertThat(secondLinks.size()).isEqualTo(0);
+		assertThat(secondLinks.size()).isEqualTo(1);
+		assertThat(secondLinks.get(0).getRel()).isEqualTo(SensorToJsonAdapter.SENSOR);
+		assertThat(secondLinks.get(0).getHref()).endsWith("/device/" + DEVICE_ID + "/sensor/" + SENSOR_ID);
 	}
 
 }
