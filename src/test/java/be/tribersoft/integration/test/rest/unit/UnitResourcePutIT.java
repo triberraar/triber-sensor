@@ -26,10 +26,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.unit.UnitMessage;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitFactory;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -50,8 +49,6 @@ public class UnitResourcePutIT {
 
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
-	@Inject
-	private UnitFactory unitFactory;
 
 	@Value("${local.server.port}")
 	private int serverPort;
@@ -61,8 +58,7 @@ public class UnitResourcePutIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl()));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		UnitEntity unitEntity = UnitBuilder.aUnit().withName(NAME).withSymbol(Optional.of(SYMBOL)).buildPersistent(unitJpaRepository);
 		uuid = unitEntity.getId();
 		version = unitEntity.getVersion();
 	}
@@ -208,20 +204,6 @@ public class UnitResourcePutIT {
 		public Long getVersion() {
 			return version;
 		}
-	}
-
-	private class UnitMessageImpl implements UnitMessage {
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getSymbol() {
-			return Optional.of(SYMBOL);
-		}
-
 	}
 
 }
