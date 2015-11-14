@@ -22,7 +22,7 @@ public class ReadingRepositoryImpl implements ReadingRepository {
 	}
 
 	public void delete(List<ReadingEntity> readings) {
-		readings.stream().forEach(reading -> readingJpaRepository.delete(reading));
+		readings.parallelStream().forEach(reading -> readingJpaRepository.delete(reading));
 	}
 
 }
