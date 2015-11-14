@@ -10,7 +10,7 @@ import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
-import be.tribersoft.sensor.rest.sensor.SensorDeviceResource;
+import be.tribersoft.sensor.rest.sensor.SensorResource;
 import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 
 @Named
@@ -19,7 +19,7 @@ public class ReadingHateoasBuilder {
 	public Resources<Resource<ReadingToJsonAdapter>> build(String deviceId, String sensorId, List<? extends Reading> readings) {
 		List<Resource<ReadingToJsonAdapter>> transformedReadingResources = readings.stream().map(reading -> {
 			Resource<ReadingToJsonAdapter> resource = new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
-			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
+			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).get(deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
 			return resource;
 		}).collect(Collectors.toList());
 

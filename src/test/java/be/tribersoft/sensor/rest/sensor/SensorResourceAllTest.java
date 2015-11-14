@@ -1,8 +1,10 @@
 package be.tribersoft.sensor.rest.sensor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,41 +13,38 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorDeviceResourceGetTest {
+public class SensorResourceAllTest {
 
 	private static final String DEVICE_ID = "device id";
-	private static String ID = "id";
 
 	@InjectMocks
-	private SensorDeviceResource sensorDeviceResource;
+	private SensorResource sensorDeviceResource;
 	@Mock
 	private SensorRepository sensorRepository;
 	@Mock
-	private Sensor sensor;
+	private Sensor sensor1, sensor2;
 	@Mock
-	private SensorDeviceHateoasBuilder sensorHateosBuilder;
+	private SensorHateoasBuilder sensorHateosBuilder;
 	@Mock
-	private Resource<SensorToJsonAdapter> resource;
-	@Mock
-	private SensorValidator sensorValidator;
+	private Resources<Resource<SensorToJsonAdapter>> resources;
 
 	@Before
 	public void setUp() {
-		when(sensorRepository.getById(ID)).thenReturn(sensor);
-		when(sensorHateosBuilder.build(sensor)).thenReturn(resource);
+		doReturn(Arrays.asList(sensor1, sensor2)).when(sensorRepository).allByDevice(DEVICE_ID);
+		when(sensorHateosBuilder.build(DEVICE_ID, Arrays.asList(sensor1, sensor2))).thenReturn(resources);
 	}
 
 	@Test
 	public void delegatesToService() {
-		Resource<SensorToJsonAdapter> returnedResource = sensorDeviceResource.get(DEVICE_ID, ID);
+		Resources<Resource<SensorToJsonAdapter>> returnedResource = sensorDeviceResource.all(DEVICE_ID);
 
-		assertThat(returnedResource).isSameAs(resource);
-		verify(sensorValidator).validate(DEVICE_ID, ID);
+		assertThat(returnedResource).isSameAs(resources);
 	}
 
 }

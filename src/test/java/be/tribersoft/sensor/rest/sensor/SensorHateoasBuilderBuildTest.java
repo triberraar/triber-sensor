@@ -27,7 +27,7 @@ import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.unit.Unit;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorDeviceHateoasBuilderBuildTest {
+public class SensorHateoasBuilderBuildTest {
 	private static Long VERSION_1 = 0l;
 	private static Long VERSION_2 = 1l;
 	private static String ID_1 = "id1";
@@ -43,7 +43,7 @@ public class SensorDeviceHateoasBuilderBuildTest {
 
 	protected MockHttpServletRequest request;
 
-	private SensorDeviceHateoasBuilder builder = new SensorDeviceHateoasBuilder();
+	private SensorHateoasBuilder builder = new SensorHateoasBuilder();
 
 	@Mock
 	private Sensor sensor1, sensor2;

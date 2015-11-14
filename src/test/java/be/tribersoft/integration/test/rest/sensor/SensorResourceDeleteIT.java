@@ -43,7 +43,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorDeviceResourceDeleteIT {
+public class SensorResourceDeleteIT {
 
 	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";

@@ -16,11 +16,11 @@ import be.tribersoft.sensor.service.api.sensor.SensorService;
 
 @RestController
 @RequestMapping("/device/{deviceId}/sensor")
-public class SensorDeviceResource {
+public class SensorResource {
 	@Inject
 	private SensorRepository sensorRepository;
 	@Inject
-	private SensorDeviceHateoasBuilder sensorHateoasBuilder;
+	private SensorHateoasBuilder sensorHateoasBuilder;
 	@Inject
 	private SensorService sensorService;
 	@Inject

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -35,7 +34,6 @@ import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 import be.tribersoft.util.builder.DeviceBuilder;
-import be.tribersoft.util.builder.SensorBuilder;
 import be.tribersoft.util.builder.TypeBuilder;
 import be.tribersoft.util.builder.UnitBuilder;
 
@@ -44,17 +42,12 @@ import be.tribersoft.util.builder.UnitBuilder;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorDeviceResourcePutIT {
+public class SensorResourcePostIT {
 
-	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
-	private static final String NON_EXISTING_UUID = "non existing uuid";
-	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
-	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
-	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
+	private static final String URL = "/api/device/{deviceId}/sensor";
+	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
-	private static final String UPDATED_NAME = "updated name";
-	private static final String UPDATED_DESCRIPTION = "updated description";
 
 	@Inject
 	private SensorJpaRepository sensorJpaRepository;
@@ -67,9 +60,6 @@ public class SensorDeviceResourcePutIT {
 
 	@Value("${local.server.port}")
 	private int serverPort;
-	private String uuid;
-	private Long version;
-
 	private TypeEntity typeEntity;
 	private UnitEntity unitEntity;
 	private DeviceEntity deviceEntity;
@@ -81,21 +71,17 @@ public class SensorDeviceResourcePutIT {
 		typeEntity = TypeBuilder.aType().buildPersistent(typeJpaRepository);
 		unitEntity = UnitBuilder.aUnit().buildPersistent(unitJpaRepository);
 		deviceEntity = DeviceBuilder.aDevice().buildPersistent(deviceJpaRepository);
-		SensorEntity sensorEntity = SensorBuilder.aSensor().withName(NAME).withDescription(Optional.of(DESCRIPTION)).withDevice(deviceEntity).withUnit(unitEntity).withType(typeEntity).buildPersistent(sensorJpaRepository);
-		uuid = sensorEntity.getId();
-		version = sensorEntity.getVersion();
 	}
 
 	@Test
-	public void updatesSensor() {
+	public void createsANewSensor() {
 		// @formatter:off
-		given().
-				pathParam("uuid", uuid).
+		given(). 
 				pathParam("deviceId", deviceEntity.getId()).
-				body(new SensorPutJsonImpl()). 
+				body(new SensorPostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put(URL). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -103,25 +89,24 @@ public class SensorDeviceResourcePutIT {
 		List<SensorEntity> sensors = sensorJpaRepository.findAllByOrderByCreationDateDesc();
 		assertThat(sensors.size()).isEqualTo(1);
 		SensorEntity sensorEntity = sensors.get(0);
-		assertThat(sensorEntity.getName()).isEqualTo(UPDATED_NAME);
-		assertThat(sensorEntity.getDescription().get()).isEqualTo(UPDATED_DESCRIPTION);
+		assertThat(sensorEntity.getName()).isEqualTo(NAME);
+		assertThat(sensorEntity.getDescription().get()).isEqualTo(DESCRIPTION);
 		assertThat(sensorEntity.getType().getId()).isEqualTo(typeEntity.getId());
 		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitEntity.getId());
 		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceEntity.getId());
-		assertThat(sensorEntity.getId()).isEqualTo(uuid);
-		assertThat(sensorEntity.getVersion()).isEqualTo(version + 1);
+		assertThat(sensorEntity.getId()).isNotNull();
+		assertThat(sensorEntity.getVersion()).isEqualTo(0L);
 	}
 
 	@Test
-	public void updatesSensorWithoutDescription() {
+	public void createsANewSensorWithoutDescription() {
 		// @formatter:off
-		given().
-				pathParam("uuid", uuid).
+		given(). 
 				pathParam("deviceId", deviceEntity.getId()).
-				body(new SensorPutJsonImplWithoutDescription()). 
+				body(new SensorPostJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put(URL). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
@@ -129,83 +114,62 @@ public class SensorDeviceResourcePutIT {
 		List<SensorEntity> sensors = sensorJpaRepository.findAllByOrderByCreationDateDesc();
 		assertThat(sensors.size()).isEqualTo(1);
 		SensorEntity sensorEntity = sensors.get(0);
-		assertThat(sensorEntity.getName()).isEqualTo(UPDATED_NAME);
+		assertThat(sensorEntity.getName()).isEqualTo(NAME);
 		assertThat(sensorEntity.getDescription().isPresent()).isFalse();
 		assertThat(sensorEntity.getType().getId()).isEqualTo(typeEntity.getId());
 		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitEntity.getId());
 		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceEntity.getId());
-		assertThat(sensorEntity.getId()).isEqualTo(uuid);
-		assertThat(sensorEntity.getVersion()).isEqualTo(version + 1);
+		assertThat(sensorEntity.getId()).isNotNull();
+		assertThat(sensorEntity.getVersion()).isEqualTo(0L);
 	}
 
 	@Test
 	public void badRequestWhenSensorIsNotValid() {
 		// @formatter:off
 		given(). 
-				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
-				body(new SensorPutJsonImplInvalid()). 
+				body(new SensorPostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
-				put(URL). 
+				post(URL). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
-				body("message", equalTo(INVALID_ERROR_MESSAGE));
+				body("message", equalTo(ERROR_MESSAGE));
 		// @formatter:on
 	}
 
-	@Test
-	public void conflictWhenSensorHasConcurrentChanges() {
-		// @formatter:off
-		given(). 
-				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceEntity.getId()).
-				body(new SensorPutJsonImplConcurrent()). 
-				contentType(ContentType.JSON).
-		when(). 
-				put(URL). 
-		then(). 
-				statusCode(HttpStatus.CONFLICT.value()).
-				body("message", equalTo(CONCURRENT_ERROR_MESSAGE));
-		// @formatter:on
-	}
-
-	@Test
-	public void notFoundWhenSensorDoesntExist() {
-		// @formatter:off
-		given(). 
-			pathParam("uuid", NON_EXISTING_UUID).
-			pathParam("deviceId", deviceEntity.getId()).
-			body(new SensorPutJsonImpl()). 
-			contentType(ContentType.JSON).
-		when(). 
-			put(URL). 
-		then(). 
-			statusCode(HttpStatus.NOT_FOUND.value()).
-			body("message", equalTo(SENSOR_NOT_FOUND_EXCEPTION));
-		// @formatter:on
-	}
-
-	private class SensorPutJsonImpl {
-
+	private class SensorPostJsonImpl {
 		@JsonProperty
 		public String getName() {
-			return UPDATED_NAME;
+			return NAME;
 		}
 
 		@JsonProperty
 		public String getDescription() {
-			return UPDATED_DESCRIPTION;
-		}
-
-		@JsonProperty
-		public Long getVersion() {
-			return version;
+			return DESCRIPTION;
 		}
 
 		@JsonProperty
 		public String getTypeId() {
-			return deviceEntity.getId();
+			return typeEntity.getId();
+		}
+
+		@JsonProperty
+		public String getUnitId() {
+			return unitEntity.getId();
+		}
+
+	}
+
+	private class SensorPostJsonImplWithoutDescription {
+		@JsonProperty
+		public String getName() {
+			return NAME;
+		}
+
+		@JsonProperty
+		public String getTypeId() {
+			return typeEntity.getId();
 		}
 
 		@JsonProperty
@@ -214,70 +178,22 @@ public class SensorDeviceResourcePutIT {
 		}
 	}
 
-	private class SensorPutJsonImplInvalid {
+	private class SensorPostJsonImplInvalid {
 		@JsonProperty
 		public String getName() {
 			return null;
 		}
 
 		@JsonProperty
-		public Long getVersion() {
-			return version;
-		}
-
-		@JsonProperty
 		public String getTypeId() {
-			return deviceEntity.getId();
+			return typeEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
 			return unitEntity.getId();
 		}
-	}
 
-	private class SensorPutJsonImplConcurrent {
-		@JsonProperty
-		public String getName() {
-			return UPDATED_NAME;
-		}
-
-		@JsonProperty
-		public Long getVersion() {
-			return version + 1;
-		}
-
-		@JsonProperty
-		public String getTypeId() {
-			return deviceEntity.getId();
-		}
-
-		@JsonProperty
-		public String getUnitId() {
-			return unitEntity.getId();
-		}
-	}
-
-	private class SensorPutJsonImplWithoutDescription {
-		@JsonProperty
-		public String getName() {
-			return UPDATED_NAME;
-		}
-
-		@JsonProperty
-		public Long getVersion() {
-			return version;
-		}
-
-		@JsonProperty
-		public String getTypeId() {
-			return deviceEntity.getId();
-		}
-
-		@JsonProperty
-		public String getUnitId() {
-			return unitEntity.getId();
-		}
 	}
 
 }

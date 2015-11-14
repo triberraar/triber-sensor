@@ -45,7 +45,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorDeviceResourceAllIT {
+public class SensorResourceAllIT {
 
 	private static final String URL = "/api/device/{deviceId}/sensor";
 	private static final String NAME_1 = "NAME 1";
