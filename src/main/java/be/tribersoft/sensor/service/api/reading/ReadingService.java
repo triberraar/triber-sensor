@@ -6,4 +6,6 @@ public interface ReadingService {
 
 	void save(String sensorId, ReadingMessage readingMessage);
 
+	void deleteBySensor(String sensorId);
+
 }

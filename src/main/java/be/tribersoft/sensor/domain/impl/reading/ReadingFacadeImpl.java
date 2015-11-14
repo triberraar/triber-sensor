@@ -19,4 +19,9 @@ public class ReadingFacadeImpl implements ReadingFacade {
 		readingRepository.save(readingFactory.create(sensorId, readingMessage));
 	}
 
+	@Override
+	public void deleteBySensor(String sensorId) {
+		readingRepository.delete(readingRepository.allBySensor(sensorId));
+	}
+
 }

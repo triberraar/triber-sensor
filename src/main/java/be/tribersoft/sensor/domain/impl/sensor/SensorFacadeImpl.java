@@ -34,4 +34,9 @@ public class SensorFacadeImpl implements SensorFacade {
 		sensorRepository.delete(sensor);
 	}
 
+	@Override
+	public void deleteByDevice(String deviceId) {
+		sensorRepository.delete(sensorRepository.allByDevice(deviceId));
+	}
+
 }

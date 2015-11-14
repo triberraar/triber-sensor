@@ -20,4 +20,9 @@ public class ReadingServiceImpl implements ReadingService {
 		readingFacade.save(sensorId, readingMessage);
 	}
 
+	@Override
+	public void deleteBySensor(String sensorId) {
+		readingFacade.deleteBySensor(sensorId);
+	}
+
 }

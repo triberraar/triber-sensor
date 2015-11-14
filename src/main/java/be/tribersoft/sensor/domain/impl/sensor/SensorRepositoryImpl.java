@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import be.tribersoft.sensor.domain.api.exception.ConcurrentModificationException;
-import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 import be.tribersoft.sensor.domain.api.sensor.exception.SensorNotFoundException;
 
@@ -40,7 +39,7 @@ public class SensorRepositoryImpl implements SensorRepository {
 	}
 
 	@Override
-	public List<? extends Sensor> allByDevice(String deviceId) {
+	public List<SensorEntity> allByDevice(String deviceId) {
 		return sensorJpaRepository.findAllByDeviceIdOrderByCreationDateDesc(deviceId);
 	}
 
@@ -72,5 +71,9 @@ public class SensorRepositoryImpl implements SensorRepository {
 			throw new ConcurrentModificationException();
 		}
 		return sensorEntity.get();
+	}
+
+	public void delete(List<SensorEntity> sensors) {
+		sensors.stream().forEach(sensor -> sensorJpaRepository.delete(sensor));
 	}
 }

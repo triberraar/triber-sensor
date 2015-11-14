@@ -11,4 +11,6 @@ public interface SensorService {
 
 	void delete(String id, Long version);
 
+	void deleteByDevice(String deviceId);
+
 }

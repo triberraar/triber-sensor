@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
 public interface ReadingJpaRepository extends Repository<ReadingEntity, String> {
-	void save(ReadingEntity sensor);
+	void save(ReadingEntity reading);
 
-	void delete(ReadingEntity sensor);
+	void delete(ReadingEntity reading);
 
 	List<ReadingEntity> findAllBySensorIdOrderByCreationDateDesc(String sensorId);
 
