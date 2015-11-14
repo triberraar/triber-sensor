@@ -30,7 +30,6 @@ import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
-import be.tribersoft.sensor.domain.impl.sensor.SensorFactory;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
@@ -59,8 +58,6 @@ public class SensorResourceAllIT {
 	private TypeJpaRepository typeJpaRepository;
 	@Inject
 	private SensorJpaRepository sensorJpaRepository;
-	@Inject
-	private SensorFactory sensorFactory;
 	@Inject
 	private DeviceJpaRepository deviceJpaRepository;
 

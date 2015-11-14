@@ -20,9 +20,7 @@ public class ReadingHateoasBuilder {
 		String deviceId = "";
 		String sensorId = "";
 		List<Resource<ReadingToJsonAdapter>> transformedReadingResources = readings.stream().map(reading -> {
-			Resource<ReadingToJsonAdapter> resource = new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
-			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(reading.getSensor().getDevice().getId(), reading.getSensor().getId())).withRel(SensorToJsonAdapter.SENSOR));
-			return resource;
+			return new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
 		}).collect(Collectors.toList());
 		if (!readings.isEmpty()) {
 			deviceId = readings.get(0).getSensor().getDevice().getId();
@@ -31,6 +29,7 @@ public class ReadingHateoasBuilder {
 
 		Resources<Resource<ReadingToJsonAdapter>> sensorResources = new Resources<>(transformedReadingResources);
 		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(deviceId, sensorId)).withSelfRel());
+		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
 		return sensorResources;
 	}
 }
