@@ -8,6 +8,4 @@ public interface SensorFacade {
 
 	void delete(String id, Long version);
 
-	void deleteByDevice(String deviceId);
-
 }

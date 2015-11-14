@@ -98,19 +98,23 @@ public class SensorDeviceResourceAllIT {
 				body("_embedded.sensors[0].description", isEmptyOrNullString()).
 				body("_embedded.sensors[0].version", is(0)).
 				body("_embedded.sensors[0].id", is(sensors.get(0).getId())).
+				body("_embedded.sensors[0]._links.size()", is(5)).
 				body("_embedded.sensors[0]._links.self.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId() + "/sensor/" + sensors.get(0).getId())).
 				body("_embedded.sensors[0]._links.type.href", is("http://localhost:" + port + "/api/admin/type/" + sensors.get(0).getType().getId())).
 				body("_embedded.sensors[0]._links.unit.href", is("http://localhost:" + port + "/api/admin/unit/" + sensors.get(0).getUnit().getId())).
 				body("_embedded.sensors[0]._links.device.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId())).
+				body("_embedded.sensors[0]._links.readings.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId() + "/sensor/" + sensors.get(0).getId()+"/reading")).
 				body("_embedded.sensors[1].size()", is(5)).
 				body("_embedded.sensors[1].name", is(NAME_1)).
 				body("_embedded.sensors[1].description", is(DESCRIPTION)).
 				body("_embedded.sensors[1].version", is(0)).
 				body("_embedded.sensors[1].id", is(sensors.get(1).getId())).
+				body("_embedded.sensors[1]._links.size()", is(5)).
 				body("_embedded.sensors[1]._links.self.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId() + "/sensor/" + sensors.get(1).getId())).
 				body("_embedded.sensors[1]._links.type.href", is("http://localhost:" + port + "/api/admin/type/" + sensors.get(1).getType().getId())).
 				body("_embedded.sensors[1]._links.unit.href", is("http://localhost:" + port + "/api/admin/unit/" + sensors.get(1).getUnit().getId())).
 				body("_embedded.sensors[1]._links.device.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId())).
+				body("_embedded.sensors[1]._links.readings.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId() + "/sensor/" + sensors.get(1).getId()+"/reading")).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

@@ -28,7 +28,7 @@ public class SensorDeviceResource {
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resources<Resource<SensorToJsonAdapter>> all(@PathVariable("deviceId") String deviceId) {
-		return sensorHateoasBuilder.build(sensorRepository.allByDevice(deviceId));
+		return sensorHateoasBuilder.build(deviceId, sensorRepository.allByDevice(deviceId));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")

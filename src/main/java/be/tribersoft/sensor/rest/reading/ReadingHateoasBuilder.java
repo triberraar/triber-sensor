@@ -16,20 +16,15 @@ import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 @Named
 public class ReadingHateoasBuilder {
 
-	public Resources<Resource<ReadingToJsonAdapter>> build(List<? extends Reading> readings) {
-		String deviceId = "";
-		String sensorId = "";
+	public Resources<Resource<ReadingToJsonAdapter>> build(String deviceId, String sensorId, List<? extends Reading> readings) {
 		List<Resource<ReadingToJsonAdapter>> transformedReadingResources = readings.stream().map(reading -> {
-			return new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
+			Resource<ReadingToJsonAdapter> resource = new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
+			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
+			return resource;
 		}).collect(Collectors.toList());
-		if (!readings.isEmpty()) {
-			deviceId = readings.get(0).getSensor().getDevice().getId();
-			sensorId = readings.get(0).getSensor().getId();
-		}
 
 		Resources<Resource<ReadingToJsonAdapter>> sensorResources = new Resources<>(transformedReadingResources);
 		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(deviceId, sensorId)).withSelfRel());
-		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorDeviceResource.class).get(deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
 		return sensorResources;
 	}
 }

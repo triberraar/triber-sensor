@@ -18,9 +18,6 @@ import org.springframework.hateoas.Resources;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
 import be.tribersoft.sensor.domain.api.reading.ReadingRepository;
-import be.tribersoft.sensor.rest.reading.ReadingHateoasBuilder;
-import be.tribersoft.sensor.rest.reading.ReadingResource;
-import be.tribersoft.sensor.rest.reading.ReadingToJsonAdapter;
 import be.tribersoft.sensor.rest.sensor.SensorValidator;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,7 +41,7 @@ public class ReadingResourceAllTest {
 	@Before
 	public void setUp() {
 		doReturn(Arrays.<Reading> asList(reading1, reading2)).when(readingRepository).allBySensor(SENSOR_ID);
-		when(readingHateosBuilder.build(Arrays.asList(reading1, reading2))).thenReturn(resources);
+		when(readingHateosBuilder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2))).thenReturn(resources);
 	}
 
 	@Test

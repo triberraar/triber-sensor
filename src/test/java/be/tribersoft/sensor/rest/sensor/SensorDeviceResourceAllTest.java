@@ -37,7 +37,7 @@ public class SensorDeviceResourceAllTest {
 	@Before
 	public void setUp() {
 		doReturn(Arrays.asList(sensor1, sensor2)).when(sensorRepository).allByDevice(DEVICE_ID);
-		when(sensorHateosBuilder.build(Arrays.asList(sensor1, sensor2))).thenReturn(resources);
+		when(sensorHateosBuilder.build(DEVICE_ID, Arrays.asList(sensor1, sensor2))).thenReturn(resources);
 	}
 
 	@Test

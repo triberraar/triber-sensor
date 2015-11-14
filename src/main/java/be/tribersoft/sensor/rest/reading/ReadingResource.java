@@ -30,7 +30,7 @@ public class ReadingResource {
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resources<Resource<ReadingToJsonAdapter>> all(@PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId) {
 		sensorValidator.validate(deviceId, sensorId);
-		return readingHateoasBuilder.build(readingRepository.allBySensor(sensorId));
+		return readingHateoasBuilder.build(deviceId, sensorId, readingRepository.allBySensor(sensorId));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")

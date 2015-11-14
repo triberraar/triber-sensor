@@ -78,14 +78,18 @@ public class DeviceResourceAllIT {
 				body("_embedded.devices[0].location", isEmptyOrNullString()).
 				body("_embedded.devices[0].version", is(0)).
 				body("_embedded.devices[0].id", is(devices.get(0).getId())).
+				body("_embedded.devices[0]._links.size()", is(2)).
 				body("_embedded.devices[0]._links.self.href", is("http://localhost:" + port + "/api/device/" + devices.get(0).getId())).
+				body("_embedded.devices[0]._links.sensors.href", is("http://localhost:" + port + "/api/device/" + devices.get(0).getId()+"/sensor")).
 				body("_embedded.devices[1].size()", is(6)).
 				body("_embedded.devices[1].name", is(NAME_1)).
 				body("_embedded.devices[1].description", is(DESCRIPTION)).
 				body("_embedded.devices[1].location", is(LOCATION)).
 				body("_embedded.devices[1].version", is(0)).
 				body("_embedded.devices[1].id", is(devices.get(1).getId())).
+				body("_embedded.devices[1]._links.size()", is(2)).
 				body("_embedded.devices[1]._links.self.href", is("http://localhost:" + port + "/api/device/" + devices	.get(1).getId())).
+				body("_embedded.devices[1]._links.sensors.href", is("http://localhost:" + port + "/api/device/" + devices	.get(1).getId()+"/sensor")).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

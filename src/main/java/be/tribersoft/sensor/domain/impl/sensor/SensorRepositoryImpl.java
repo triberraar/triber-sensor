@@ -73,7 +73,4 @@ public class SensorRepositoryImpl implements SensorRepository {
 		return sensorEntity.get();
 	}
 
-	public void delete(List<SensorEntity> sensors) {
-		sensors.parallelStream().forEach(sensor -> sensorJpaRepository.delete(sensor));
-	}
 }

@@ -96,18 +96,21 @@ public class ReadingResourceAllIT {
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.size()", is(2)).
+				body("_links.size()", is(1)).
 				body("_links.self.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading")).
-				body("_links.sensor.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
 				body("_embedded.readings.size()", is(2)).
-				body("_embedded.readings[0].size()", is(3)).
+				body("_embedded.readings[0].size()", is(4)).
 				body("_embedded.readings[0].value", is(VALUE_2.floatValue())).
 				body("_embedded.readings[0].version", is(0)).
 				body("_embedded.readings[0].id", is(readings.get(0).getId())).
-				body("_embedded.readings[1].size()", is(3)).
+				body("_embedded.readings[0]._links.size()", is(1)).
+				body("_embedded.readings[0]._links.sensor.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
+				body("_embedded.readings[1].size()", is(4)).
 				body("_embedded.readings[1].value", is(VALUE_1.floatValue())).
 				body("_embedded.readings[1].version", is(0)).
 				body("_embedded.readings[1].id", is(readings.get(1).getId())).
+				body("_embedded.readings[1]._links.size()", is(1)).
+				body("_embedded.readings[1]._links.sensor.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

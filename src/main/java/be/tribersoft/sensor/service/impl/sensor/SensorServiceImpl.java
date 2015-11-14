@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
 import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
+import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 import be.tribersoft.sensor.domain.api.sensor.SensorUpdateMessage;
 import be.tribersoft.sensor.service.api.reading.ReadingService;
 import be.tribersoft.sensor.service.api.sensor.SensorService;
@@ -18,6 +19,8 @@ public class SensorServiceImpl implements SensorService {
 	private SensorFacade sensorFacade;
 	@Inject
 	private ReadingService readingService;
+	@Inject
+	private SensorRepository sensorRepository;
 
 	@Override
 	public void save(String deviceId, SensorMessage sensorMessage) {
@@ -37,7 +40,7 @@ public class SensorServiceImpl implements SensorService {
 
 	@Override
 	public void deleteByDevice(String deviceId) {
-		sensorFacade.deleteByDevice(deviceId);
+		sensorRepository.allByDevice(deviceId).parallelStream().forEach(sensor -> delete(sensor.getId(), sensor.getVersion()));
 	}
 
 }

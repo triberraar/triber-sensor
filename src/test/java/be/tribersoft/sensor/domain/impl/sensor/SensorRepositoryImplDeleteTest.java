@@ -2,8 +2,6 @@ package be.tribersoft.sensor.domain.impl.sensor;
 
 import static org.mockito.Mockito.verify;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,14 +24,6 @@ public class SensorRepositoryImplDeleteTest {
 		sensorRepositoryImpl.delete(sensorEntity1);
 
 		verify(sensorJpaRepository).delete(sensorEntity1);
-	}
-
-	@Test
-	public void delegatesToSpringDataREpositoryForList() {
-		sensorRepositoryImpl.delete(Arrays.asList(sensorEntity1, sensorEntity2));
-
-		verify(sensorJpaRepository).delete(sensorEntity1);
-		verify(sensorJpaRepository).delete(sensorEntity2);
 	}
 
 }
