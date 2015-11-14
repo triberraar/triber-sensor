@@ -24,10 +24,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.type.DeviceMessage;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
-import be.tribersoft.sensor.domain.impl.device.DeviceFactory;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
+import be.tribersoft.util.builder.DeviceBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -43,9 +42,6 @@ public class DeviceResourceGetIT {
 	private static final String NAME = "name";
 
 	@Inject
-	private DeviceFactory deviceFactory;
-
-	@Inject
 	private DeviceJpaRepository deviceJpaRepository;
 
 	@Value("${local.server.port}")
@@ -59,8 +55,7 @@ public class DeviceResourceGetIT {
 
 	@Test
 	public void getDevice() {
-		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl(DESCRIPTION, LOCATION)));
-		DeviceEntity deviceEntity = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		DeviceEntity deviceEntity = DeviceBuilder.aDevice().withName(NAME).withDescription(Optional.of(DESCRIPTION)).withLocation(Optional.of(LOCATION)).buildPersistent(deviceJpaRepository);
 		uuid = deviceEntity.getId();
 		// @formatter:off
 		given().
@@ -94,8 +89,7 @@ public class DeviceResourceGetIT {
 
 	@Test
 	public void getUnitWithoutDescriptionOrLocation() {
-		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl(null, null)));
-		DeviceEntity deviceEntity = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		DeviceEntity deviceEntity = DeviceBuilder.aDevice().withName(NAME).withDescription(Optional.empty()).withLocation(Optional.empty()).buildPersistent(deviceJpaRepository);
 		uuid = deviceEntity.getId();
 		// @formatter:off
 		given().
@@ -115,30 +109,4 @@ public class DeviceResourceGetIT {
 		// @formatter:on
 	}
 
-	private class DeviceMessageImpl implements DeviceMessage {
-
-		private String description;
-		private String location;
-
-		public DeviceMessageImpl(String description, String location) {
-			this.description = description;
-			this.location = location;
-		}
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getDescription() {
-			return Optional.ofNullable(description);
-		}
-
-		@Override
-		public Optional<String> getLocation() {
-			return Optional.ofNullable(location);
-		}
-
-	}
 }

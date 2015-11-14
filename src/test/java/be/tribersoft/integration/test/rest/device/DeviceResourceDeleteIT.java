@@ -25,10 +25,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.type.DeviceMessage;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
-import be.tribersoft.sensor.domain.impl.device.DeviceFactory;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
+import be.tribersoft.util.builder.DeviceBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -44,9 +43,6 @@ public class DeviceResourceDeleteIT {
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 
 	@Inject
-	private DeviceFactory deviceFactory;
-
-	@Inject
 	private DeviceJpaRepository deviceJpaRepository;
 
 	@Value("${local.server.port}")
@@ -58,8 +54,7 @@ public class DeviceResourceDeleteIT {
 	public void setUp() {
 		RestAssured.port = port;
 
-		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl()));
-		DeviceEntity deviceEntity = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		DeviceEntity deviceEntity = DeviceBuilder.aDevice().withName(NAME).withDescription(Optional.of(DESCRIPTION)).withLocation(Optional.of(LOCATION)).buildPersistent(deviceJpaRepository);
 		uuid = deviceEntity.getId();
 		version = deviceEntity.getVersion();
 	}
@@ -94,25 +89,6 @@ public class DeviceResourceDeleteIT {
 		// @formatter:on
 
 		assertThat(deviceJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
-	}
-
-	private class DeviceMessageImpl implements DeviceMessage {
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getDescription() {
-			return Optional.of(DESCRIPTION);
-		}
-
-		@Override
-		public Optional<String> getLocation() {
-			return Optional.of(LOCATION);
-		}
-
 	}
 
 	private class DeviceDeleteJsonImpl {

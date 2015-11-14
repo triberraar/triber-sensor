@@ -27,10 +27,9 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.common.DateFactory;
-import be.tribersoft.sensor.domain.api.type.DeviceMessage;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
-import be.tribersoft.sensor.domain.impl.device.DeviceFactory;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
+import be.tribersoft.util.builder.DeviceBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -47,8 +46,6 @@ public class DeviceResourceAllIT {
 
 	@Inject
 	private DeviceJpaRepository deviceJpaRepository;
-	@Inject
-	private DeviceFactory deviceFactory;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -59,9 +56,9 @@ public class DeviceResourceAllIT {
 		RestAssured.port = port;
 		LocalDateTime now = LocalDateTime.now();
 		DateFactory.fixateDate(now);
-		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl(NAME_1, DESCRIPTION, LOCATION)));
+		DeviceBuilder.aDevice().withName(NAME_1).withDescription(Optional.of(DESCRIPTION)).withLocation(Optional.of(LOCATION)).buildPersistent(deviceJpaRepository);
 		DateFactory.fixateDate(now.plusDays(1));
-		deviceJpaRepository.save(deviceFactory.create(new DeviceMessageImpl(NAME_2, null, null)));
+		DeviceBuilder.aDevice().withName(NAME_2).withDescription(Optional.empty()).withLocation(Optional.empty()).buildPersistent(deviceJpaRepository);
 		devices = deviceJpaRepository.findAllByOrderByCreationDateDesc();
 	}
 
@@ -91,35 +88,6 @@ public class DeviceResourceAllIT {
 				body("_embedded.devices[1]._links.self.href", is("http://localhost:" + port + "/api/device/" + devices	.get(1).getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
-	}
-
-	private class DeviceMessageImpl implements DeviceMessage {
-
-		private String name;
-		private String description;
-		private String location;
-
-		public DeviceMessageImpl(String name, String description, String location) {
-			this.name = name;
-			this.description = description;
-			this.location = location;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public Optional<String> getDescription() {
-			return Optional.ofNullable(description);
-		}
-
-		@Override
-		public Optional<String> getLocation() {
-			return Optional.ofNullable(location);
-		}
-
 	}
 
 }
