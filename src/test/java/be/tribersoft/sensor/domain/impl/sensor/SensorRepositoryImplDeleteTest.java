@@ -17,13 +17,13 @@ public class SensorRepositoryImplDeleteTest {
 	@Mock
 	private SensorJpaRepository sensorJpaRepository;
 	@Mock
-	private SensorEntity sensorEntity;
+	private SensorEntity sensorEntity1, sensorEntity2;
 
 	@Test
 	public void delegatesToSpringDataRepository() {
-		sensorRepositoryImpl.delete(sensorEntity);
+		sensorRepositoryImpl.delete(sensorEntity1);
 
-		verify(sensorJpaRepository).delete(sensorEntity);
+		verify(sensorJpaRepository).delete(sensorEntity1);
 	}
 
 }

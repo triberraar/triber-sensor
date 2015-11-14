@@ -25,10 +25,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.unit.UnitMessage;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitFactory;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -45,8 +44,6 @@ public class UnitResourceDeleteIT {
 
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
-	@Inject
-	private UnitFactory unitFactory;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -56,8 +53,7 @@ public class UnitResourceDeleteIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(SYMBOL)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		UnitEntity unitEntity = UnitBuilder.aUnit().withName(NAME).withSymbol(Optional.of(SYMBOL)).buildPersistent(unitJpaRepository);
 		uuid = unitEntity.getId();
 		version = unitEntity.getVersion();
 	}
@@ -91,25 +87,6 @@ public class UnitResourceDeleteIT {
 			body("message", equalTo(UNIT_NOT_FOUND_EXCEPTION));
 		// @formatter:on
 		assertThat(unitJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
-	}
-
-	private class UnitMessageImpl implements UnitMessage {
-
-		private String symbol;
-
-		public UnitMessageImpl(String symbol) {
-			this.symbol = symbol;
-		}
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getSymbol() {
-			return Optional.ofNullable(symbol);
-		}
 	}
 
 	private class UnitDeleteJsonImpl {

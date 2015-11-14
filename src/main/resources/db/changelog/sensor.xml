@@ -36,9 +36,9 @@
     </changeSet>
     
     <changeSet id="create sensor foreign keys" author="tribersoft">
-    	<addForeignKeyConstraint constraintName="sensor_type_fk" baseTableName="sensor" baseColumnNames="type_id" referencedTableName="type" referencedColumnNames="id"/>
-    	<addForeignKeyConstraint constraintName="sensor_unit_fk" baseTableName="sensor" baseColumnNames="unit_id" referencedTableName="unit" referencedColumnNames="id"/>
-    	<addForeignKeyConstraint constraintName="sensor_device_fk" baseTableName="sensor" baseColumnNames="device_id" referencedTableName="device" referencedColumnNames="id"/>
+    	<addForeignKeyConstraint constraintName="sensor__type_fk" baseTableName="sensor" baseColumnNames="type_id" referencedTableName="type" referencedColumnNames="id"/>
+    	<addForeignKeyConstraint constraintName="sensor__unit_fk" baseTableName="sensor" baseColumnNames="unit_id" referencedTableName="unit" referencedColumnNames="id"/>
+    	<addForeignKeyConstraint constraintName="sensor__device_fk" baseTableName="sensor" baseColumnNames="device_id" referencedTableName="device" referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

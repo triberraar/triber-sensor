@@ -25,35 +25,31 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
-import be.tribersoft.sensor.domain.impl.sensor.SensorFactory;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.DeviceBuilder;
+import be.tribersoft.util.builder.SensorBuilder;
+import be.tribersoft.util.builder.TypeBuilder;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorDeviceResourceGetIT {
+public class SensorResourceGetIT {
 
-	private static final String DEVICE_NAME = "device name";
 	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
-	private static final String UNIT_NAME = "unit name";
-	private static final String TYPE_NAME = "type name";
-
-	@Inject
-	private SensorFactory sensorFactory;
 
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
@@ -67,31 +63,27 @@ public class SensorDeviceResourceGetIT {
 	@Value("${local.server.port}")
 	private int port;
 	private String uuid;
-	private String typeId;
-	private String unitId;
-	private String deviceId;
+	private TypeEntity typeEntity;
+	private UnitEntity unitEntity;
+	private DeviceEntity deviceEntity;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
 
-		typeJpaRepository.save(new TypeEntity(TYPE_NAME));
-		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
-		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
-		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		typeEntity = TypeBuilder.aType().buildPersistent(typeJpaRepository);
+		unitEntity = UnitBuilder.aUnit().buildPersistent(unitJpaRepository);
+		deviceEntity = DeviceBuilder.aDevice().buildPersistent(deviceJpaRepository);
 	}
 
 	@Test
 	public void getSensor() {
-		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl(DESCRIPTION)));
-		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		SensorEntity sensorEntity = SensorBuilder.aSensor().withName(NAME).withDescription(Optional.of(DESCRIPTION)).withDevice(deviceEntity).withType(typeEntity).withUnit(unitEntity).buildPersistent(sensorJpaRepository);
 		uuid = sensorEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 		when(). 
 				get(URL). 
 		then(). 
@@ -101,10 +93,10 @@ public class SensorDeviceResourceGetIT {
 				body("description", is(DESCRIPTION)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceId+"/sensor/" + uuid)).
-				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
-				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
-				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId() + "/sensor/" + uuid)).
+				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitEntity.getId())).
+				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeEntity.getId())).
+				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -114,7 +106,7 @@ public class SensorDeviceResourceGetIT {
 		// @formatter:off
 		given().
 				pathParam("uuid", NON_EXISTING_UUID).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 		when(). 
 				get(URL). 
 		then(). 
@@ -125,13 +117,12 @@ public class SensorDeviceResourceGetIT {
 
 	@Test
 	public void getUnitWithoutDescription() {
-		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl(null)));
-		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		SensorEntity sensorEntity = SensorBuilder.aSensor().withName(NAME).withDescription(Optional.empty()).withDevice(deviceEntity).withType(typeEntity).withUnit(unitEntity).buildPersistent(sensorJpaRepository);
 		uuid = sensorEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 		when(). 
 				get(URL). 
 		then(). 
@@ -141,40 +132,12 @@ public class SensorDeviceResourceGetIT {
 				body("description", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceId + "/sensor/" + uuid)).
-				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitId)).
-				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeId)).
-				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceId)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId() + "/sensor/" + uuid)).
+				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitEntity.getId())).
+				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeEntity.getId())).
+				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
 
-	private class SensorMessageImpl implements SensorMessage {
-
-		private String description;
-
-		public SensorMessageImpl(String description) {
-			this.description = description;
-		}
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getDescription() {
-			return Optional.ofNullable(description);
-		}
-
-		@Override
-		public String getTypeId() {
-			return typeId;
-		}
-
-		@Override
-		public String getUnitId() {
-			return unitId;
-		}
-	}
 }

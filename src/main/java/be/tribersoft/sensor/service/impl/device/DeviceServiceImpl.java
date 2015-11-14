@@ -5,10 +5,9 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 
 import be.tribersoft.sensor.domain.api.device.DeviceFacade;
-import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
-import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
 import be.tribersoft.sensor.domain.api.type.DeviceMessage;
 import be.tribersoft.sensor.service.api.device.DeviceService;
+import be.tribersoft.sensor.service.api.sensor.SensorService;
 
 @Named
 @Transactional
@@ -17,9 +16,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Inject
 	private DeviceFacade deviceFacade;
 	@Inject
-	private SensorRepository sensorRepository;
-	@Inject
-	private SensorFacade sensorFacade;
+	private SensorService sensorService;
 
 	@Override
 	public void save(DeviceMessage deviceMessage) {
@@ -33,7 +30,7 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Override
 	public void delete(String id, Long version) {
-		sensorRepository.allByDevice(id).stream().forEach(s -> sensorFacade.delete(s.getId(), s.getVersion()));
+		sensorService.deleteByDevice(id);
 		deviceFacade.delete(id, version);
 	}
 

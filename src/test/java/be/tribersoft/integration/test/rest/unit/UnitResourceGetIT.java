@@ -25,10 +25,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.unit.UnitMessage;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitFactory;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -45,12 +44,9 @@ public class UnitResourceGetIT {
 
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
-	@Inject
-	private UnitFactory unitFactory;
 
 	@Value("${local.server.port}")
 	private int port;
-	private String uuid;
 
 	@Before
 	public void setUp() {
@@ -59,9 +55,8 @@ public class UnitResourceGetIT {
 
 	@Test
 	public void getUnit() {
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(SYMBOL)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = unitEntity.getId();
+		UnitEntity unitEntity = UnitBuilder.aUnit().withName(NAME).withSymbol(Optional.of(SYMBOL)).buildPersistent(unitJpaRepository);
+		String uuid = unitEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
@@ -94,9 +89,8 @@ public class UnitResourceGetIT {
 
 	@Test
 	public void getUnitWithoutSymbol() {
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(null)));
-		UnitEntity unitEntity = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0);
-		uuid = unitEntity.getId();
+		UnitEntity unitEntity = UnitBuilder.aUnit().withName(NAME).withSymbol(Optional.empty()).buildPersistent(unitJpaRepository);
+		String uuid = unitEntity.getId();
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
@@ -114,22 +108,4 @@ public class UnitResourceGetIT {
 		// @formatter:on
 	}
 
-	private class UnitMessageImpl implements UnitMessage {
-
-		private String symbol;
-
-		public UnitMessageImpl(String symbol) {
-			this.symbol = symbol;
-		}
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getSymbol() {
-			return Optional.ofNullable(symbol);
-		}
-	}
 }

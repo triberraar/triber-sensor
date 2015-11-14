@@ -27,10 +27,9 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.common.DateFactory;
-import be.tribersoft.sensor.domain.api.unit.UnitMessage;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
-import be.tribersoft.sensor.domain.impl.unit.UnitFactory;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -46,8 +45,6 @@ public class UnitResourceAllIT {
 
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
-	@Inject
-	private UnitFactory unitFactory;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -58,9 +55,9 @@ public class UnitResourceAllIT {
 		RestAssured.port = port;
 		LocalDateTime now = LocalDateTime.now();
 		DateFactory.fixateDate(now);
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(NAME_1, SYMBOL_1)));
+		UnitBuilder.aUnit().withName(NAME_1).withSymbol(Optional.of(SYMBOL_1)).buildPersistent(unitJpaRepository);
 		DateFactory.fixateDate(now.plusDays(1));
-		unitJpaRepository.save(unitFactory.create(new UnitMessageImpl(NAME_2, null)));
+		UnitBuilder.aUnit().withName(NAME_2).withSymbol(Optional.empty()).buildPersistent(unitJpaRepository);
 		units = unitJpaRepository.findAllByOrderByCreationDateDesc();
 	}
 
@@ -89,23 +86,4 @@ public class UnitResourceAllIT {
 		// @formatter:on
 	}
 
-	private class UnitMessageImpl implements UnitMessage {
-		private String name;
-		private String symbol;
-
-		public UnitMessageImpl(String name, String symbol) {
-			this.name = name;
-			this.symbol = symbol;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public Optional<String> getSymbol() {
-			return Optional.ofNullable(symbol);
-		}
-	}
 }

@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import be.tribersoft.sensor.domain.api.sensor.SensorFacade;
+import be.tribersoft.sensor.service.api.reading.ReadingService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SensorServiceImplDeleteTest {
@@ -19,12 +20,15 @@ public class SensorServiceImplDeleteTest {
 	private SensorServiceImpl sensorService;
 	@Mock
 	private SensorFacade sensorFacade;
+	@Mock
+	private ReadingService readingService;
 
 	@Test
-	public void delegatesToFacade() {
+	public void deletesSensorAndConnectedReading() {
 		sensorService.delete(ID, VERSION);
 
 		verify(sensorFacade).delete(ID, VERSION);
+		verify(readingService).deleteBySensor(ID);
 	}
 
 }

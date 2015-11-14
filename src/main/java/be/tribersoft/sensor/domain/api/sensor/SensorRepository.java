@@ -14,7 +14,7 @@ public interface SensorRepository {
 
 	List<? extends Sensor> allByDevice(String deviceId);
 
-	Sensor getBydId(String id);
+	Sensor getById(String id);
 
 	Sensor getByIdAndVersion(String id, Long version);
 }

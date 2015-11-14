@@ -33,21 +33,21 @@ import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.DeviceBuilder;
+import be.tribersoft.util.builder.TypeBuilder;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorDeviceResourcePostIT {
+public class SensorResourcePostIT {
 
 	private static final String URL = "/api/device/{deviceId}/sensor";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
-	private static final String UNIT_NAME = "unit name";
-	private static final String TYPE_NAME = "type name";
-	private static final String DEVICE_NAME = "device name";
 
 	@Inject
 	private SensorJpaRepository sensorJpaRepository;
@@ -60,27 +60,24 @@ public class SensorDeviceResourcePostIT {
 
 	@Value("${local.server.port}")
 	private int serverPort;
-	private String typeId;
-	private String unitId;
-	private String deviceId;
+	private TypeEntity typeEntity;
+	private UnitEntity unitEntity;
+	private DeviceEntity deviceEntity;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
 
-		typeJpaRepository.save(new TypeEntity(TYPE_NAME));
-		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
-		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
-		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
+		typeEntity = TypeBuilder.aType().buildPersistent(typeJpaRepository);
+		unitEntity = UnitBuilder.aUnit().buildPersistent(unitJpaRepository);
+		deviceEntity = DeviceBuilder.aDevice().buildPersistent(deviceJpaRepository);
 	}
 
 	@Test
 	public void createsANewSensor() {
 		// @formatter:off
 		given(). 
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -94,8 +91,9 @@ public class SensorDeviceResourcePostIT {
 		SensorEntity sensorEntity = sensors.get(0);
 		assertThat(sensorEntity.getName()).isEqualTo(NAME);
 		assertThat(sensorEntity.getDescription().get()).isEqualTo(DESCRIPTION);
-		assertThat(sensorEntity.getType().getId()).isEqualTo(typeId);
-		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitId);
+		assertThat(sensorEntity.getType().getId()).isEqualTo(typeEntity.getId());
+		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitEntity.getId());
+		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceEntity.getId());
 		assertThat(sensorEntity.getId()).isNotNull();
 		assertThat(sensorEntity.getVersion()).isEqualTo(0L);
 	}
@@ -104,7 +102,7 @@ public class SensorDeviceResourcePostIT {
 	public void createsANewSensorWithoutDescription() {
 		// @formatter:off
 		given(). 
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPostJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -118,8 +116,9 @@ public class SensorDeviceResourcePostIT {
 		SensorEntity sensorEntity = sensors.get(0);
 		assertThat(sensorEntity.getName()).isEqualTo(NAME);
 		assertThat(sensorEntity.getDescription().isPresent()).isFalse();
-		assertThat(sensorEntity.getType().getId()).isEqualTo(typeId);
-		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitId);
+		assertThat(sensorEntity.getType().getId()).isEqualTo(typeEntity.getId());
+		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitEntity.getId());
+		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceEntity.getId());
 		assertThat(sensorEntity.getId()).isNotNull();
 		assertThat(sensorEntity.getVersion()).isEqualTo(0L);
 	}
@@ -128,7 +127,7 @@ public class SensorDeviceResourcePostIT {
 	public void badRequestWhenSensorIsNotValid() {
 		// @formatter:off
 		given(). 
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -152,12 +151,12 @@ public class SensorDeviceResourcePostIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return typeEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 
 	}
@@ -170,12 +169,12 @@ public class SensorDeviceResourcePostIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return typeEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 	}
 
@@ -187,12 +186,12 @@ public class SensorDeviceResourcePostIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return typeEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 
 	}

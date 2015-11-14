@@ -26,25 +26,26 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.sensor.SensorMessage;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
-import be.tribersoft.sensor.domain.impl.sensor.SensorFactory;
 import be.tribersoft.sensor.domain.impl.sensor.SensorJpaRepository;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
+import be.tribersoft.util.builder.DeviceBuilder;
+import be.tribersoft.util.builder.SensorBuilder;
+import be.tribersoft.util.builder.TypeBuilder;
+import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
-public class SensorDeviceResourcePutIT {
+public class SensorResourcePutIT {
 
-	private static final String DEVICE_NAME = "device name";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
@@ -54,13 +55,9 @@ public class SensorDeviceResourcePutIT {
 	private static final String DESCRIPTION = "description";
 	private static final String UPDATED_NAME = "updated name";
 	private static final String UPDATED_DESCRIPTION = "updated description";
-	private static final String UNIT_NAME = "unit name";
-	private static final String TYPE_NAME = "type name";
 
 	@Inject
 	private SensorJpaRepository sensorJpaRepository;
-	@Inject
-	private SensorFactory sensorFactory;
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
 	@Inject
@@ -72,23 +69,19 @@ public class SensorDeviceResourcePutIT {
 	private int serverPort;
 	private String uuid;
 	private Long version;
-	private String typeId;
-	private String unitId;
-	private String deviceId;
+
+	private TypeEntity typeEntity;
+	private UnitEntity unitEntity;
+	private DeviceEntity deviceEntity;
 
 	@Before
 	public void setUp() {
 		RestAssured.port = serverPort;
 
-		typeJpaRepository.save(new TypeEntity(TYPE_NAME));
-		typeId = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-		unitJpaRepository.save(new UnitEntity(UNIT_NAME));
-		unitId = unitJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-		deviceJpaRepository.save(new DeviceEntity(DEVICE_NAME));
-		deviceId = deviceJpaRepository.findAllByOrderByCreationDateDesc().get(0).getId();
-
-		sensorJpaRepository.save(sensorFactory.create(deviceId, new SensorMessageImpl()));
-		SensorEntity sensorEntity = sensorJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		typeEntity = TypeBuilder.aType().buildPersistent(typeJpaRepository);
+		unitEntity = UnitBuilder.aUnit().buildPersistent(unitJpaRepository);
+		deviceEntity = DeviceBuilder.aDevice().buildPersistent(deviceJpaRepository);
+		SensorEntity sensorEntity = SensorBuilder.aSensor().withName(NAME).withDescription(Optional.of(DESCRIPTION)).withDevice(deviceEntity).withUnit(unitEntity).withType(typeEntity).buildPersistent(sensorJpaRepository);
 		uuid = sensorEntity.getId();
 		version = sensorEntity.getVersion();
 	}
@@ -98,7 +91,7 @@ public class SensorDeviceResourcePutIT {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -112,9 +105,9 @@ public class SensorDeviceResourcePutIT {
 		SensorEntity sensorEntity = sensors.get(0);
 		assertThat(sensorEntity.getName()).isEqualTo(UPDATED_NAME);
 		assertThat(sensorEntity.getDescription().get()).isEqualTo(UPDATED_DESCRIPTION);
-		assertThat(sensorEntity.getType().getId()).isEqualTo(typeId);
-		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitId);
-		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceId);
+		assertThat(sensorEntity.getType().getId()).isEqualTo(typeEntity.getId());
+		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitEntity.getId());
+		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceEntity.getId());
 		assertThat(sensorEntity.getId()).isEqualTo(uuid);
 		assertThat(sensorEntity.getVersion()).isEqualTo(version + 1);
 	}
@@ -124,7 +117,7 @@ public class SensorDeviceResourcePutIT {
 		// @formatter:off
 		given().
 				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -138,9 +131,9 @@ public class SensorDeviceResourcePutIT {
 		SensorEntity sensorEntity = sensors.get(0);
 		assertThat(sensorEntity.getName()).isEqualTo(UPDATED_NAME);
 		assertThat(sensorEntity.getDescription().isPresent()).isFalse();
-		assertThat(sensorEntity.getType().getId()).isEqualTo(typeId);
-		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitId);
-		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceId);
+		assertThat(sensorEntity.getType().getId()).isEqualTo(typeEntity.getId());
+		assertThat(sensorEntity.getUnit().getId()).isEqualTo(unitEntity.getId());
+		assertThat(sensorEntity.getDevice().getId()).isEqualTo(deviceEntity.getId());
 		assertThat(sensorEntity.getId()).isEqualTo(uuid);
 		assertThat(sensorEntity.getVersion()).isEqualTo(version + 1);
 	}
@@ -150,7 +143,7 @@ public class SensorDeviceResourcePutIT {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -166,7 +159,7 @@ public class SensorDeviceResourcePutIT {
 		// @formatter:off
 		given(). 
 				pathParam("uuid", uuid).
-				pathParam("deviceId", deviceId).
+				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -182,7 +175,7 @@ public class SensorDeviceResourcePutIT {
 		// @formatter:off
 		given(). 
 			pathParam("uuid", NON_EXISTING_UUID).
-			pathParam("deviceId", deviceId).
+			pathParam("deviceId", deviceEntity.getId()).
 			body(new SensorPutJsonImpl()). 
 			contentType(ContentType.JSON).
 		when(). 
@@ -212,12 +205,12 @@ public class SensorDeviceResourcePutIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return deviceEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 	}
 
@@ -234,12 +227,12 @@ public class SensorDeviceResourcePutIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return deviceEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 	}
 
@@ -256,12 +249,12 @@ public class SensorDeviceResourcePutIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return deviceEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 	}
 
@@ -278,35 +271,13 @@ public class SensorDeviceResourcePutIT {
 
 		@JsonProperty
 		public String getTypeId() {
-			return typeId;
+			return deviceEntity.getId();
 		}
 
 		@JsonProperty
 		public String getUnitId() {
-			return unitId;
+			return unitEntity.getId();
 		}
 	}
 
-	private class SensorMessageImpl implements SensorMessage {
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
-
-		@Override
-		public Optional<String> getDescription() {
-			return Optional.of(DESCRIPTION);
-		}
-
-		@Override
-		public String getTypeId() {
-			return typeId;
-		}
-
-		@Override
-		public String getUnitId() {
-			return unitId;
-		}
-	}
 }

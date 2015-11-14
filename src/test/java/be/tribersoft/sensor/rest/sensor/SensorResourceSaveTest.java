@@ -11,10 +11,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import be.tribersoft.sensor.service.api.sensor.SensorService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SensorDeviceResourceSaveTest {
+public class SensorResourceSaveTest {
 	private static final String DEVICE_ID = "device id";
 	@InjectMocks
-	private SensorDeviceResource sensorDeviceResource;
+	private SensorResource sensorDeviceResource;
 	@Mock
 	private SensorService sensorService;
 	@Mock

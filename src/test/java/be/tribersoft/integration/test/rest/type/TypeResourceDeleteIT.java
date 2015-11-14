@@ -23,10 +23,9 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.sensor.domain.api.type.TypeMessage;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
-import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
+import be.tribersoft.util.builder.TypeBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -42,8 +41,6 @@ public class TypeResourceDeleteIT {
 
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
-	@Inject
-	private TypeFactory typeFactory;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -53,8 +50,7 @@ public class TypeResourceDeleteIT {
 	@Before
 	public void setUp() {
 		RestAssured.port = port;
-		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl()));
-		TypeEntity typeEntity = typeJpaRepository.findAllByOrderByCreationDateDesc().get(0);
+		TypeEntity typeEntity = TypeBuilder.aType().withName(NAME).buildPersistent(typeJpaRepository);
 		uuid = typeEntity.getId();
 		version = typeEntity.getVersion();
 	}
@@ -90,14 +86,6 @@ public class TypeResourceDeleteIT {
 		// @formatter:on
 
 		assertThat(typeJpaRepository.findAllByOrderByCreationDateDesc().isEmpty()).isFalse();
-	}
-
-	private class TypeMessageImpl implements TypeMessage {
-
-		@Override
-		public String getName() {
-			return NAME;
-		}
 	}
 
 	private class TypeDeleteJsonImpl {

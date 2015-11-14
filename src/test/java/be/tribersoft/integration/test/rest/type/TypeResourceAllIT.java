@@ -25,10 +25,9 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.common.DateFactory;
-import be.tribersoft.sensor.domain.api.type.TypeMessage;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
-import be.tribersoft.sensor.domain.impl.type.TypeFactory;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
+import be.tribersoft.util.builder.TypeBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -43,8 +42,6 @@ public class TypeResourceAllIT {
 
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
-	@Inject
-	private TypeFactory typeFactory;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -55,9 +52,9 @@ public class TypeResourceAllIT {
 		RestAssured.port = port;
 		LocalDateTime now = LocalDateTime.now();
 		DateFactory.fixateDate(now);
-		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl(NAME_1)));
+		TypeBuilder.aType().withName(NAME_1).buildPersistent(typeJpaRepository);
 		DateFactory.fixateDate(now.plusDays(1));
-		typeJpaRepository.save(typeFactory.create(new TypeMessageImpl(NAME_2)));
+		TypeBuilder.aType().withName(NAME_2).buildPersistent(typeJpaRepository);
 		types = typeJpaRepository.findAllByOrderByCreationDateDesc();
 	}
 
@@ -84,16 +81,4 @@ public class TypeResourceAllIT {
 		// @formatter:on
 	}
 
-	private class TypeMessageImpl implements TypeMessage {
-		private String name;
-
-		public TypeMessageImpl(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-	}
 }
