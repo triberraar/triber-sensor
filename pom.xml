@@ -116,6 +116,12 @@
 	        <artifactId>spring-boot-devtools</artifactId>
 	        <optional>true</optional>
 	    </dependency>
+	    
+	    <dependency>
+	    	<groupId>be.tribersoft</groupId>
+	    	<artifactId>semver</artifactId>
+	    	<version>0.1.0</version>
+	    </dependency>
 	</dependencies>
 	
 	<build>
@@ -171,6 +177,11 @@
         <repository>
             <id>spring-milestones</id>
             <url>http://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+        	<id>bintray-triberraar-maven</id>
+			<name>bintray</name>
+			<url>http://dl.bintray.com/triberraar/maven</url>
         </repository>
     </repositories>
     <pluginRepositories>
