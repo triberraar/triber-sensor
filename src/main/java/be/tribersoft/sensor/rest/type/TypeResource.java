@@ -15,7 +15,7 @@ import be.tribersoft.sensor.domain.api.type.TypeRepository;
 import be.tribersoft.sensor.service.api.type.TypeService;
 
 @RestController
-@RequestMapping("/admin/type")
+@RequestMapping("/api/admin/type")
 public class TypeResource {
 
 	@Inject

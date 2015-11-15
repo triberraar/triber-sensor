@@ -16,7 +16,7 @@ import be.tribersoft.sensor.rest.sensor.SensorValidator;
 import be.tribersoft.sensor.service.api.reading.ReadingService;
 
 @RestController
-@RequestMapping("/device/{deviceId}/sensor/{sensorId}/reading")
+@RequestMapping("/api/device/{deviceId}/sensor/{sensorId}/reading")
 public class ReadingResource {
 	@Inject
 	private ReadingRepository readingRepository;

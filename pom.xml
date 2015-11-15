@@ -24,6 +24,7 @@
 		<assertj.version>3.2.0</assertj.version>
 		<commons.lang3.version>3.4</commons.lang3.version>
 		<restassured.version>2.6.0</restassured.version>
+		<semver.version>0.1.0</semver.version>
 	</properties>
 
 	<dependencies>
@@ -120,7 +121,7 @@
 	    <dependency>
 	    	<groupId>be.tribersoft</groupId>
 	    	<artifactId>semver</artifactId>
-	    	<version>0.1.0</version>
+	    	<version>${semver.version}</version>
 	    </dependency>
 	</dependencies>
 	

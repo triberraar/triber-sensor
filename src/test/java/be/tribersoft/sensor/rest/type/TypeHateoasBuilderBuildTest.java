@@ -64,7 +64,7 @@ public class TypeHateoasBuilderBuildTest {
 		List<Link> links = typeResource.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/admin/type/" + ID_1);
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/admin/type/" + ID_1);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class TypeHateoasBuilderBuildTest {
 		List<Link> links = typeResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/admin/type");
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/admin/type");
 
 		assertThat(typeResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<TypeToJsonAdapter>> content = typeResources.getContent();
@@ -87,7 +87,7 @@ public class TypeHateoasBuilderBuildTest {
 		List<Link> firstLinks = first.getLinks();
 		assertThat(firstLinks.size()).isEqualTo(1);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(firstLinks.get(0).getHref()).endsWith("/admin/type/" + ID_1);
+		assertThat(firstLinks.get(0).getHref()).isEqualTo("http://localhost/api/admin/type/" + ID_1);
 
 		Resource<TypeToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -96,6 +96,6 @@ public class TypeHateoasBuilderBuildTest {
 		List<Link> secondLinks = second.getLinks();
 		assertThat(secondLinks.size()).isEqualTo(1);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(secondLinks.get(0).getHref()).endsWith("/admin/type/" + ID_2);
+		assertThat(secondLinks.get(0).getHref()).isEqualTo("http://localhost/api/admin/type/" + ID_2);
 	}
 }

@@ -74,7 +74,7 @@ public class APIResourceGetIT {
 				body("size()", is(2)).
 				body("version", is(apiVersion)).
 				body("_links.size()", is(2)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/")).
+				body("_links.self.href", is("http://localhost:" + port+"/api")).
 				body("_links.api.href", is("http://localhost:" + port+"/api/" + apiVersion)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on

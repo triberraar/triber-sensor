@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import be.tribersoft.common.rest.IncorrectApiVersionException;
 
 @RestController
+@RequestMapping("/api")
 public class ApiResource {
 
 	@Value("${api.version}")
@@ -28,7 +29,7 @@ public class ApiResource {
 		return apiHateoasBuilder.build(apiVersion);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/", produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public Resource<ApiToJsonAdapter> get() {
 		return apiHateoasBuilder.build();
 	}

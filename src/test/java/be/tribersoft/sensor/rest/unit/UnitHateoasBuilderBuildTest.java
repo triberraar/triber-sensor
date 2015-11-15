@@ -68,7 +68,7 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> links = unitResource.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/admin/unit/" + ID_1);
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit/" + ID_1);
 	}
 
 	@Test
@@ -78,7 +78,7 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> links = unitResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/admin/unit");
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit");
 
 		assertThat(unitResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<UnitToJsonAdapter>> content = unitResources.getContent();
@@ -92,7 +92,7 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> firstLinks = first.getLinks();
 		assertThat(firstLinks.size()).isEqualTo(1);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(firstLinks.get(0).getHref()).endsWith("/admin/unit/" + ID_1);
+		assertThat(firstLinks.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit/" + ID_1);
 
 		Resource<UnitToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -102,6 +102,6 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> secondLinks = second.getLinks();
 		assertThat(secondLinks.size()).isEqualTo(1);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(secondLinks.get(0).getHref()).endsWith("/admin/unit/" + ID_2);
+		assertThat(secondLinks.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit/" + ID_2);
 	}
 }

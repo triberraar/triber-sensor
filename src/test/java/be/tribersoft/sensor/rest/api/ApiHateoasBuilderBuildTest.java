@@ -35,13 +35,13 @@ public class ApiHateoasBuilderBuildTest {
 		List<Link> links = result.getLinks();
 		assertThat(links.size()).isEqualTo(4);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/" + VERSION);
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + VERSION);
 		assertThat(links.get(1).getRel()).isEqualTo("types");
-		assertThat(links.get(1).getHref()).endsWith("/admin/type");
+		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/admin/type");
 		assertThat(links.get(2).getRel()).isEqualTo("units");
-		assertThat(links.get(2).getHref()).endsWith("/admin/unit");
+		assertThat(links.get(2).getHref()).isEqualTo("http://localhost/api/admin/unit");
 		assertThat(links.get(3).getRel()).isEqualTo("devices");
-		assertThat(links.get(3).getHref()).endsWith("/device");
+		assertThat(links.get(3).getHref()).isEqualTo("http://localhost/api/device");
 	}
 
 	@Test
@@ -52,8 +52,8 @@ public class ApiHateoasBuilderBuildTest {
 		List<Link> links = result.getLinks();
 		assertThat(links.size()).isEqualTo(2);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).endsWith("/");
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api");
 		assertThat(links.get(1).getRel()).isEqualTo("api");
-		assertThat(links.get(1).getHref()).endsWith("/" + VERSION);
+		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/" + VERSION);
 	}
 }
