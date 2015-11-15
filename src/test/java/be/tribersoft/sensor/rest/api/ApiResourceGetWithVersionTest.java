@@ -12,14 +12,15 @@ import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.hateoas.Resource;
 
+import be.tribersoft.common.rest.FutureApiVersionException;
 import be.tribersoft.common.rest.IncorrectApiVersionException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApiResourceGetWithVersionTest {
 
-	private static final String DIFFERENT_VERSION = "different version";
-
-	private static final String API_VERSION = "apiVersion";
+	private static final String API_VERSION = "2.1.0";
+	private static final String INCOMPATIBLE_VERSION = "1.0.0";
+	private static final String FUTURE_VERSION = "2.1.1";
 
 	@InjectMocks
 	private ApiResource apiResource;
@@ -32,13 +33,19 @@ public class ApiResourceGetWithVersionTest {
 
 	@Before
 	public void setUp() {
-		Whitebox.setInternalState(apiResource, API_VERSION, API_VERSION);
+		Whitebox.setInternalState(apiResource, "apiVersion", API_VERSION);
+		apiResource.init();
 		when(apiHateoasBuilder.build(API_VERSION)).thenReturn(apiToJsoAdapterResource);
 	}
 
 	@Test(expected = IncorrectApiVersionException.class)
-	public void failsWhenVersionIsDifferent() {
-		apiResource.getWithVersion(DIFFERENT_VERSION);
+	public void failsWhenVersionIsNotCompatible() {
+		apiResource.getWithVersion(INCOMPATIBLE_VERSION);
+	}
+
+	@Test(expected = FutureApiVersionException.class)
+	public void failsWhenVersionIsInFuture() {
+		apiResource.getWithVersion(FUTURE_VERSION);
 	}
 
 	@Test

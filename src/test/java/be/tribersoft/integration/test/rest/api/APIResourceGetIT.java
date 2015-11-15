@@ -29,10 +29,12 @@ import be.tribersoft.TriberSensorApplication;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class APIResourceGetIT {
 
-	private static final String INCORRECT_VERSION_MESSAGE = "You tried to use version 'wrong' while we provide version '1'";
+	private static final String WRONG_VERSION = "125.0.1";
+	private static final String INCORRECT_VERSION_MESSAGE = "You tried to use version '" + WRONG_VERSION + "' while we provide version 'CURRENT_VERSION'";
 	private static final String URL_WITH_VERSION = "/api/{apiVersion}";
 	private static final String URL = "/api";
-	private static final String WRONG_VERSION = "wrong";
+	private static final String NOT_SEMVER = "not semver";
+	private static final String NOT_SEMVER_EXCEPTION = "This version is not a semver";
 
 	@Value("${local.server.port}")
 	private int port;
@@ -89,7 +91,20 @@ public class APIResourceGetIT {
 				get(URL_WITH_VERSION). 
 		then(). 
 				statusCode(HttpStatus.BAD_REQUEST.value()).
-				body("message", equalTo(INCORRECT_VERSION_MESSAGE));
+				body("message", equalTo(INCORRECT_VERSION_MESSAGE.replace("CURRENT_VERSION", apiVersion)));
+		// @formatter:on
+	}
+
+	@Test
+	public void failsWhenNotSemver() {
+		// @formatter:off
+		given().
+		pathParam("apiVersion", NOT_SEMVER).
+		when(). 
+		get(URL_WITH_VERSION). 
+		then(). 
+		statusCode(HttpStatus.BAD_REQUEST.value()).
+		body("message", equalTo(NOT_SEMVER_EXCEPTION));
 		// @formatter:on
 	}
 
