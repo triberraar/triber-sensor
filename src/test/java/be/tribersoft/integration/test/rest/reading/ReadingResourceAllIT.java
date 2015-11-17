@@ -97,7 +97,7 @@ public class ReadingResourceAllIT {
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
 				body("_links.size()", is(1)).
-				body("_links.self.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading?page=0")).
 				body("_embedded.readings.size()", is(2)).
 				body("_embedded.readings[0].size()", is(4)).
 				body("_embedded.readings[0].value", is(VALUE_2.floatValue())).

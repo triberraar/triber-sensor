@@ -3,14 +3,10 @@ package be.tribersoft.sensor.domain.impl.sensor;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SensorJpaRepository extends Repository<SensorEntity, String> {
+public interface SensorJpaRepository extends JpaRepository<SensorEntity, String> {
 	List<SensorEntity> findAllByOrderByCreationDateDesc();
-
-	void save(SensorEntity sensor);
-
-	void delete(SensorEntity sensor);
 
 	Long countByUnitId(String unitId);
 

@@ -3,14 +3,11 @@ package be.tribersoft.sensor.domain.impl.unit;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UnitJpaRepository extends Repository<UnitEntity, String> {
+public interface UnitJpaRepository extends JpaRepository<UnitEntity, String> {
 	List<UnitEntity> findAllByOrderByCreationDateDesc();
-
-	void save(UnitEntity unit);
 
 	Optional<UnitEntity> findById(String id);
 
-	void delete(UnitEntity unit);
 }
