@@ -3,14 +3,11 @@ package be.tribersoft.sensor.domain.impl.device;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DeviceJpaRepository extends Repository<DeviceEntity, String> {
+public interface DeviceJpaRepository extends JpaRepository<DeviceEntity, String> {
 	List<DeviceEntity> findAllByOrderByCreationDateDesc();
-
-	void save(DeviceEntity sensor);
 
 	Optional<DeviceEntity> findById(String id);
 
-	void delete(DeviceEntity sensor);
 }

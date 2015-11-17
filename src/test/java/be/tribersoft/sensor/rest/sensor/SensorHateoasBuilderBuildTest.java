@@ -106,7 +106,7 @@ public class SensorHateoasBuilderBuildTest {
 		assertThat(links.get(3).getRel()).isEqualTo("device");
 		assertThat(links.get(3).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID);
 		assertThat(links.get(4).getRel()).isEqualTo("readings");
-		assertThat(links.get(4).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID + "/sensor/" + ID_1 + "/reading");
+		assertThat(links.get(4).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID + "/sensor/" + ID_1 + "/reading?page=0");
 	}
 
 	@Test
@@ -138,7 +138,7 @@ public class SensorHateoasBuilderBuildTest {
 		assertThat(firstLinks.get(3).getRel()).isEqualTo("device");
 		assertThat(firstLinks.get(3).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID);
 		assertThat(firstLinks.get(4).getRel()).isEqualTo("readings");
-		assertThat(firstLinks.get(4).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID + "/sensor/" + ID_1 + "/reading");
+		assertThat(firstLinks.get(4).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID + "/sensor/" + ID_1 + "/reading?page=0");
 
 		Resource<SensorToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -156,7 +156,7 @@ public class SensorHateoasBuilderBuildTest {
 		assertThat(secondLinks.get(3).getRel()).isEqualTo("device");
 		assertThat(secondLinks.get(3).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID);
 		assertThat(secondLinks.get(4).getRel()).isEqualTo("readings");
-		assertThat(secondLinks.get(4).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID + "/sensor/" + ID_2 + "/reading");
+		assertThat(secondLinks.get(4).getHref()).isEqualTo("http://localhost/api/device/" + DEVICE_ID + "/sensor/" + ID_2 + "/reading?page=0");
 	}
 
 }

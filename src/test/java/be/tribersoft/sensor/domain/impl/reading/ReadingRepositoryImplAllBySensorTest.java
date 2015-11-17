@@ -13,14 +13,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Pageable;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
-import be.tribersoft.sensor.domain.impl.reading.ReadingEntity;
-import be.tribersoft.sensor.domain.impl.reading.ReadingJpaRepository;
-import be.tribersoft.sensor.domain.impl.reading.ReadingRepositoryImpl;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ReadingRepositoryImplAllByDeviceTest {
+public class ReadingRepositoryImplAllBySensorTest {
 
 	private static final String SENSOR_ID = "sensor id";
 
@@ -31,10 +29,13 @@ public class ReadingRepositoryImplAllByDeviceTest {
 	private ReadingJpaRepository readingJpaRepository;
 	@Mock
 	private ReadingEntity readingEntity1, readingEntity2;
+	@Mock
+	private Pageable pageable;
 
 	@Before
 	public void setUp() {
 		when(readingJpaRepository.findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID)).thenReturn(Arrays.asList(readingEntity1, readingEntity2));
+		when(readingJpaRepository.findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID, pageable)).thenReturn(Arrays.asList(readingEntity2, readingEntity1));
 	}
 
 	@Test
@@ -43,6 +44,14 @@ public class ReadingRepositoryImplAllByDeviceTest {
 
 		verify(readingJpaRepository).findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID);
 		assertThat(all).isEqualTo(Arrays.asList(readingEntity1, readingEntity2));
+	}
+
+	@Test
+	public void delegatesToSpringDataRepositoryWithPageable() {
+		List<? extends Reading> all = readingRepositoryImpl.allBySensor(SENSOR_ID, pageable);
+
+		verify(readingJpaRepository).findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID, pageable);
+		assertThat(all).isEqualTo(Arrays.asList(readingEntity2, readingEntity1));
 	}
 
 }

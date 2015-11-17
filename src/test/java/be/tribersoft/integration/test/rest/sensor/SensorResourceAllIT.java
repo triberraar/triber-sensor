@@ -103,7 +103,7 @@ public class SensorResourceAllIT {
 				body("_embedded.sensors[0]._links.type.href", is("http://localhost:" + port + "/api/admin/type/" + sensors.get(0).getType().getId())).
 				body("_embedded.sensors[0]._links.unit.href", is("http://localhost:" + port + "/api/admin/unit/" + sensors.get(0).getUnit().getId())).
 				body("_embedded.sensors[0]._links.device.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId())).
-				body("_embedded.sensors[0]._links.readings.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId() + "/sensor/" + sensors.get(0).getId()+"/reading")).
+				body("_embedded.sensors[0]._links.readings.href", is("http://localhost:" + port + "/api/device/" + sensors.get(0).getDevice().getId() + "/sensor/" + sensors.get(0).getId()+"/reading?page=0")).
 				body("_embedded.sensors[1].size()", is(5)).
 				body("_embedded.sensors[1].name", is(NAME_1)).
 				body("_embedded.sensors[1].description", is(DESCRIPTION)).
@@ -114,7 +114,7 @@ public class SensorResourceAllIT {
 				body("_embedded.sensors[1]._links.type.href", is("http://localhost:" + port + "/api/admin/type/" + sensors.get(1).getType().getId())).
 				body("_embedded.sensors[1]._links.unit.href", is("http://localhost:" + port + "/api/admin/unit/" + sensors.get(1).getUnit().getId())).
 				body("_embedded.sensors[1]._links.device.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId())).
-				body("_embedded.sensors[1]._links.readings.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId() + "/sensor/" + sensors.get(1).getId()+"/reading")).
+				body("_embedded.sensors[1]._links.readings.href", is("http://localhost:" + port + "/api/device/" + sensors.get(1).getDevice().getId() + "/sensor/" + sensors.get(1).getId()+"/reading?page=0")).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

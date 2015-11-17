@@ -28,7 +28,7 @@ public class SensorHateoasBuilder {
 		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).get(sensor.getType().getId())).withRel(TypeToJsonAdapter.TYPE));
 		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(UnitResource.class).get(sensor.getUnit().getId())).withRel(UnitToJsonAdapter.UNIT));
 		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(DeviceResource.class).get(sensor.getDevice().getId())).withRel(DeviceToJsonAdapter.DEVICE));
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(sensor.getDevice().getId(), sensor.getId())).withRel(ReadingToJsonAdapter.READINGS));
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(sensor.getDevice().getId(), sensor.getId(), 0)).withRel(ReadingToJsonAdapter.READINGS));
 		return resource;
 	}
 
