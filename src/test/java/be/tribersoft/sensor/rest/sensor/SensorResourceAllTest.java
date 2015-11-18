@@ -2,6 +2,7 @@ package be.tribersoft.sensor.rest.sensor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -17,9 +18,12 @@ import org.springframework.hateoas.Resources;
 
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
+import be.tribersoft.sensor.rest.VersionValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SensorResourceAllTest {
+
+	private static final String API_VERSION = "apiVersion";
 
 	private static final String DEVICE_ID = "device id";
 
@@ -33,6 +37,8 @@ public class SensorResourceAllTest {
 	private SensorHateoasBuilder sensorHateosBuilder;
 	@Mock
 	private Resources<Resource<SensorToJsonAdapter>> resources;
+	@Mock
+	private VersionValidator versionValidator;
 
 	@Before
 	public void setUp() {
@@ -42,9 +48,10 @@ public class SensorResourceAllTest {
 
 	@Test
 	public void delegatesToService() {
-		Resources<Resource<SensorToJsonAdapter>> returnedResource = sensorDeviceResource.all(DEVICE_ID);
+		Resources<Resource<SensorToJsonAdapter>> returnedResource = sensorDeviceResource.all(API_VERSION, DEVICE_ID);
 
 		assertThat(returnedResource).isSameAs(resources);
+		verify(versionValidator).validate(API_VERSION);
 	}
 
 }

@@ -23,21 +23,23 @@ public class ReadingHateoasBuilder {
 	private ReadingRepository readingRepository;
 	@Value("${rest.page.size}")
 	private int pageSize;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	public Resources<Resource<ReadingToJsonAdapter>> build(String deviceId, String sensorId, List<? extends Reading> readings, int page) {
 		List<Resource<ReadingToJsonAdapter>> transformedReadingResources = readings.stream().map(reading -> {
 			Resource<ReadingToJsonAdapter> resource = new Resource<ReadingToJsonAdapter>(new ReadingToJsonAdapter(reading));
-			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).get(deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
+			resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).get(apiVersion, deviceId, sensorId)).withRel(SensorToJsonAdapter.SENSOR));
 			return resource;
 		}).collect(Collectors.toList());
 
 		Resources<Resource<ReadingToJsonAdapter>> sensorResources = new Resources<>(transformedReadingResources);
-		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(deviceId, sensorId, page)).withSelfRel());
+		sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, page)).withSelfRel());
 		if (page > 0) {
-			sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(deviceId, sensorId, page - 1)).withRel("previous"));
+			sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, page - 1)).withRel("previous"));
 		}
 		if ((page + 1) * pageSize < readingRepository.countBySensor(sensorId)) {
-			sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(deviceId, sensorId, page + 1)).withRel("next"));
+			sensorResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, page + 1)).withRel("next"));
 		}
 		return sensorResources;
 	}

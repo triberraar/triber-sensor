@@ -29,7 +29,7 @@ public class ApiHateoasBuilderBuildTest {
 
 	@Test
 	public void buildsLinksToApiResourceWithVersion() {
-		Resource<ApiToJsonAdapter> result = builder.build(VERSION);
+		Resource<ApiToJsonAdapter> result = builder.build();
 
 		assertThat(result.getContent().getVersion()).isEqualTo(VERSION);
 		List<Link> links = result.getLinks();
@@ -37,23 +37,11 @@ public class ApiHateoasBuilderBuildTest {
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + VERSION);
 		assertThat(links.get(1).getRel()).isEqualTo("types");
-		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/admin/type");
+		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/" + VERSION + "/admin/type");
 		assertThat(links.get(2).getRel()).isEqualTo("units");
-		assertThat(links.get(2).getHref()).isEqualTo("http://localhost/api/admin/unit");
+		assertThat(links.get(2).getHref()).isEqualTo("http://localhost/api/" + VERSION + "/admin/unit");
 		assertThat(links.get(3).getRel()).isEqualTo("devices");
-		assertThat(links.get(3).getHref()).isEqualTo("http://localhost/api/device");
+		assertThat(links.get(3).getHref()).isEqualTo("http://localhost/api/" + VERSION + "/device");
 	}
 
-	@Test
-	public void buildsLinksToApiResource() {
-		Resource<ApiToJsonAdapter> result = builder.build();
-
-		assertThat(result.getContent().getVersion()).isEqualTo(VERSION);
-		List<Link> links = result.getLinks();
-		assertThat(links.size()).isEqualTo(2);
-		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api");
-		assertThat(links.get(1).getRel()).isEqualTo("api");
-		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/" + VERSION);
-	}
 }

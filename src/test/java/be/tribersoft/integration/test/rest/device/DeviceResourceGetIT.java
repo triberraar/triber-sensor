@@ -35,7 +35,7 @@ import be.tribersoft.util.builder.DeviceBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class DeviceResourceGetIT {
 
-	private static final String URL = "/api/device/{uuid}";
+	private static final String URL = "/api/{apiVersion}/device/{uuid}";
 	private static final String DESCRIPTION = "description";
 	private static final String LOCATION = "location";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
@@ -47,6 +47,8 @@ public class DeviceResourceGetIT {
 	@Value("${local.server.port}")
 	private int port;
 	private String uuid;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -59,6 +61,7 @@ public class DeviceResourceGetIT {
 		uuid = deviceEntity.getId();
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 		when(). 
 				get(URL). 
@@ -70,7 +73,7 @@ public class DeviceResourceGetIT {
 				body("location", is(LOCATION)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -79,6 +82,7 @@ public class DeviceResourceGetIT {
 	public void failsWhenNotFound() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
 				get(URL). 
@@ -93,6 +97,7 @@ public class DeviceResourceGetIT {
 		uuid = deviceEntity.getId();
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 		when(). 
 				get(URL). 
@@ -104,7 +109,7 @@ public class DeviceResourceGetIT {
 				body("location", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

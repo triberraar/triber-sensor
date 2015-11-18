@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.tribersoft.sensor.domain.api.type.TypeRepository;
+import be.tribersoft.sensor.rest.VersionValidator;
 import be.tribersoft.sensor.service.api.type.TypeService;
 
 @RestController
-@RequestMapping("/api/admin/type")
+@RequestMapping("/api/{apiVersion}/admin/type")
 public class TypeResource {
 
 	@Inject
@@ -24,29 +25,36 @@ public class TypeResource {
 	private TypeRepository typeRepository;
 	@Inject
 	private TypeHateoasBuilder typeHateoasBuilder;
+	@Inject
+	private VersionValidator versionValidator;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public Resources<Resource<TypeToJsonAdapter>> all() {
+	public Resources<Resource<TypeToJsonAdapter>> all(@PathVariable("apiVersion") String apiVersion) {
+		versionValidator.validate(apiVersion);
 		return typeHateoasBuilder.build(typeRepository.all());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
-	public Resource<TypeToJsonAdapter> get(@PathVariable("id") String id) {
+	public Resource<TypeToJsonAdapter> get(@PathVariable("apiVersion") String apiVersion, @PathVariable("id") String id) {
+		versionValidator.validate(apiVersion);
 		return typeHateoasBuilder.build(typeRepository.getById(id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public void save(@Valid @RequestBody TypePostJson typePostJson) {
+	public void save(@PathVariable("apiVersion") String apiVersion, @Valid @RequestBody TypePostJson typePostJson) {
+		versionValidator.validate(apiVersion);
 		typeService.save(typePostJson);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}", consumes = "application/json")
-	public void update(@PathVariable("id") String id, @Valid @RequestBody TypeUpdateJson type) {
+	public void update(@PathVariable("apiVersion") String apiVersion, @PathVariable("id") String id, @Valid @RequestBody TypeUpdateJson type) {
+		versionValidator.validate(apiVersion);
 		typeService.update(id, type.getVersion(), type);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}", consumes = "application/json")
-	public void delete(@PathVariable("id") String id, @Valid @RequestBody TypeDeleteJson type) {
+	public void delete(@PathVariable("apiVersion") String apiVersion, @PathVariable("id") String id, @Valid @RequestBody TypeDeleteJson type) {
+		versionValidator.validate(apiVersion);
 		typeService.delete(id, type.getVersion());
 	}
 

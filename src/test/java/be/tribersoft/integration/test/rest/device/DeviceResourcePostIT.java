@@ -35,7 +35,7 @@ import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class DeviceResourcePostIT {
 
-	private static final String URL = "/api/device";
+	private static final String URL = "/api/{apiVersion}/device";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
@@ -46,6 +46,8 @@ public class DeviceResourcePostIT {
 
 	@Value("${local.server.port}")
 	private int serverPort;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -56,6 +58,7 @@ public class DeviceResourcePostIT {
 	public void createsANewDevice() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				body(new DevicePostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -78,6 +81,7 @@ public class DeviceResourcePostIT {
 	public void createsANewDeviceWithoutDescriptionOrLocation() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				body(new DevicePostJsonImplWithoutDescriptionOrLocation()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -100,6 +104,7 @@ public class DeviceResourcePostIT {
 	public void badRequestWhenDeviceIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				body(new DevicePostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 

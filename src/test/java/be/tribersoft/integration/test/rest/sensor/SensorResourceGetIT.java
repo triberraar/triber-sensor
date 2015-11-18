@@ -45,7 +45,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourceGetIT {
 
-	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
+	private static final String URL = "/api/{apiVersion}/device/{deviceId}/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
@@ -66,6 +66,8 @@ public class SensorResourceGetIT {
 	private TypeEntity typeEntity;
 	private UnitEntity unitEntity;
 	private DeviceEntity deviceEntity;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -82,6 +84,7 @@ public class SensorResourceGetIT {
 		uuid = sensorEntity.getId();
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 		when(). 
@@ -93,10 +96,10 @@ public class SensorResourceGetIT {
 				body("description", is(DESCRIPTION)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId() + "/sensor/" + uuid)).
-				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitEntity.getId())).
-				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeEntity.getId())).
-				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId())).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device/" + deviceEntity.getId() + "/sensor/" + uuid)).
+				body("_links.unit.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/unit/" + unitEntity.getId())).
+				body("_links.type.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/type/" + typeEntity.getId())).
+				body("_links.device.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device/" + deviceEntity.getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -105,6 +108,7 @@ public class SensorResourceGetIT {
 	public void failsWhenNotFound() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", NON_EXISTING_UUID).
 				pathParam("deviceId", deviceEntity.getId()).
 		when(). 
@@ -121,6 +125,7 @@ public class SensorResourceGetIT {
 		uuid = sensorEntity.getId();
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 		when(). 
@@ -132,10 +137,10 @@ public class SensorResourceGetIT {
 				body("description", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId() + "/sensor/" + uuid)).
-				body("_links.unit.href", is("http://localhost:" + port+"/api/admin/unit/" + unitEntity.getId())).
-				body("_links.type.href", is("http://localhost:" + port+"/api/admin/type/" + typeEntity.getId())).
-				body("_links.device.href", is("http://localhost:" + port+"/api/device/" + deviceEntity.getId())).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device/" + deviceEntity.getId() + "/sensor/" + uuid)).
+				body("_links.unit.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/unit/" + unitEntity.getId())).
+				body("_links.type.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/type/" + typeEntity.getId())).
+				body("_links.device.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device/" + deviceEntity.getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

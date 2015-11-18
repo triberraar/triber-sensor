@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -25,6 +26,7 @@ import be.tribersoft.sensor.domain.api.unit.Unit;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UnitHateoasBuilderBuildTest {
+	private static final String API_VERSION = "apiVersion";
 	private static Long VERSION_1 = 0l;
 	private static Long VERSION_2 = 1l;
 	private static String ID_1 = "id1";
@@ -54,6 +56,7 @@ public class UnitHateoasBuilderBuildTest {
 		when(unit2.getName()).thenReturn(NAME_2);
 		when(unit2.getVersion()).thenReturn(VERSION_2);
 		when(unit2.getSymbol()).thenReturn(Optional.ofNullable(null));
+		Whitebox.setInternalState(builder, API_VERSION, API_VERSION);
 	}
 
 	@Test
@@ -68,7 +71,7 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> links = unitResource.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit/" + ID_1);
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/admin/unit/" + ID_1);
 	}
 
 	@Test
@@ -78,7 +81,7 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> links = unitResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit");
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/admin/unit");
 
 		assertThat(unitResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<UnitToJsonAdapter>> content = unitResources.getContent();
@@ -92,7 +95,7 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> firstLinks = first.getLinks();
 		assertThat(firstLinks.size()).isEqualTo(1);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(firstLinks.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit/" + ID_1);
+		assertThat(firstLinks.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/admin/unit/" + ID_1);
 
 		Resource<UnitToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -102,6 +105,6 @@ public class UnitHateoasBuilderBuildTest {
 		List<Link> secondLinks = second.getLinks();
 		assertThat(secondLinks.size()).isEqualTo(1);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(secondLinks.get(0).getHref()).isEqualTo("http://localhost/api/admin/unit/" + ID_2);
+		assertThat(secondLinks.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/admin/unit/" + ID_2);
 	}
 }

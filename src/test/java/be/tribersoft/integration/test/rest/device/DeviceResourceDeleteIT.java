@@ -36,7 +36,7 @@ import be.tribersoft.util.builder.DeviceBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class DeviceResourceDeleteIT {
 
-	private static final String URL = "/api/device/{uuid}";
+	private static final String URL = "/api/{apiVersion}/device/{uuid}";
 	private static final String DESCRIPTION = "description";
 	private static final String LOCATION = "location";
 	private static final String NAME = "name";
@@ -49,6 +49,8 @@ public class DeviceResourceDeleteIT {
 	private int port;
 	private String uuid;
 	private Long version;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -63,6 +65,7 @@ public class DeviceResourceDeleteIT {
 	public void deletesDevice() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new DeviceDeleteJsonImpl()).
 				contentType(ContentType.JSON).
@@ -78,6 +81,7 @@ public class DeviceResourceDeleteIT {
 	public void failsWhenDeviceNotFound() {
 		// @formatter:off
 		given().
+			pathParam("apiVersion", apiVersion).
 			pathParam("uuid", NON_EXISTING_UUID).
 			body(new DeviceDeleteJsonImpl()).
 		contentType(ContentType.JSON).

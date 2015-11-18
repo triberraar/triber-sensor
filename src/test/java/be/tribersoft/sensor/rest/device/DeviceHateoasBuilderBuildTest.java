@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -25,6 +26,7 @@ import be.tribersoft.sensor.domain.api.device.Device;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeviceHateoasBuilderBuildTest {
+	private static final String API_VERSION = "apiVersion";
 	private static Long VERSION_1 = 0l;
 	private static Long VERSION_2 = 1l;
 	private static String ID_1 = "id1";
@@ -58,6 +60,7 @@ public class DeviceHateoasBuilderBuildTest {
 		when(device2.getVersion()).thenReturn(VERSION_2);
 		when(device2.getDescription()).thenReturn(Optional.ofNullable(null));
 		when(device2.getLocation()).thenReturn(Optional.ofNullable(null));
+		Whitebox.setInternalState(builder, API_VERSION, API_VERSION);
 	}
 
 	@Test
@@ -73,9 +76,9 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> links = deviceResource.getLinks();
 		assertThat(links.size()).isEqualTo(2);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/device/" + ID_1);
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device/" + ID_1);
 		assertThat(links.get(1).getRel()).isEqualTo("sensors");
-		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/device/" + ID_1 + "/sensor");
+		assertThat(links.get(1).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device/" + ID_1 + "/sensor");
 
 	}
 
@@ -86,7 +89,7 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> links = deviceResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/device");
+		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device");
 
 		assertThat(deviceResources.getContent().size()).isEqualTo(2);
 		Collection<Resource<DeviceToJsonAdapter>> content = deviceResources.getContent();
@@ -101,9 +104,9 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> firstLinks = first.getLinks();
 		assertThat(firstLinks.size()).isEqualTo(2);
 		assertThat(firstLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(firstLinks.get(0).getHref()).isEqualTo("http://localhost/api/device/" + ID_1);
+		assertThat(firstLinks.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device/" + ID_1);
 		assertThat(firstLinks.get(1).getRel()).isEqualTo("sensors");
-		assertThat(firstLinks.get(1).getHref()).isEqualTo("http://localhost/api/device/" + ID_1 + "/sensor");
+		assertThat(firstLinks.get(1).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device/" + ID_1 + "/sensor");
 
 		Resource<DeviceToJsonAdapter> second = iterator.next();
 		assertThat(second.getContent().getId()).isEqualTo(ID_2);
@@ -114,9 +117,9 @@ public class DeviceHateoasBuilderBuildTest {
 		List<Link> secondLinks = second.getLinks();
 		assertThat(secondLinks.size()).isEqualTo(2);
 		assertThat(secondLinks.get(0).getRel()).isEqualTo(Link.REL_SELF);
-		assertThat(secondLinks.get(0).getHref()).isEqualTo("http://localhost/api/device/" + ID_2);
+		assertThat(secondLinks.get(0).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device/" + ID_2);
 		assertThat(secondLinks.get(1).getRel()).isEqualTo("sensors");
-		assertThat(secondLinks.get(1).getHref()).isEqualTo("http://localhost/api/device/" + ID_2 + "/sensor");
+		assertThat(secondLinks.get(1).getHref()).isEqualTo("http://localhost/api/" + API_VERSION + "/device/" + ID_2 + "/sensor");
 	}
 
 }

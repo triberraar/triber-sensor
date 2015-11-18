@@ -1,6 +1,6 @@
 package be.tribersoft.integration.test.rest.device;
 
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -38,7 +38,7 @@ import be.tribersoft.util.builder.DeviceBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class DeviceResourceAllIT {
 
-	private static final String URL = "/api/device";
+	private static final String URL = "/api/{apiVersion}/device";
 	private static final String DESCRIPTION = "description";
 	private static final String LOCATION = "location";
 	private static final String NAME_1 = "name 1";
@@ -50,6 +50,8 @@ public class DeviceResourceAllIT {
 	@Value("${local.server.port}")
 	private int port;
 	private List<DeviceEntity> devices;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -65,12 +67,14 @@ public class DeviceResourceAllIT {
 	@Test
 	public void getsAllDevices() {
 		// @formatter:off
+		given().
+				pathParam("apiVersion", apiVersion).
 		when(). 
 				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.self.href", is("http://localhost:" + port + "/api/device")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device")).
 				body("_embedded.devices.size()", is(2)).
 				body("_embedded.devices[0].size()", is(6)).
 				body("_embedded.devices[0].name", is(NAME_2)).
@@ -79,8 +83,8 @@ public class DeviceResourceAllIT {
 				body("_embedded.devices[0].version", is(0)).
 				body("_embedded.devices[0].id", is(devices.get(0).getId())).
 				body("_embedded.devices[0]._links.size()", is(2)).
-				body("_embedded.devices[0]._links.self.href", is("http://localhost:" + port + "/api/device/" + devices.get(0).getId())).
-				body("_embedded.devices[0]._links.sensors.href", is("http://localhost:" + port + "/api/device/" + devices.get(0).getId()+"/sensor")).
+				body("_embedded.devices[0]._links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + devices.get(0).getId())).
+				body("_embedded.devices[0]._links.sensors.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + devices.get(0).getId()+"/sensor")).
 				body("_embedded.devices[1].size()", is(6)).
 				body("_embedded.devices[1].name", is(NAME_1)).
 				body("_embedded.devices[1].description", is(DESCRIPTION)).
@@ -88,8 +92,8 @@ public class DeviceResourceAllIT {
 				body("_embedded.devices[1].version", is(0)).
 				body("_embedded.devices[1].id", is(devices.get(1).getId())).
 				body("_embedded.devices[1]._links.size()", is(2)).
-				body("_embedded.devices[1]._links.self.href", is("http://localhost:" + port + "/api/device/" + devices	.get(1).getId())).
-				body("_embedded.devices[1]._links.sensors.href", is("http://localhost:" + port + "/api/device/" + devices	.get(1).getId()+"/sensor")).
+				body("_embedded.devices[1]._links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + devices	.get(1).getId())).
+				body("_embedded.devices[1]._links.sensors.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + devices	.get(1).getId()+"/sensor")).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
