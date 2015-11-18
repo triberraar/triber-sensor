@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -16,10 +17,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.api.reading.Reading;
+import be.tribersoft.sensor.domain.impl.event.Event;
+import be.tribersoft.sensor.domain.impl.event.EventPersister;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
 
 @Entity(name = "reading")
-public class ReadingEntity implements Reading {
+@EntityListeners(value = EventPersister.class)
+public class ReadingEntity implements Reading, Event {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
