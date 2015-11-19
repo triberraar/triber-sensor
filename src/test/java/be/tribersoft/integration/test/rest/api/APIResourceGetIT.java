@@ -59,9 +59,9 @@ public class APIResourceGetIT {
 				body("version", is(apiVersion)).
 				body("_links.size()", is(4)).
 				body("_links.self.href", is("http://localhost:" + port+"/api/" + apiVersion)).
-				body("_links.types.href", is("http://localhost:" + port+"/api/admin/type" )).
-				body("_links.units.href", is("http://localhost:" + port+"/api/admin/unit")).
-				body("_links.devices.href", is("http://localhost:" + port+"/api/device")).
+				body("_links.types.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/type" )).
+				body("_links.units.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/unit")).
+				body("_links.devices.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device")).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -75,9 +75,11 @@ public class APIResourceGetIT {
 				contentType(ContentType.JSON).
 				body("size()", is(2)).
 				body("version", is(apiVersion)).
-				body("_links.size()", is(2)).
-				body("_links.self.href", is("http://localhost:" + port+"/api")).
-				body("_links.api.href", is("http://localhost:" + port+"/api/" + apiVersion)).
+				body("_links.size()", is(4)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/" + apiVersion)).
+				body("_links.types.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/type" )).
+				body("_links.units.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/unit")).
+				body("_links.devices.href", is("http://localhost:" + port+"/api/"+apiVersion+"/device")).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

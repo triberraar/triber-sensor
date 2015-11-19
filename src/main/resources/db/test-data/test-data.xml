@@ -7,11 +7,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <include file="/db/changelog/type.xml"/>
-    <include file="/db/changelog/unit.xml"/>
-    <include file="/db/changelog/device.xml"/>
-    <include file="/db/changelog/sensor.xml"/>
-    <include file="/db/changelog/reading.xml"/>
-
-    <include file="/db/test-data/test-data.xml"/>
+    <changeSet id="test data" author="tribersoft" context="test-data">
+    	<loadData tableName="type" file="/db/test-data/type.csv"></loadData>
+    	<loadData tableName="unit" file="/db/test-data/unit.csv"></loadData>
+    	<loadData tableName="device" file="/db/test-data/device.csv"></loadData>
+    	<loadData tableName="sensor" file="/db/test-data/sensor.csv"></loadData>
+    	<loadData tableName="reading" file="/db/test-data/reading.csv"></loadData>
+    </changeSet>
+    
 </databaseChangeLog>

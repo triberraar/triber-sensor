@@ -1,6 +1,6 @@
 package be.tribersoft.integration.test.rest.type;
 
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
 import java.time.LocalDateTime;
@@ -36,12 +36,14 @@ import be.tribersoft.util.builder.TypeBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class TypeResourceAllIT {
 
-	private static final String URL = "/api/admin/type";
+	private static final String URL = "/api/{apiVersion}/admin/type";
 	private static final String NAME_1 = "name 1";
 	private static final String NAME_2 = "name 2";
 
 	@Inject
 	private TypeJpaRepository typeJpaRepository;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -61,23 +63,25 @@ public class TypeResourceAllIT {
 	@Test
 	public void getsAllTypes() {
 		// @formatter:off
+		given().
+			pathParam("apiVersion", apiVersion).
 		when(). 
 				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.self.href", is("http://localhost:" + port + "/api/admin/type")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/admin/type")).
 				body("_embedded.types.size()", is(2)).
 				body("_embedded.types[0].size()", is(4)).
 				body("_embedded.types[0].name", is(NAME_2)).
 				body("_embedded.types[0].version", is(0)).
 				body("_embedded.types[0].id", is(types.get(0).getId())).
-				body("_embedded.types[0]._links.self.href", is("http://localhost:" + port + "/api/admin/type/" + types.get(0).getId())).
+				body("_embedded.types[0]._links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/admin/type/" + types.get(0).getId())).
 				body("_embedded.types[1].size()", is(4)).
 				body("_embedded.types[1].name", is(NAME_1)).
 				body("_embedded.types[1].version", is(0)).
 				body("_embedded.types[1].id", is(types.get(1).getId())).
-				body("_embedded.types[1]._links.self.href", is("http://localhost:" + port + "/api/admin/type/" + types.get(1).getId()));
+				body("_embedded.types[1]._links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/admin/type/" + types.get(1).getId()));
 		// @formatter:on
 	}
 

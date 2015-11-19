@@ -38,7 +38,7 @@ public class TypeResourcePutIT {
 
 	private static final String TYPE_NOT_FOUND_EXCEPTION = "Type not found";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
-	private static final String URL = "/api/admin/type/{uuid}";
+	private static final String URL = "/api/{apiVersion}/admin/type/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -51,6 +51,8 @@ public class TypeResourcePutIT {
 	private int serverPort;
 	private String uuid;
 	private Long version;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -64,6 +66,7 @@ public class TypeResourcePutIT {
 	public void updatesType() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new TypePutJsonImpl()). 
 				contentType(ContentType.JSON).
@@ -85,6 +88,7 @@ public class TypeResourcePutIT {
 	public void badRequestWhenTypeIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new TypePutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
@@ -100,6 +104,7 @@ public class TypeResourcePutIT {
 	public void conflictWhenTypeHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new TypePutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
@@ -115,6 +120,7 @@ public class TypeResourcePutIT {
 	public void notFoundWhenTypeDoesntExist() {
 		// @formatter:off
 		given(). 
+			pathParam("apiVersion", apiVersion).
 			pathParam("uuid", NON_EXISTING_UUID).
 			body(new TypePutJsonImpl()). 
 			contentType(ContentType.JSON).

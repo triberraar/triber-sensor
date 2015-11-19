@@ -48,7 +48,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class ReadingResourcePostIT {
 
-	private static final String URL = "/api/device/{deviceId}/sensor/{sensorId}/reading";
+	private static final String URL = "/api/{apiVersion}/device/{deviceId}/sensor/{sensorId}/reading";
 	private static final String ERROR_MESSAGE = "Value can't be null";
 	private static final BigDecimal VALUE = BigDecimal.valueOf(23.0);
 
@@ -69,6 +69,8 @@ public class ReadingResourcePostIT {
 	private UnitEntity unitEntity;
 	private DeviceEntity deviceEntity;
 	private SensorEntity sensorEntity;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -84,6 +86,7 @@ public class ReadingResourcePostIT {
 	public void createsANewReading() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("deviceId", deviceEntity.getId()).
 				pathParam("sensorId", sensorEntity.getId()).
 				body(new ReadingPostJsonImpl()). 
@@ -107,6 +110,7 @@ public class ReadingResourcePostIT {
 	public void badRequestWhenSensorIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("deviceId", deviceEntity.getId()).
 				pathParam("sensorId", sensorEntity.getId()).
 				body(new ReadingPostJsonImplInvalid()). 

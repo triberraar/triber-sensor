@@ -37,7 +37,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 public class UnitResourceGetIT {
 
 	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
-	private static final String URL = "/api/admin/unit/{uuid}";
+	private static final String URL = "/api/{apiVersion}/admin/unit/{uuid}";
 	private static final String SYMBOL = "symbol";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
@@ -47,6 +47,8 @@ public class UnitResourceGetIT {
 
 	@Value("${local.server.port}")
 	private int port;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -59,6 +61,7 @@ public class UnitResourceGetIT {
 		String uuid = unitEntity.getId();
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 		when(). 
 				get(URL). 
@@ -69,7 +72,7 @@ public class UnitResourceGetIT {
 				body("symbol", is(SYMBOL)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/unit/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -78,6 +81,7 @@ public class UnitResourceGetIT {
 	public void notFoundWhenUnitDoesntExist() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
 				get(URL). 
@@ -93,6 +97,7 @@ public class UnitResourceGetIT {
 		String uuid = unitEntity.getId();
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 		when(). 
 				get(URL). 
@@ -103,7 +108,7 @@ public class UnitResourceGetIT {
 				body("symbol", isEmptyOrNullString()).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/unit/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/unit/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}

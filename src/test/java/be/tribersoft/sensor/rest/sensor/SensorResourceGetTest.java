@@ -14,10 +14,12 @@ import org.springframework.hateoas.Resource;
 
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.api.sensor.SensorRepository;
+import be.tribersoft.sensor.rest.VersionValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SensorResourceGetTest {
 
+	private static final String API_VERSION = "apiVersion";
 	private static final String DEVICE_ID = "device id";
 	private static String ID = "id";
 
@@ -33,6 +35,8 @@ public class SensorResourceGetTest {
 	private Resource<SensorToJsonAdapter> resource;
 	@Mock
 	private SensorValidator sensorValidator;
+	@Mock
+	private VersionValidator versionValidator;
 
 	@Before
 	public void setUp() {
@@ -42,10 +46,11 @@ public class SensorResourceGetTest {
 
 	@Test
 	public void delegatesToService() {
-		Resource<SensorToJsonAdapter> returnedResource = sensorDeviceResource.get(DEVICE_ID, ID);
+		Resource<SensorToJsonAdapter> returnedResource = sensorDeviceResource.get(API_VERSION, DEVICE_ID, ID);
 
 		assertThat(returnedResource).isSameAs(resource);
 		verify(sensorValidator).validate(DEVICE_ID, ID);
+		verify(versionValidator).validate(API_VERSION);
 	}
 
 }

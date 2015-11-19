@@ -23,10 +23,12 @@ import org.springframework.hateoas.Resources;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
 import be.tribersoft.sensor.domain.api.reading.ReadingRepository;
+import be.tribersoft.sensor.rest.VersionValidator;
 import be.tribersoft.sensor.rest.sensor.SensorValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReadingResourceAllTest {
+	private static final String API_VERSION = "apiVersion";
 	private static final int PAGE = 2;
 	private static final int PAGE_SIZE = 10;
 	private static final String DEVICE_ID = "device id";
@@ -46,6 +48,8 @@ public class ReadingResourceAllTest {
 	private SensorValidator sensorValidator;
 	@Captor
 	private ArgumentCaptor<Pageable> pageableCaptor;
+	@Mock
+	private VersionValidator versionValidator;
 
 	@Before
 	public void setUp() {
@@ -56,13 +60,14 @@ public class ReadingResourceAllTest {
 
 	@Test
 	public void delegatesToService() {
-		Resources<Resource<ReadingToJsonAdapter>> sensorResources = readingResource.all(DEVICE_ID, SENSOR_ID, PAGE);
+		Resources<Resource<ReadingToJsonAdapter>> sensorResources = readingResource.all(API_VERSION, DEVICE_ID, SENSOR_ID, PAGE);
 
 		assertThat(sensorResources).isSameAs(resources);
 		verify(sensorValidator).validate(DEVICE_ID, SENSOR_ID);
 		Pageable pageable = pageableCaptor.getValue();
 		assertThat(pageable.getPageNumber()).isEqualTo(PAGE);
 		assertThat(pageable.getPageSize()).isEqualTo(PAGE_SIZE);
+		verify(versionValidator).validate(API_VERSION);
 	}
 
 }

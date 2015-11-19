@@ -10,10 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import be.tribersoft.sensor.rest.VersionValidator;
 import be.tribersoft.sensor.service.api.type.TypeService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeResourceUpdateTest {
+	private static final String API_VERSION = "apiVersion";
 	private static final long VERSION = 2L;
 	private static final String ID = "id";
 	@InjectMocks
@@ -22,6 +24,8 @@ public class TypeResourceUpdateTest {
 	private TypeService typeService;
 	@Mock
 	private TypeUpdateJson typeUpdateJson;
+	@Mock
+	private VersionValidator versionValidator;
 
 	@Before
 	public void setUp() {
@@ -30,8 +34,9 @@ public class TypeResourceUpdateTest {
 
 	@Test
 	public void delegatesToService() {
-		typeResource.update(ID, typeUpdateJson);
+		typeResource.update(API_VERSION, ID, typeUpdateJson);
 
 		verify(typeService).update(ID, VERSION, typeUpdateJson);
+		verify(versionValidator).validate(API_VERSION);
 	}
 }

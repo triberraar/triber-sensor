@@ -37,7 +37,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 public class UnitResourceDeleteIT {
 
 	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
-	private static final String API_ADMIN_UNIT_UUID = "/api/admin/unit/{uuid}";
+	private static final String API_ADMIN_UNIT_UUID = "/api/{apiVersion}/admin/unit/{uuid}";
 	private static final String SYMBOL = "symbol";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
@@ -49,6 +49,8 @@ public class UnitResourceDeleteIT {
 	private int port;
 	private String uuid;
 	private Long version;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -62,6 +64,7 @@ public class UnitResourceDeleteIT {
 	public void deletesUnit() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				contentType(ContentType.JSON).
 				body(new UnitDeleteJsonImpl()).
@@ -77,6 +80,7 @@ public class UnitResourceDeleteIT {
 	public void notFoundWhenDeviceDoesntExist() {
 		// @formatter:off
 		given().
+			pathParam("apiVersion", apiVersion).
 			pathParam("uuid", NON_EXISTING_UUID).
 			contentType(ContentType.JSON).
 			body(new UnitDeleteJsonImpl()).

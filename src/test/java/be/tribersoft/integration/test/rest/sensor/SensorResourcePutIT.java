@@ -48,7 +48,7 @@ public class SensorResourcePutIT {
 
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
-	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
+	private static final String URL = "/api/{apiVersion}/device/{deviceId}/sensor/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -73,6 +73,8 @@ public class SensorResourcePutIT {
 	private TypeEntity typeEntity;
 	private UnitEntity unitEntity;
 	private DeviceEntity deviceEntity;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -90,6 +92,7 @@ public class SensorResourcePutIT {
 	public void updatesSensor() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImpl()). 
@@ -116,6 +119,7 @@ public class SensorResourcePutIT {
 	public void updatesSensorWithoutDescription() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImplWithoutDescription()). 
@@ -142,6 +146,7 @@ public class SensorResourcePutIT {
 	public void badRequestWhenSensorIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImplInvalid()). 
@@ -158,6 +163,7 @@ public class SensorResourcePutIT {
 	public void conflictWhenSensorHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPutJsonImplConcurrent()). 
@@ -173,7 +179,8 @@ public class SensorResourcePutIT {
 	@Test
 	public void notFoundWhenSensorDoesntExist() {
 		// @formatter:off
-		given(). 
+		given().
+			pathParam("apiVersion", apiVersion).
 			pathParam("uuid", NON_EXISTING_UUID).
 			pathParam("deviceId", deviceEntity.getId()).
 			body(new SensorPutJsonImpl()). 
