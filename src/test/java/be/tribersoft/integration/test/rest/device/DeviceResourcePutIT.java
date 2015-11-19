@@ -38,7 +38,7 @@ import be.tribersoft.util.builder.DeviceBuilder;
 public class DeviceResourcePutIT {
 
 	private static final String DEVICE_NOT_FOUND_EXCEPTION = "Device not found";
-	private static final String URL = "/api/device/{uuid}";
+	private static final String URL = "/api/{apiVersion}/device/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -56,6 +56,8 @@ public class DeviceResourcePutIT {
 	private int serverPort;
 	private String uuid;
 	private Long version;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -70,6 +72,7 @@ public class DeviceResourcePutIT {
 	public void updatesDevice() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new DevicePutJsonImpl()). 
 				contentType(ContentType.JSON).
@@ -93,6 +96,7 @@ public class DeviceResourcePutIT {
 	public void updatesDeviceWithoutLocationOrDescription() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).		
 				pathParam("uuid", uuid).
 				body(new DevicePutJsonImplWithoutLocationOrDescription()). 
 				contentType(ContentType.JSON).
@@ -116,6 +120,7 @@ public class DeviceResourcePutIT {
 	public void badRequestWhenDeviceIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new DevicePutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
@@ -131,6 +136,7 @@ public class DeviceResourcePutIT {
 	public void conflictWhenDeviceHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new DevicePutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).
@@ -146,6 +152,7 @@ public class DeviceResourcePutIT {
 	public void notFoundWhenDeviceDoesntExist() {
 		// @formatter:off
 		given(). 
+			pathParam("apiVersion", apiVersion).
 			pathParam("uuid", NON_EXISTING_UUID).
 			body(new DevicePutJsonImpl()). 
 			contentType(ContentType.JSON).

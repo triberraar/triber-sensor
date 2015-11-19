@@ -44,7 +44,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourcePostIT {
 
-	private static final String URL = "/api/device/{deviceId}/sensor";
+	private static final String URL = "/api/{apiVersion}/device/{deviceId}/sensor";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
@@ -63,6 +63,8 @@ public class SensorResourcePostIT {
 	private TypeEntity typeEntity;
 	private UnitEntity unitEntity;
 	private DeviceEntity deviceEntity;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -77,6 +79,7 @@ public class SensorResourcePostIT {
 	public void createsANewSensor() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPostJsonImpl()). 
 				contentType(ContentType.JSON).
@@ -102,6 +105,7 @@ public class SensorResourcePostIT {
 	public void createsANewSensorWithoutDescription() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPostJsonImplWithoutDescription()). 
 				contentType(ContentType.JSON).
@@ -127,6 +131,7 @@ public class SensorResourcePostIT {
 	public void badRequestWhenSensorIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorPostJsonImplInvalid()). 
 				contentType(ContentType.JSON).

@@ -39,7 +39,7 @@ public class UnitResourcePutIT {
 
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String UNIT_NOT_FOUND_EXCEPTION = "Unit not found";
-	private static final String URL = "/api/admin/unit/{uuid}";
+	private static final String URL = "/api/{apiVersion}/admin/unit/{uuid}";
 	private static final String CONCURRENT_ERROR_MESSAGE = "Somebody else might have changed the resource, please reload";
 	private static final String INVALID_ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
@@ -54,6 +54,8 @@ public class UnitResourcePutIT {
 	private int serverPort;
 	private String uuid;
 	private Long version;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -67,6 +69,7 @@ public class UnitResourcePutIT {
 	public void updatesUnit() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new UnitPutJsonImpl()). 
 				contentType(ContentType.JSON).
@@ -89,6 +92,7 @@ public class UnitResourcePutIT {
 	public void updatesUnitWithoutSymbol() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new UnitPutJsonImplWithoutSymbol()). 
 				contentType(ContentType.JSON).
@@ -111,6 +115,7 @@ public class UnitResourcePutIT {
 	public void badRequestWhenUnitIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new UnitPutJsonImplInvalid()). 
 				contentType(ContentType.JSON).
@@ -126,6 +131,7 @@ public class UnitResourcePutIT {
 	public void notFoundWhenUnitDoesntExist() {
 		// @formatter:off
 		given(). 
+			pathParam("apiVersion", apiVersion).
 			pathParam("uuid", NON_EXISTING_UUID).
 			body(new UnitPutJsonImpl()). 
 			contentType(ContentType.JSON).
@@ -141,6 +147,7 @@ public class UnitResourcePutIT {
 	public void conflictWhenUnitHasConcurrentChanges() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new UnitPutJsonImplConcurrent()). 
 				contentType(ContentType.JSON).

@@ -35,7 +35,7 @@ import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class UnitResourcePostIT {
 
-	private static final String URL = "/api/admin/unit";
+	private static final String URL = "/api/{apiVersion}/admin/unit";
 	private static final String ERROR_MESSAGE = "Name can't be null";
 	private static final String NAME = "name";
 	private static final String SYMBOL = "symbol";
@@ -45,6 +45,8 @@ public class UnitResourcePostIT {
 
 	@Value("${local.server.port}")
 	private int serverPort;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -55,6 +57,7 @@ public class UnitResourcePostIT {
 	public void createsANewUnit() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				body(new UnitPostJsonImpl()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -76,6 +79,7 @@ public class UnitResourcePostIT {
 	public void createsANewUnitWithoutSymbol() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				body(new UnitPostJsonImplWithoutSymbol()). 
 				contentType(ContentType.JSON).
 		when(). 
@@ -97,6 +101,7 @@ public class UnitResourcePostIT {
 	public void badRequestWhenUnitIsNotValid() {
 		// @formatter:off
 		given(). 
+				pathParam("apiVersion", apiVersion).
 				body(new UnitPostJsonImplInvalid()). 
 				contentType(ContentType.JSON).
 		when(). 

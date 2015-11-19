@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.tribersoft.sensor.domain.api.reading.ReadingRepository;
+import be.tribersoft.sensor.rest.VersionValidator;
 import be.tribersoft.sensor.rest.sensor.SensorValidator;
 import be.tribersoft.sensor.service.api.reading.ReadingService;
 
 @RestController
-@RequestMapping("/api/device/{deviceId}/sensor/{sensorId}/reading")
+@RequestMapping("/api/{apiVersion}/device/{deviceId}/sensor/{sensorId}/reading")
 public class ReadingResource {
 	@Inject
 	private ReadingRepository readingRepository;
@@ -32,16 +33,20 @@ public class ReadingResource {
 	private SensorValidator sensorValidator;
 	@Value("${rest.page.size}")
 	private Integer pageSize;
+	@Inject
+	private VersionValidator versionValidator;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public Resources<Resource<ReadingToJsonAdapter>> all(@PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId, @RequestParam(defaultValue = "0") int page) {
+	public Resources<Resource<ReadingToJsonAdapter>> all(@PathVariable("apiVersion") String apiVersion, @PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId, @RequestParam(defaultValue = "0") int page) {
+		versionValidator.validate(apiVersion);
 		sensorValidator.validate(deviceId, sensorId);
 		Pageable pageable = new PageRequest(page, pageSize);
 		return readingHateoasBuilder.build(deviceId, sensorId, readingRepository.allBySensor(sensorId, pageable), page);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public void save(@PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId, @Valid @RequestBody ReadingPostJson readingPostJson) {
+	public void save(@PathVariable("apiVersion") String apiVersion, @PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId, @Valid @RequestBody ReadingPostJson readingPostJson) {
+		versionValidator.validate(apiVersion);
 		sensorValidator.validate(deviceId, sensorId);
 		readingService.save(sensorId, readingPostJson);
 	}

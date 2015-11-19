@@ -1,6 +1,7 @@
 package be.tribersoft.sensor.rest.type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -13,9 +14,12 @@ import org.springframework.hateoas.Resource;
 
 import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.type.TypeRepository;
+import be.tribersoft.sensor.rest.VersionValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TypeResourceGetTest {
+
+	private static final String API_VERSION = "apiVersion";
 
 	private static String ID = "id";
 
@@ -29,6 +33,8 @@ public class TypeResourceGetTest {
 	private TypeHateoasBuilder typeHateosBuilder;
 	@Mock
 	private Resource<TypeToJsonAdapter> resource;
+	@Mock
+	private VersionValidator versionValidator;
 
 	@Before
 	public void setUp() {
@@ -38,9 +44,10 @@ public class TypeResourceGetTest {
 
 	@Test
 	public void delegatesToService() {
-		Resource<TypeToJsonAdapter> returnedResource = typeResource.get(ID);
+		Resource<TypeToJsonAdapter> returnedResource = typeResource.get(API_VERSION, ID);
 
 		assertThat(returnedResource).isSameAs(resource);
+		verify(versionValidator).validate(API_VERSION);
 	}
 
 }

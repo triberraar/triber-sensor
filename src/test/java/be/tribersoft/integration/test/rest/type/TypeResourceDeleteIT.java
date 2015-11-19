@@ -35,7 +35,7 @@ import be.tribersoft.util.builder.TypeBuilder;
 public class TypeResourceDeleteIT {
 
 	private static final String TYPE_NOT_FOUND_EXCEPTION = "Type not found";
-	private static final String URL = "/api/admin/type/{uuid}";
+	private static final String URL = "/api/{apiVersion}/admin/type/{uuid}";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
 
@@ -46,6 +46,8 @@ public class TypeResourceDeleteIT {
 	private int port;
 	private String uuid;
 	private Long version;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -59,6 +61,7 @@ public class TypeResourceDeleteIT {
 	public void deletesType() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				body(new TypeDeleteJsonImpl()).
 				contentType(ContentType.JSON).
@@ -75,6 +78,7 @@ public class TypeResourceDeleteIT {
 	public void failsWhenTypeNotFound() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", NON_EXISTING_UUID).
 				body(new TypeDeleteJsonImpl()).
 				contentType(ContentType.JSON).

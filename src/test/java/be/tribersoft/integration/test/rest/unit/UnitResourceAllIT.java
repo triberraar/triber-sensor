@@ -1,6 +1,6 @@
 package be.tribersoft.integration.test.rest.unit;
 
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 
@@ -38,7 +38,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class UnitResourceAllIT {
 
-	private static final String URL = "/api/admin/unit";
+	private static final String URL = "/api/{apiVersion}/admin/unit";
 	private static final String NAME_1 = "name 1";
 	private static final String SYMBOL_1 = "symbol 1";
 	private static final String NAME_2 = "name 2";
@@ -49,6 +49,8 @@ public class UnitResourceAllIT {
 	@Value("${local.server.port}")
 	private int port;
 	private List<UnitEntity> units;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -64,25 +66,27 @@ public class UnitResourceAllIT {
 	@Test
 	public void getsAllUnits() {
 		// @formatter:off
+		given().
+				pathParam("apiVersion", apiVersion).
 		when(). 
 				get(URL). 
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.self.href", is("http://localhost:" + port + "/api/admin/unit")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/admin/unit")).
 				body("_embedded.units.size()", is(2)).
 				body("_embedded.units[0].size()", is(5)).
 				body("_embedded.units[0].name", is(NAME_2)).
 				body("_embedded.units[0].symbol", isEmptyOrNullString()).
 				body("_embedded.units[0].version", is(0)).
 				body("_embedded.units[0].id", is(units.get(0).getId())).
-				body("_embedded.units[0]._links.self.href", is("http://localhost:" + port + "/api/admin/unit/" + units.get(0).getId())).
+				body("_embedded.units[0]._links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/admin/unit/" + units.get(0).getId())).
 				body("_embedded.units[1].size()", is(5)).
 				body("_embedded.units[1].name", is(NAME_1)).
 				body("_embedded.units[1].symbol", is(SYMBOL_1)).
 				body("_embedded.units[1].version", is(0)).
 				body("_embedded.units[1].id", is(units.get(1).getId())).
-				body("_embedded.units[1]._links.self.href", is("http://localhost:" + port + "/api/admin/unit/" + units.get(1).getId()));
+				body("_embedded.units[1]._links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/admin/unit/" + units.get(1).getId()));
 		// @formatter:on
 	}
 

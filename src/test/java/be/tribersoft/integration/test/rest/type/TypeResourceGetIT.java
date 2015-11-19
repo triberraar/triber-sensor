@@ -34,7 +34,7 @@ import be.tribersoft.util.builder.TypeBuilder;
 public class TypeResourceGetIT {
 
 	private static final String TYPE_NOT_FOUND_EXCPETION = "Type not found";
-	private static final String URL = "/api/admin/type/{uuid}";
+	private static final String URL = "/api/{apiVersion}/admin/type/{uuid}";
 	private static final String NON_EXISTING_UUID = "non existing uuid";
 	private static final String NAME = "name";
 
@@ -44,6 +44,8 @@ public class TypeResourceGetIT {
 	@Value("${local.server.port}")
 	private int port;
 	private String uuid;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -57,6 +59,7 @@ public class TypeResourceGetIT {
 	public void getType() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 		when(). 
 				get(URL). 
@@ -66,7 +69,7 @@ public class TypeResourceGetIT {
 				body("name", is(NAME)).
 				body("id", is(uuid)).
 				body("version", is(0)).
-				body("_links.self.href", is("http://localhost:" + port+"/api/admin/type/" + uuid)).
+				body("_links.self.href", is("http://localhost:" + port+"/api/"+apiVersion+"/admin/type/" + uuid)).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
@@ -75,6 +78,7 @@ public class TypeResourceGetIT {
 	public void failsWhenNotFound() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", NON_EXISTING_UUID).
 		when(). 
 				get(URL). 

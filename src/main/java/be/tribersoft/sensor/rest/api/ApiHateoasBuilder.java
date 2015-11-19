@@ -19,21 +19,14 @@ public class ApiHateoasBuilder {
 	@Value("${api.version}")
 	private String apiVersion;
 
-	public Resource<ApiToJsonAdapter> build(String apiVersion) {
-		Resource<ApiToJsonAdapter> resource = new Resource<ApiToJsonAdapter>(new ApiToJsonAdapter(apiVersion));
-
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ApiResource.class).getWithVersion(apiVersion)).withSelfRel());
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).all()).withRel(TypeToJsonAdapter.TYPES));
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(UnitResource.class).all()).withRel(UnitToJsonAdapter.UNITS));
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(DeviceResource.class).all()).withRel(DeviceToJsonAdapter.DEVICES));
-		return resource;
-	}
-
 	public Resource<ApiToJsonAdapter> build() {
 		Resource<ApiToJsonAdapter> resource = new Resource<ApiToJsonAdapter>(new ApiToJsonAdapter(apiVersion));
 
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ApiResource.class).get()).withSelfRel());
-		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ApiResource.class).getWithVersion(apiVersion)).withRel(ApiToJsonAdapter.API));
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ApiResource.class).getWithVersion(apiVersion)).withSelfRel());
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).all(apiVersion)).withRel(TypeToJsonAdapter.TYPES));
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(UnitResource.class).all(apiVersion)).withRel(UnitToJsonAdapter.UNITS));
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(DeviceResource.class).all(apiVersion)).withRel(DeviceToJsonAdapter.DEVICES));
 		return resource;
 	}
+
 }

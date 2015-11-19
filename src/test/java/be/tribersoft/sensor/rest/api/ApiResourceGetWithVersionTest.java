@@ -1,6 +1,7 @@
 package be.tribersoft.sensor.rest.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -8,19 +9,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.hateoas.Resource;
 
-import be.tribersoft.common.rest.FutureApiVersionException;
-import be.tribersoft.common.rest.IncorrectApiVersionException;
+import be.tribersoft.sensor.rest.VersionValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApiResourceGetWithVersionTest {
 
-	private static final String API_VERSION = "2.1.0";
-	private static final String INCOMPATIBLE_VERSION = "1.0.0";
-	private static final String FUTURE_VERSION = "2.1.1";
+	private static final String API_VERSION = "api version";
 
 	@InjectMocks
 	private ApiResource apiResource;
@@ -31,27 +28,19 @@ public class ApiResourceGetWithVersionTest {
 	@Mock
 	private Resource<ApiToJsonAdapter> apiToJsoAdapterResource;
 
+	@Mock
+	private VersionValidator versionValidator;
+
 	@Before
 	public void setUp() {
-		Whitebox.setInternalState(apiResource, "apiVersion", API_VERSION);
-		apiResource.init();
-		when(apiHateoasBuilder.build(API_VERSION)).thenReturn(apiToJsoAdapterResource);
-	}
-
-	@Test(expected = IncorrectApiVersionException.class)
-	public void failsWhenVersionIsNotCompatible() {
-		apiResource.getWithVersion(INCOMPATIBLE_VERSION);
-	}
-
-	@Test(expected = FutureApiVersionException.class)
-	public void failsWhenVersionIsInFuture() {
-		apiResource.getWithVersion(FUTURE_VERSION);
+		when(apiHateoasBuilder.build()).thenReturn(apiToJsoAdapterResource);
 	}
 
 	@Test
 	public void returnsApi() {
 		Resource<ApiToJsonAdapter> resource = apiResource.getWithVersion(API_VERSION);
 
+		verify(versionValidator).validate(API_VERSION);
 		assertThat(resource).isSameAs(apiToJsoAdapterResource);
 	}
 }

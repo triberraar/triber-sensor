@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -14,8 +15,13 @@ import be.tribersoft.sensor.domain.api.type.Type;
 @Named
 public class TypeHateoasBuilder {
 
+	@Value("${api.version}")
+	private String apiVersion;
+
 	public Resource<TypeToJsonAdapter> build(Type type) {
-		return new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type), ControllerLinkBuilder.linkTo(TypeResource.class).slash(type).withSelfRel());
+		Resource<TypeToJsonAdapter> resource = new Resource<TypeToJsonAdapter>(new TypeToJsonAdapter(type));
+		resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).get(apiVersion, type.getId())).withSelfRel());
+		return resource;
 	}
 
 	public Resources<Resource<TypeToJsonAdapter>> build(List<? extends Type> types) {
@@ -24,7 +30,7 @@ public class TypeHateoasBuilder {
 		}).collect(Collectors.toList());
 
 		Resources<Resource<TypeToJsonAdapter>> typeResources = new Resources<>(transformedTypeResources);
-		typeResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).all()).withSelfRel());
+		typeResources.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TypeResource.class).all(apiVersion)).withSelfRel());
 		return typeResources;
 	}
 }

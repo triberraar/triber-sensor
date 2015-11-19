@@ -45,7 +45,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:clean.sql")
 public class SensorResourceDeleteIT {
 
-	private static final String URL = "/api/device/{deviceId}/sensor/{uuid}";
+	private static final String URL = "/api/{apiVersion}/device/{deviceId}/sensor/{uuid}";
 	private static final String SENSOR_NOT_FOUND_EXCEPTION = "Sensor not found";
 	private static final String DESCRIPTION = "description";
 	private static final String NAME = "name";
@@ -65,6 +65,8 @@ public class SensorResourceDeleteIT {
 	private String uuid;
 	private Long version;
 	private DeviceEntity deviceEntity;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -82,6 +84,7 @@ public class SensorResourceDeleteIT {
 	public void deletesSensor() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", uuid).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorDeleteJsonImpl()).
@@ -98,6 +101,7 @@ public class SensorResourceDeleteIT {
 	public void notFoundWhenSensorDoesntExist() {
 		// @formatter:off
 		given().
+				pathParam("apiVersion", apiVersion).
 				pathParam("uuid", NON_EXISTING_UUID).
 				pathParam("deviceId", deviceEntity.getId()).
 				body(new SensorDeleteJsonImpl()).

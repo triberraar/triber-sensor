@@ -50,7 +50,7 @@ import be.tribersoft.util.builder.UnitBuilder;
 public class ReadingResourceAllIT {
 	private static final BigDecimal VALUE_2 = BigDecimal.valueOf(-4.3);
 	private static final BigDecimal VALUE_1 = BigDecimal.valueOf(2.3);
-	private static final String URL = "/api/device/{deviceId}/sensor/{sensorId}/reading";
+	private static final String URL = "/api/{apiVersion}/device/{deviceId}/sensor/{sensorId}/reading";
 
 	@Inject
 	private UnitJpaRepository unitJpaRepository;
@@ -68,6 +68,8 @@ public class ReadingResourceAllIT {
 	private DeviceEntity deviceEntity;
 	private SensorEntity sensorEntity;
 	private List<ReadingEntity> readings;
+	@Value("${api.version}")
+	private String apiVersion;
 
 	@Before
 	public void setUp() {
@@ -88,6 +90,7 @@ public class ReadingResourceAllIT {
 	public void getsAllReadings() {
 		// @formatter:off
 		given().
+			pathParam("apiVersion", apiVersion).
 			pathParam("deviceId", deviceEntity.getId()).
 			pathParam("sensorId", sensorEntity.getId()).
 		when(). 
@@ -97,20 +100,20 @@ public class ReadingResourceAllIT {
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
 				body("_links.size()", is(1)).
-				body("_links.self.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading?page=0")).
+				body("_links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading?page=0")).
 				body("_embedded.readings.size()", is(2)).
 				body("_embedded.readings[0].size()", is(4)).
 				body("_embedded.readings[0].value", is(VALUE_2.floatValue())).
 				body("_embedded.readings[0].version", is(0)).
 				body("_embedded.readings[0].id", is(readings.get(0).getId())).
 				body("_embedded.readings[0]._links.size()", is(1)).
-				body("_embedded.readings[0]._links.sensor.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
+				body("_embedded.readings[0]._links.sensor.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
 				body("_embedded.readings[1].size()", is(4)).
 				body("_embedded.readings[1].value", is(VALUE_1.floatValue())).
 				body("_embedded.readings[1].version", is(0)).
 				body("_embedded.readings[1].id", is(readings.get(1).getId())).
 				body("_embedded.readings[1]._links.size()", is(1)).
-				body("_embedded.readings[1]._links.sensor.href", is("http://localhost:" + port + "/api/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
+				body("_embedded.readings[1]._links.sensor.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId())).
 				statusCode(HttpStatus.OK.value());
 		// @formatter:on
 	}
