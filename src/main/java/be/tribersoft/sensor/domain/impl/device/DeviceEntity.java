@@ -15,6 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
 import be.tribersoft.sensor.domain.api.device.Device;
+import be.tribersoft.sensor.domain.api.event.EventSubject;
 
 @Entity(name = "device")
 public class DeviceEntity implements Device {
@@ -97,5 +98,10 @@ public class DeviceEntity implements Device {
 	@Override
 	public Optional<String> getLocation() {
 		return Optional.ofNullable(location);
+	}
+
+	@Override
+	public EventSubject getEventSubject() {
+		return EventSubject.DEVICE;
 	}
 }

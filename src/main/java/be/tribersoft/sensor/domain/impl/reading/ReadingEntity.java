@@ -16,14 +16,14 @@ import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.sensor.domain.api.event.EventSubject;
 import be.tribersoft.sensor.domain.api.reading.Reading;
-import be.tribersoft.sensor.domain.impl.event.Event;
 import be.tribersoft.sensor.domain.impl.event.EventPersister;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
 
 @Entity(name = "reading")
 @EntityListeners(value = EventPersister.class)
-public class ReadingEntity implements Reading, Event {
+public class ReadingEntity implements Reading {
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
@@ -75,6 +75,11 @@ public class ReadingEntity implements Reading, Event {
 	@Override
 	public SensorEntity getSensor() {
 		return sensor;
+	}
+
+	@Override
+	public EventSubject getEventSubject() {
+		return EventSubject.READING;
 	}
 
 }

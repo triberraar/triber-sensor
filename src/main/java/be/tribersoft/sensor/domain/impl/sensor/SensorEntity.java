@@ -15,6 +15,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
 
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.sensor.domain.api.event.EventSubject;
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
@@ -111,6 +112,11 @@ public class SensorEntity implements Sensor {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public EventSubject getEventSubject() {
+		return EventSubject.SENSOR;
 	}
 
 }
