@@ -1,9 +1,9 @@
 package be.tribersoft.sensor.domain.impl.event;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,12 +21,6 @@ public class EventListenerPostPersistTest {
 	private EventListener eventListener;
 
 	@Mock
-	private EventRepositoryImpl eventRepositoryImpl;
-
-	@Mock
-	private EventFactory eventFactory;
-
-	@Mock
 	private Eventable eventable;
 
 	@Mock
@@ -35,16 +29,11 @@ public class EventListenerPostPersistTest {
 	@Mock
 	private Object nonEventable;
 
-	@Before
-	public void setUp() {
-		when(eventFactory.create(eventable, EventMode.CREATE)).thenReturn(eventDocument);
-	}
-
 	@Test
-	public void createsAndSavesAnEventDocument() {
+	public void callsVisitor() {
 		eventListener.postPersist(eventable);
 
-		verify(eventRepositoryImpl).save(eventDocument);
+		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.CREATE));
 	}
 
 	@Test(expected = NotAnEventableException.class)

@@ -2,7 +2,8 @@ package be.tribersoft.sensor.domain.api.event;
 
 import org.springframework.hateoas.Identifiable;
 
-public interface Eventable extends Identifiable<String> {
+import be.tribersoft.sensor.domain.impl.event.EventVisitor;
 
-	EventSubject getEventSubject();
+public interface Eventable extends Identifiable<String> {
+	void accept(EventVisitor eventVisitor, EventMode eventMode);
 }

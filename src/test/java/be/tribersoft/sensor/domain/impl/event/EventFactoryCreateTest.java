@@ -35,13 +35,12 @@ public class EventFactoryCreateTest {
 	@Before
 	public void setUp() {
 		DateFactory.fixateDate(DATE);
-		when(eventable.getEventSubject()).thenReturn(EVENT_SUBJECT);
 		when(eventable.getId()).thenReturn(ID);
 	}
 
 	@Test
 	public void createsAnEvent() {
-		EventDocument eventDocument = eventFactory.create(eventable, EVENT_MODE);
+		EventDocument eventDocument = eventFactory.create(eventable, EVENT_MODE, EVENT_SUBJECT);
 
 		assertThat(eventDocument.getCreationDate()).isEqualTo(Date.from(DATE.atZone(ZoneId.systemDefault()).toInstant()));
 		assertThat(eventDocument.getEventId()).isEqualTo(ID);

@@ -28,12 +28,12 @@ public class EventDocument {
 	@Field(type = FieldType.Date)
 	private Date creationDate;
 
-	public EventDocument(Eventable eventable, EventMode eventMode) {
+	public EventDocument(Eventable eventable, EventMode eventMode, EventSubject eventSubject) {
 		this.eventMode = eventMode;
-		this.eventSubject = eventable.getEventSubject();
 		this.eventId = eventable.getId();
 		id = UUID.randomUUID().toString();
 		this.creationDate = DateFactory.generate();
+		this.eventSubject = eventSubject;
 	}
 
 	public EventMode getEventMode() {
