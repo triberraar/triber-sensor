@@ -8,11 +8,11 @@ import javax.validation.constraints.Size;
 import org.springframework.hateoas.Identifiable;
 
 import be.tribersoft.sensor.domain.api.device.Device;
-import be.tribersoft.sensor.domain.api.event.Event;
+import be.tribersoft.sensor.domain.api.event.Eventable;
 import be.tribersoft.sensor.domain.api.type.Type;
 import be.tribersoft.sensor.domain.api.unit.Unit;
 
-public interface Sensor extends Event, Identifiable<String> {
+public interface Sensor extends Eventable, Identifiable<String> {
 	@NotNull(message = "sensor.validation.name.null")
 	@Size(max = 256, message = "sensor.validation.name.too.long")
 	String getName();

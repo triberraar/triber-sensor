@@ -7,9 +7,9 @@ import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.Identifiable;
 
-import be.tribersoft.sensor.domain.api.event.Event;
+import be.tribersoft.sensor.domain.api.event.Eventable;
 
-public interface Device extends Event, Identifiable<String> {
+public interface Device extends Eventable, Identifiable<String> {
 
 	@Size(max = 256, message = "device.validation.location.too.long")
 	Optional<String> getLocation();

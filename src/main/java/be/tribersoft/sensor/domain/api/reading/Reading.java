@@ -6,10 +6,10 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.hateoas.Identifiable;
 
-import be.tribersoft.sensor.domain.api.event.Event;
+import be.tribersoft.sensor.domain.api.event.Eventable;
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 
-public interface Reading extends Event, Identifiable<String> {
+public interface Reading extends Eventable, Identifiable<String> {
 	@NotNull(message = "reading.validation.value.null")
 	BigDecimal getValue();
 
