@@ -33,7 +33,7 @@ public class EventListenerPostPersistTest {
 	public void callsVisitor() {
 		eventListener.postPersist(eventable);
 
-		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.CREATE));
+		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.CREATED));
 	}
 
 	@Test(expected = NotAnEventableException.class)

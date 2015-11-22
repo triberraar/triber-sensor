@@ -33,7 +33,7 @@ public class EventListenerPostRemoveTest {
 	public void callsVisitor() {
 		eventListener.postRemove(eventable);
 
-		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.DELETE));
+		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.DELETED));
 	}
 
 	@Test(expected = NotAnEventableException.class)

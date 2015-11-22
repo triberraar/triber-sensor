@@ -33,7 +33,7 @@ public class EventListenerPostUpdateTest {
 	public void callsVisitor() {
 		eventListener.postUpdate(eventable);
 
-		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.UPDATE));
+		verify(eventable).accept(isA(EventVisitor.class), eq(EventMode.UPDATED));
 	}
 
 	@Test(expected = NotAnEventableException.class)

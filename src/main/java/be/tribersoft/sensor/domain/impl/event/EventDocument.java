@@ -10,12 +10,13 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.sensor.domain.api.event.Event;
 import be.tribersoft.sensor.domain.api.event.EventMode;
 import be.tribersoft.sensor.domain.api.event.EventSubject;
 import be.tribersoft.sensor.domain.api.event.Eventable;
 
 @Document(indexName = "triber-sensor", type = "event")
-public class EventDocument {
+public class EventDocument implements Event {
 
 	@Id
 	private String id;

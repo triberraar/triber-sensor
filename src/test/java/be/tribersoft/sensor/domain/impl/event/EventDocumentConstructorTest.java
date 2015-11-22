@@ -23,7 +23,7 @@ public class EventDocumentConstructorTest {
 
 	private static final String ID = "id";
 	private static final EventSubject EVENT_SUBJECT = EventSubject.READING;
-	private static final EventMode EVENT_MODE = EventMode.DELETE;
+	private static final EventMode EVENT_MODE = EventMode.DELETED;
 	private static final LocalDateTime DATE = LocalDateTime.now();
 
 	@Mock

@@ -15,17 +15,17 @@ public class EventListener {
 
 	@PostPersist
 	public void postPersist(Object input) {
-		handle(input, EventMode.CREATE);
+		handle(input, EventMode.CREATED);
 	}
 
 	@PostUpdate
 	public void postUpdate(Object input) {
-		handle(input, EventMode.UPDATE);
+		handle(input, EventMode.UPDATED);
 	}
 
 	@PostRemove
 	public void postRemove(Object input) {
-		handle(input, EventMode.DELETE);
+		handle(input, EventMode.DELETED);
 	}
 
 	private void handle(Object input, EventMode eventMode) {

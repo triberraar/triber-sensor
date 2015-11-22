@@ -19,7 +19,7 @@ import be.tribersoft.sensor.domain.api.sensor.Sensor;
 @RunWith(MockitoJUnitRunner.class)
 public class EventVisitorImplVisitTest {
 
-	private static final EventMode EVENT_MODE = EventMode.DELETE;
+	private static final EventMode EVENT_MODE = EventMode.DELETED;
 	@InjectMocks
 	private EventVisitorImpl eventVisitorImpl;
 	@Mock

@@ -13,7 +13,7 @@ import be.tribersoft.sensor.domain.impl.event.EventVisitor;
 @RunWith(MockitoJUnitRunner.class)
 public class SensorEntityAcceptTest {
 
-	private static final EventMode EVENT_MODE = EventMode.DELETE;
+	private static final EventMode EVENT_MODE = EventMode.DELETED;
 	private SensorEntity sensorEntity = new SensorEntity();
 	@Mock
 	private EventVisitor eventVisitor;
