@@ -11,7 +11,7 @@ import be.tribersoft.TriberSensorApplication;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
 @WebAppConfiguration
-public class TriberSensorApplicationTest {
+public class TriberSensorApplicationContextTest {
 
 	@Test
 	public void contextLoads() {

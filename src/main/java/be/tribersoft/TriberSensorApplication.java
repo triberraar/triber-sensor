@@ -13,9 +13,17 @@ public class TriberSensorApplication {
 	}
 
 	@Bean(name = "validationMessageSource")
-	public ReloadableResourceBundleMessageSource messageSource() {
+	public ReloadableResourceBundleMessageSource validationMessageSource() {
 		ReloadableResourceBundleMessageSource messageBundle = new ReloadableResourceBundleMessageSource();
 		messageBundle.setBasename("classpath:messages/ValidationMessages");
+		messageBundle.setDefaultEncoding("UTF-8");
+		return messageBundle;
+	}
+
+	@Bean(name = "messageSource")
+	public ReloadableResourceBundleMessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageBundle = new ReloadableResourceBundleMessageSource();
+		messageBundle.setBasename("classpath:messages/messages");
 		messageBundle.setDefaultEncoding("UTF-8");
 		return messageBundle;
 	}
