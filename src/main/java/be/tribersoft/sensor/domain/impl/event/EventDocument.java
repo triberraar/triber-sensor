@@ -37,18 +37,22 @@ public class EventDocument implements Event {
 		this.eventSubject = eventSubject;
 	}
 
+	@Override
 	public EventMode getEventMode() {
 		return eventMode;
 	}
 
+	@Override
 	public EventSubject getEventSubject() {
 		return eventSubject;
 	}
 
+	@Override
 	public String getEventId() {
 		return eventId;
 	}
 
+	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
