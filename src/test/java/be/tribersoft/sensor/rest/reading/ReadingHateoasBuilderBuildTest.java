@@ -90,7 +90,7 @@ public class ReadingHateoasBuilderBuildTest {
 	}
 
 	@Test
-	public void buildsLinksAndMetaDataForReadingss() {
+	public void buildsLinksAndMetaDataForReadings() {
 		PagedResources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, page, PAGE);
 
 		List<Link> links = sensorResources.getLinks();

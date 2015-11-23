@@ -44,4 +44,9 @@ public class ReadingRepositoryImpl implements ReadingRepository {
 		return reading.get();
 	}
 
+	@Override
+	public boolean exists(String id) {
+		return readingJpaRepository.exists(id);
+	}
+
 }

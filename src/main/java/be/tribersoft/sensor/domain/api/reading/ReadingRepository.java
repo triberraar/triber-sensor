@@ -9,4 +9,6 @@ public interface ReadingRepository {
 
 	Reading getById(String id);
 
+	boolean exists(String id);
+
 }

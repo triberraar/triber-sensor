@@ -8,4 +8,6 @@ public interface DeviceRepository {
 
 	List<? extends Device> all();
 
+	boolean exists(String id);
+
 }

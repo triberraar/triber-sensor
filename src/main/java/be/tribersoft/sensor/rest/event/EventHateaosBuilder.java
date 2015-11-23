@@ -27,17 +27,19 @@ public class EventHateaosBuilder {
 			Resource<EventToJsonAdapter> resource = new Resource<EventToJsonAdapter>(new EventToJsonAdapter(event));
 			EventUrlVisitor visitor = new EventUrlVisitor();
 			event.getEventSubject().accept(visitor, event);
-			resource.add(visitor.getLink());
+			if (visitor.getLink().isPresent()) {
+				resource.add(visitor.getLink().get());
+			}
 			return resource;
 		}).collect(Collectors.toList());
 
 		List<Link> links = new ArrayList<>();
 		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, page)).withSelfRel());
 		if (events.hasPrevious()) {
-			links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, page - 1)).withRel("previous"));
+			links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, page - 1)).withRel(Link.REL_PREVIOUS));
 		}
 		if (events.hasNext()) {
-			links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, page + 1)).withRel("next"));
+			links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, page + 1)).withRel(Link.REL_NEXT));
 		}
 		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, 0)).withRel(Link.REL_FIRST));
 		Long lastPage = events.getTotalElements() == 0 ? 0 : events.getTotalElements() - 1;
