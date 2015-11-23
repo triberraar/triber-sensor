@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -21,11 +22,13 @@ public class EventHateaosBuilder {
 
 	@Value("${api.version}")
 	private String apiVersion;
+	@Inject
+	private EventUrlVisitorFactory eventUrlVisitorFactory;
 
 	public PagedResources<Resource<EventToJsonAdapter>> build(Page<? extends Event> events, int page) {
 		List<Resource<EventToJsonAdapter>> transformedEventResources = events.getContent().stream().map(event -> {
 			Resource<EventToJsonAdapter> resource = new Resource<EventToJsonAdapter>(new EventToJsonAdapter(event));
-			EventUrlVisitor visitor = new EventUrlVisitor();
+			EventUrlVisitor visitor = eventUrlVisitorFactory.create();
 			event.getEventSubject().accept(visitor, event);
 			if (visitor.getLink().isPresent()) {
 				resource.add(visitor.getLink().get());
