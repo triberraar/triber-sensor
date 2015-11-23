@@ -37,6 +37,10 @@ public class EventDocument implements Event {
 		this.eventSubject = eventSubject;
 	}
 
+	protected EventDocument() {
+
+	}
+
 	@Override
 	public EventMode getEventMode() {
 		return eventMode;

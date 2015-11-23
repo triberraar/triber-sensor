@@ -1,7 +1,24 @@
 package be.tribersoft.sensor.domain.api.event;
 
 public enum EventSubject {
-	DEVICE("event.device"), SENSOR("event.sensor"), READING("event.reading");
+	DEVICE("event.device") {
+		@Override
+		public void accept(EventSubjectVisitor visitor, Event event) {
+			visitor.visitDevice(event);
+		}
+	},
+	SENSOR("event.sensor") {
+		@Override
+		public void accept(EventSubjectVisitor visitor, Event event) {
+			visitor.visitSensor(event);
+		}
+	},
+	READING("event.reading") {
+		@Override
+		public void accept(EventSubjectVisitor visitor, Event event) {
+			visitor.visitReading(event);
+		}
+	};
 
 	private String message;
 
@@ -12,4 +29,6 @@ public enum EventSubject {
 	public String getMessage() {
 		return message;
 	}
+
+	public abstract void accept(EventSubjectVisitor visitor, Event event);
 }

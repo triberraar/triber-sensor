@@ -1,9 +1,13 @@
 package be.tribersoft.sensor.domain.impl.event;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 import be.tribersoft.sensor.domain.api.event.EventRepository;
 
@@ -18,7 +22,8 @@ public class EventRepositoryImpl implements EventRepository {
 	}
 
 	@Override
-	public List<EventDocument> all() {
-		return eventJpaRepository.findAllByOrderByCreationDateDesc();
+	public Page<EventDocument> all(Pageable pageable) {
+		return eventJpaRepository.findAll(new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), new Sort(Direction.DESC, "creationDate")));
 	}
+
 }

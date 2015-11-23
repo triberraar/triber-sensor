@@ -1,9 +1,10 @@
 package be.tribersoft.sensor.domain.api.event;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EventRepository {
 
-	List<? extends Event> all();
+	Page<? extends Event> all(Pageable pageable);
 
 }

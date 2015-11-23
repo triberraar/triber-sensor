@@ -1,6 +1,7 @@
 package be.tribersoft.sensor.rest.reading;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -32,7 +34,6 @@ import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 @RunWith(MockitoJUnitRunner.class)
 public class ReadingHateoasBuilderBuildTest {
 	private static final String API_VERSION = "apiVersion";
-	private static final int PAGE_SIZE = 20;
 	private static Long VERSION_1 = 0l;
 	private static Long VERSION_2 = 1l;
 	private static String ID_1 = "id1";
@@ -56,6 +57,8 @@ public class ReadingHateoasBuilderBuildTest {
 	private Device device;
 	@Mock
 	private ReadingRepository readingRepository;
+	@Mock
+	private Page<? extends Reading> page;
 
 	@Before
 	public void setUp() {
@@ -66,6 +69,7 @@ public class ReadingHateoasBuilderBuildTest {
 		when(device.getId()).thenReturn(DEVICE_ID);
 		when(sensor.getDevice()).thenReturn(device);
 		when(sensor.getId()).thenReturn(SENSOR_ID);
+		doReturn(Arrays.asList(reading1, reading2)).when(page).getContent();
 
 		when(reading1.getId()).thenReturn(ID_1);
 		when(reading1.getVersion()).thenReturn(VERSION_1);
@@ -75,14 +79,12 @@ public class ReadingHateoasBuilderBuildTest {
 		when(reading2.getVersion()).thenReturn(VERSION_2);
 		when(reading2.getSensor()).thenReturn(sensor);
 		when(reading2.getValue()).thenReturn(VALUE_2);
-		when(readingRepository.countBySensor(SENSOR_ID)).thenReturn(1);
-		Whitebox.setInternalState(builder, "pageSize", PAGE_SIZE);
 		Whitebox.setInternalState(builder, API_VERSION, API_VERSION);
 	}
 
 	@Test
 	public void buildsLinksForReadingss() {
-		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2), PAGE);
+		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, page, PAGE);
 
 		List<Link> links = sensorResources.getLinks();
 		assertThat(links.size()).isEqualTo(1);
@@ -111,7 +113,8 @@ public class ReadingHateoasBuilderBuildTest {
 
 	@Test
 	public void addsPreviousLinkWhenNotOnFirstPage() {
-		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2), 1);
+		when(page.hasPrevious()).thenReturn(true);
+		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, page, 1);
 
 		List<Link> links = sensorResources.getLinks();
 		assertThat(links.size()).isEqualTo(2);
@@ -142,9 +145,8 @@ public class ReadingHateoasBuilderBuildTest {
 
 	@Test
 	public void addsNextLinkWhenMoreItemsExist() {
-		when(readingRepository.countBySensor(SENSOR_ID)).thenReturn(PAGE_SIZE + 1);
-
-		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2), 0);
+		when(page.hasNext()).thenReturn(true);
+		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, page, 0);
 
 		List<Link> links = sensorResources.getLinks();
 		assertThat(links.size()).isEqualTo(2);
@@ -175,9 +177,9 @@ public class ReadingHateoasBuilderBuildTest {
 
 	@Test
 	public void addsNextLinkWhenMoreItemsExistAndPreviousWhenNotOnFirstPage() {
-		when(readingRepository.countBySensor(SENSOR_ID)).thenReturn((PAGE_SIZE * 2) + 1);
-
-		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2), 1);
+		when(page.hasNext()).thenReturn(true);
+		when(page.hasPrevious()).thenReturn(true);
+		Resources<Resource<ReadingToJsonAdapter>> sensorResources = builder.build(DEVICE_ID, SENSOR_ID, page, 1);
 
 		List<Link> links = sensorResources.getLinks();
 		assertThat(links.size()).isEqualTo(3);

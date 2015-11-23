@@ -6,8 +6,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -50,11 +49,13 @@ public class ReadingResourceAllTest {
 	private ArgumentCaptor<Pageable> pageableCaptor;
 	@Mock
 	private VersionValidator versionValidator;
+	@Mock
+	private Page<? extends Reading> page;
 
 	@Before
 	public void setUp() {
-		doReturn(Arrays.<Reading> asList(reading1, reading2)).when(readingRepository).allBySensor(eq(SENSOR_ID), pageableCaptor.capture());
-		when(readingHateosBuilder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2), PAGE)).thenReturn(resources);
+		doReturn(page).when(readingRepository).allBySensor(eq(SENSOR_ID), pageableCaptor.capture());
+		when(readingHateosBuilder.build(DEVICE_ID, SENSOR_ID, page, PAGE)).thenReturn(resources);
 		Whitebox.setInternalState(readingResource, "pageSize", PAGE_SIZE);
 	}
 
