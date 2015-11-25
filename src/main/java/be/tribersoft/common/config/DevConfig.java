@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import be.tribersoft.sensor.domain.impl.event.EventJpaRepository;
 
 @Configuration
-@Profile("dev")
+@Profile({ "dev", "test" })
 public class DevConfig {
 
 	@Inject
