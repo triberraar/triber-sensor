@@ -38,8 +38,8 @@ public class EventUrlVisitor implements EventSubjectVisitor {
 	@Override
 	public void visitSensor(Event event) {
 		BeanInjector.inject(this, sensorRepository, apiVersion);
-		Sensor sensor = sensorRepository.getById(event.getEventId());
 		if (sensorRepository.exists(event.getEventId())) {
+			Sensor sensor = sensorRepository.getById(event.getEventId());
 			link = Optional.of(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(SensorResource.class).get(apiVersion, sensor.getDevice().getId(), sensor.getId())).withRel(SensorToJsonAdapter.SENSOR));
 		} else {
 			link = Optional.empty();
@@ -49,8 +49,8 @@ public class EventUrlVisitor implements EventSubjectVisitor {
 	@Override
 	public void visitReading(Event event) {
 		BeanInjector.inject(this, readingRepository, apiVersion);
-		Reading reading = readingRepository.getById(event.getEventId());
 		if (readingRepository.exists(event.getEventId())) {
+			Reading reading = readingRepository.getById(event.getEventId());
 			link = Optional
 					.of(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, reading.getSensor().getDevice().getId(), reading.getSensor().getId(), 0)).withRel(ReadingToJsonAdapter.READINGS));
 		} else {
@@ -61,8 +61,8 @@ public class EventUrlVisitor implements EventSubjectVisitor {
 	@Override
 	public void visitDevice(Event event) {
 		BeanInjector.inject(this, deviceRepository, apiVersion);
-		Device device = deviceRepository.getById(event.getEventId());
 		if (deviceRepository.exists(event.getEventId())) {
+			Device device = deviceRepository.getById(event.getEventId());
 			link = Optional.of(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(DeviceResource.class).get(apiVersion, device.getId())).withRel(DeviceToJsonAdapter.DEVICE));
 		} else {
 			link = Optional.empty();
