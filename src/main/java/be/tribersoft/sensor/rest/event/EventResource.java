@@ -5,8 +5,8 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +30,7 @@ public class EventResource {
 	private EventRepository eventRepository;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public Resources<Resource<EventToJsonAdapter>> all(@PathVariable("apiVersion") String apiVersion, @RequestParam(defaultValue = "0") int page) {
+	public PagedResources<Resource<EventToJsonAdapter>> all(@PathVariable("apiVersion") String apiVersion, @RequestParam(defaultValue = "0") int page) {
 		versionValidator.validate(apiVersion);
 		Pageable pageable = new PageRequest(page, pageSize);
 		return eventHateaosBuilder.build(eventRepository.all(pageable), page);
