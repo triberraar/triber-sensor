@@ -47,7 +47,7 @@ public class EventHateaosBuilder {
 		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, 0)).withRel(Link.REL_FIRST));
 		Long lastPage = events.getTotalElements() == 0 ? 0 : events.getTotalElements() - 1;
 		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, lastPage.intValue())).withRel(Link.REL_LAST));
-		PageMetadata pageMetadata = new PageMetadata(events.getSize(), events.getNumber(), events.getNumberOfElements());
+		PageMetadata pageMetadata = new PageMetadata(events.getSize(), events.getNumber(), events.getTotalElements());
 		PagedResources<Resource<EventToJsonAdapter>> result = new PagedResources<>(transformedEventResources, pageMetadata, links);
 		return result;
 	}
