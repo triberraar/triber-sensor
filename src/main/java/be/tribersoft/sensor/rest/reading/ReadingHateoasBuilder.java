@@ -40,8 +40,8 @@ public class ReadingHateoasBuilder {
 			links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, page + 1)).withRel(Link.REL_NEXT));
 		}
 		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, 0)).withRel(Link.REL_FIRST));
-		Long lastPage = readings.getTotalElements() == 0 ? 0 : readings.getTotalElements() - 1;
-		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, lastPage.intValue())).withRel(Link.REL_LAST));
+		int lastPage = readings.getTotalPages() == 0 ? 0 : readings.getTotalPages() - 1;
+		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ReadingResource.class).all(apiVersion, deviceId, sensorId, lastPage)).withRel(Link.REL_LAST));
 		PageMetadata pageMetadata = new PageMetadata(readings.getSize(), readings.getNumber(), readings.getTotalElements());
 		PagedResources<Resource<ReadingToJsonAdapter>> result = new PagedResources<>(transformedReadingResources, pageMetadata, links);
 		return result;

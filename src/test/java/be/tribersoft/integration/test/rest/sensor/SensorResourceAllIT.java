@@ -27,6 +27,10 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.common.testData.DeviceBuilder;
+import be.tribersoft.common.testData.SensorBuilder;
+import be.tribersoft.common.testData.TypeBuilder;
+import be.tribersoft.common.testData.UnitBuilder;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;
@@ -35,10 +39,6 @@ import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
-import be.tribersoft.util.builder.DeviceBuilder;
-import be.tribersoft.util.builder.SensorBuilder;
-import be.tribersoft.util.builder.TypeBuilder;
-import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)

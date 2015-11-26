@@ -12,6 +12,4 @@
     <include file="/db/changelog/device.xml"/>
     <include file="/db/changelog/sensor.xml"/>
     <include file="/db/changelog/reading.xml"/>
-
-    <include file="/db/test-data/test-data.xml"/>
 </databaseChangeLog>

@@ -27,9 +27,9 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.common.testData.UnitBuilder;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
-import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)

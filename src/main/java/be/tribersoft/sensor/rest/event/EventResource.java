@@ -25,7 +25,7 @@ public class EventResource {
 	@Inject
 	private VersionValidator versionValidator;
 	@Inject
-	private EventHateaosBuilder eventHateaosBuilder;
+	private EventHateoasBuilder eventHateaosBuilder;
 	@Inject
 	private EventRepository eventRepository;
 

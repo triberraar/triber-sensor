@@ -43,7 +43,7 @@ public class EventResourceAllTest {
 	@Mock
 	private PagedResources<Resource<EventToJsonAdapter>> pagedResources;
 	@Mock
-	private EventHateaosBuilder eventHateaosBuilder;
+	private EventHateoasBuilder eventHateaosBuilder;
 
 	@Before
 	public void setUp() {

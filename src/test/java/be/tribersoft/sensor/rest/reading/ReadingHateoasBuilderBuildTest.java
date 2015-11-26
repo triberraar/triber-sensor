@@ -35,7 +35,8 @@ import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 @RunWith(MockitoJUnitRunner.class)
 public class ReadingHateoasBuilderBuildTest {
 	private static final int SIZE = 42;
-	private static final long TOTAL_ELEMENTS = 22L;
+	private static final long TOTAL_ELEMENTS = 122L;
+	private static final int TOTAL_PAGES = 22;
 	private static final int NUMBER = 2;
 	private static final String API_VERSION = "apiVersion";
 	private static Long VERSION_1 = 0l;
@@ -76,6 +77,7 @@ public class ReadingHateoasBuilderBuildTest {
 		doReturn(Arrays.asList(reading1, reading2)).when(page).getContent();
 		when(page.getNumber()).thenReturn(NUMBER);
 		when(page.getTotalElements()).thenReturn(TOTAL_ELEMENTS);
+		when(page.getTotalPages()).thenReturn(TOTAL_PAGES);
 		when(page.getSize()).thenReturn(SIZE);
 
 		when(reading1.getId()).thenReturn(ID_1);
@@ -127,7 +129,7 @@ public class ReadingHateoasBuilderBuildTest {
 		assertThat(sensorResources.getMetadata().getNumber()).isEqualTo(NUMBER);
 		assertThat(sensorResources.getMetadata().getSize()).isEqualTo(SIZE);
 		assertThat(sensorResources.getMetadata().getTotalElements()).isEqualTo(TOTAL_ELEMENTS);
-		assertThat(sensorResources.getMetadata().getTotalPages()).isEqualTo(1L);
+		assertThat(sensorResources.getMetadata().getTotalPages()).isEqualTo(3L);
 	}
 
 	@Test

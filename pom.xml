@@ -173,6 +173,10 @@
 			        <aggregate>true</aggregate>
 			        <instrumentation>
 			        	<ignoreTrivial>true</ignoreTrivial>
+			        	<ignores>
+				        	<ignore>be.tribersoft.common.testData.*</ignore>
+			        	</ignores>
+			        	<ignoreMethodAnnotation></ignoreMethodAnnotation>
 			        </instrumentation>
 			    </configuration>
 			</plugin>

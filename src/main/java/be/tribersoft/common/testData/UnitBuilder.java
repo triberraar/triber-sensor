@@ -1,4 +1,4 @@
-package be.tribersoft.util.builder;
+package be.tribersoft.common.testData;
 
 import java.util.Optional;
 

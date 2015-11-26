@@ -1,4 +1,4 @@
-package be.tribersoft.util.builder;
+package be.tribersoft.common.testData;
 
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;

@@ -1,4 +1,4 @@
-package be.tribersoft.common.config;
+package be.tribersoft.common.testData;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -9,14 +9,15 @@ import org.springframework.context.annotation.Profile;
 import be.tribersoft.sensor.domain.impl.event.EventJpaRepository;
 
 @Configuration
-@Profile({ "dev", "test" })
-public class DevConfig {
+@Profile("test")
+public class TestData {
 
 	@Inject
 	private EventJpaRepository eventJpaRepository;
 
 	@PostConstruct
-	public void init() {
+	private void clear() {
 		eventJpaRepository.deleteAll();
 	}
+
 }

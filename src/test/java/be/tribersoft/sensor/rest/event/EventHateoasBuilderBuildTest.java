@@ -33,7 +33,7 @@ import be.tribersoft.sensor.domain.api.event.EventRepository;
 import be.tribersoft.sensor.domain.api.event.EventSubject;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EventHateaosBuilderBuildTest {
+public class EventHateoasBuilderBuildTest {
 	private static final EventSubject EVENT_SUBJECT_1 = EventSubject.READING;
 	private static final EventMode EVENT_MODE_1 = EventMode.DELETED;
 	private static final String EVENT_ID_1 = "event id 1";
@@ -43,7 +43,8 @@ public class EventHateaosBuilderBuildTest {
 	private static final String EVENT_ID_2 = "event id 2";
 	private static final Date CREATION_DATE_2 = new Date(212);
 	private static final int SIZE = 42;
-	private static final long TOTAL_ELEMENTS = 22L;
+	private static final int TOTAL_PAGES = 22;
+	private static final long TOTAL_ELEMENTS = 122L;
 	private static final int NUMBER = 2;
 	private static final String API_VERSION = "apiVersion";
 	private static int PAGE = 0;
@@ -51,7 +52,7 @@ public class EventHateaosBuilderBuildTest {
 	protected MockHttpServletRequest request;
 
 	@InjectMocks
-	private EventHateaosBuilder builder;
+	private EventHateoasBuilder builder;
 
 	@Mock
 	private Event event1, event2;
@@ -76,8 +77,9 @@ public class EventHateaosBuilderBuildTest {
 
 		doReturn(Arrays.asList(event1, event2)).when(page).getContent();
 		when(page.getNumber()).thenReturn(NUMBER);
-		when(page.getTotalElements()).thenReturn(TOTAL_ELEMENTS);
+		when(page.getTotalPages()).thenReturn(TOTAL_PAGES);
 		when(page.getSize()).thenReturn(SIZE);
+		when(page.getTotalElements()).thenReturn(TOTAL_ELEMENTS);
 
 		when(event1.getCreationDate()).thenReturn(CREATION_DATE_1);
 		when(event1.getEventId()).thenReturn(EVENT_ID_1);
@@ -126,7 +128,7 @@ public class EventHateaosBuilderBuildTest {
 		assertThat(eventResources.getMetadata().getNumber()).isEqualTo(NUMBER);
 		assertThat(eventResources.getMetadata().getSize()).isEqualTo(SIZE);
 		assertThat(eventResources.getMetadata().getTotalElements()).isEqualTo(TOTAL_ELEMENTS);
-		assertThat(eventResources.getMetadata().getTotalPages()).isEqualTo(1L);
+		assertThat(eventResources.getMetadata().getTotalPages()).isEqualTo(3L);
 	}
 
 	@Test

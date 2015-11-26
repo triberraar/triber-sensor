@@ -18,7 +18,7 @@ import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import be.tribersoft.sensor.domain.api.event.Event;
 
 @Named
-public class EventHateaosBuilder {
+public class EventHateoasBuilder {
 
 	@Value("${api.version}")
 	private String apiVersion;
@@ -45,8 +45,8 @@ public class EventHateaosBuilder {
 			links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, page + 1)).withRel(Link.REL_NEXT));
 		}
 		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, 0)).withRel(Link.REL_FIRST));
-		Long lastPage = events.getTotalElements() == 0 ? 0 : events.getTotalElements() - 1;
-		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, lastPage.intValue())).withRel(Link.REL_LAST));
+		int lastPage = events.getTotalPages() == 0 ? 0 : events.getTotalPages() - 1;
+		links.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EventResource.class).all(apiVersion, lastPage)).withRel(Link.REL_LAST));
 		PageMetadata pageMetadata = new PageMetadata(events.getSize(), events.getNumber(), events.getTotalElements());
 		PagedResources<Resource<EventToJsonAdapter>> result = new PagedResources<>(transformedEventResources, pageMetadata, links);
 		return result;
