@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.0.BUILD-SNAPSHOT</version>
+		<version>1.3.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -127,6 +127,12 @@
 	    	<artifactId>semver</artifactId>
 	    	<version>${semver.version}</version>
 	    </dependency>
+	    <dependency>
+	    	<groupId>org.springframework.boot</groupId>
+	    	<artifactId>
+	    		spring-boot-starter-data-elasticsearch
+	    	</artifactId>
+	    </dependency>
 	</dependencies>
 	
 	<build>
@@ -167,6 +173,12 @@
 			        <aggregate>true</aggregate>
 			        <instrumentation>
 			        	<ignoreTrivial>true</ignoreTrivial>
+			        	<ignores>
+				        	<ignore>be.tribersoft.common.testData.*</ignore>
+			        	</ignores>
+			        	<excludes>
+			        		<exclude>be.tribersoft.common.testData.*</exclude>
+			        	</excludes>
 			        </instrumentation>
 			    </configuration>
 			</plugin>

@@ -33,7 +33,7 @@ public class ApiHateoasBuilderBuildTest {
 
 		assertThat(result.getContent().getVersion()).isEqualTo(VERSION);
 		List<Link> links = result.getLinks();
-		assertThat(links.size()).isEqualTo(4);
+		assertThat(links.size()).isEqualTo(5);
 		assertThat(links.get(0).getRel()).isEqualTo(Link.REL_SELF);
 		assertThat(links.get(0).getHref()).isEqualTo("http://localhost/api/" + VERSION);
 		assertThat(links.get(1).getRel()).isEqualTo("types");
@@ -42,6 +42,8 @@ public class ApiHateoasBuilderBuildTest {
 		assertThat(links.get(2).getHref()).isEqualTo("http://localhost/api/" + VERSION + "/admin/unit");
 		assertThat(links.get(3).getRel()).isEqualTo("devices");
 		assertThat(links.get(3).getHref()).isEqualTo("http://localhost/api/" + VERSION + "/device");
+		assertThat(links.get(4).getRel()).isEqualTo("events");
+		assertThat(links.get(4).getHref()).isEqualTo("http://localhost/api/" + VERSION + "/event?page=0");
 	}
 
 }

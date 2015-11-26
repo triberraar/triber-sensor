@@ -6,8 +6,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +37,7 @@ public class ReadingResource {
 	private VersionValidator versionValidator;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public Resources<Resource<ReadingToJsonAdapter>> all(@PathVariable("apiVersion") String apiVersion, @PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId, @RequestParam(defaultValue = "0") int page) {
+	public PagedResources<Resource<ReadingToJsonAdapter>> all(@PathVariable("apiVersion") String apiVersion, @PathVariable("deviceId") String deviceId, @PathVariable("sensorId") String sensorId, @RequestParam(defaultValue = "0") int page) {
 		versionValidator.validate(apiVersion);
 		sensorValidator.validate(deviceId, sensorId);
 		Pageable pageable = new PageRequest(page, pageSize);

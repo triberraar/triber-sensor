@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
@@ -32,10 +33,13 @@ public class ReadingRepositoryImplAllBySensorTest {
 	@Mock
 	private Pageable pageable;
 
+	@Mock
+	private Page<ReadingEntity> page;
+
 	@Before
 	public void setUp() {
 		when(readingJpaRepository.findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID)).thenReturn(Arrays.asList(readingEntity1, readingEntity2));
-		when(readingJpaRepository.findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID, pageable)).thenReturn(Arrays.asList(readingEntity2, readingEntity1));
+		when(readingJpaRepository.findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID, pageable)).thenReturn(page);
 	}
 
 	@Test
@@ -48,10 +52,10 @@ public class ReadingRepositoryImplAllBySensorTest {
 
 	@Test
 	public void delegatesToSpringDataRepositoryWithPageable() {
-		List<? extends Reading> all = readingRepositoryImpl.allBySensor(SENSOR_ID, pageable);
+		Page<ReadingEntity> all = readingRepositoryImpl.allBySensor(SENSOR_ID, pageable);
 
 		verify(readingJpaRepository).findAllBySensorIdOrderByCreationDateDesc(SENSOR_ID, pageable);
-		assertThat(all).isEqualTo(Arrays.asList(readingEntity2, readingEntity1));
+		assertThat(all).isEqualTo(page);
 	}
 
 }

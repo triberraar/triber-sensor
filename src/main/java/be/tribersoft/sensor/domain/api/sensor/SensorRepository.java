@@ -17,4 +17,6 @@ public interface SensorRepository {
 	Sensor getById(String id);
 
 	Sensor getByIdAndVersion(String id, Long version);
+
+	boolean exists(String id);
 }

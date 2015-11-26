@@ -26,6 +26,11 @@ import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
 import be.tribersoft.common.DateFactory;
+import be.tribersoft.common.testData.DeviceBuilder;
+import be.tribersoft.common.testData.ReadingBuilder;
+import be.tribersoft.common.testData.SensorBuilder;
+import be.tribersoft.common.testData.TypeBuilder;
+import be.tribersoft.common.testData.UnitBuilder;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.reading.ReadingEntity;
@@ -36,11 +41,6 @@ import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 import be.tribersoft.sensor.domain.impl.unit.UnitEntity;
 import be.tribersoft.sensor.domain.impl.unit.UnitJpaRepository;
-import be.tribersoft.util.builder.DeviceBuilder;
-import be.tribersoft.util.builder.ReadingBuilder;
-import be.tribersoft.util.builder.SensorBuilder;
-import be.tribersoft.util.builder.TypeBuilder;
-import be.tribersoft.util.builder.UnitBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TriberSensorApplication.class)
@@ -99,8 +99,10 @@ public class ReadingResourceAllIT {
 		then(). 
 				contentType(ContentType.JSON).
 				statusCode(HttpStatus.OK.value()).
-				body("_links.size()", is(1)).
+				body("_links.size()", is(3)).
 				body("_links.self.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading?page=0")).
+				body("_links.first.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading?page=0")).
+				body("_links.last.href", is("http://localhost:" + port + "/api/"+apiVersion+"/device/" + deviceEntity.getId()+ "/sensor/" + sensorEntity.getId()+"/reading?page=0")).
 				body("_embedded.readings.size()", is(2)).
 				body("_embedded.readings[0].size()", is(4)).
 				body("_embedded.readings[0].value", is(VALUE_2.floatValue())).

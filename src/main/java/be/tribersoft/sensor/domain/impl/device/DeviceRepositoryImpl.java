@@ -44,4 +44,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		}
 		return device.get();
 	}
+
+	@Override
+	public boolean exists(String id) {
+		return deviceJpaRepository.exists(id);
+	}
 }

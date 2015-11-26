@@ -73,4 +73,9 @@ public class SensorRepositoryImpl implements SensorRepository {
 		return sensorEntity.get();
 	}
 
+	@Override
+	public boolean exists(String id) {
+		return sensorJpaRepository.exists(id);
+	}
+
 }

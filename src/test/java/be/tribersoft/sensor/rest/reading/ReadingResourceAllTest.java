@@ -6,8 +6,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 
 import be.tribersoft.sensor.domain.api.reading.Reading;
 import be.tribersoft.sensor.domain.api.reading.ReadingRepository;
@@ -43,26 +42,28 @@ public class ReadingResourceAllTest {
 	@Mock
 	private ReadingHateoasBuilder readingHateosBuilder;
 	@Mock
-	private Resources<Resource<ReadingToJsonAdapter>> resources;
-	@Mock
 	private SensorValidator sensorValidator;
 	@Captor
 	private ArgumentCaptor<Pageable> pageableCaptor;
 	@Mock
 	private VersionValidator versionValidator;
+	@Mock
+	private Page<? extends Reading> page;
+	@Mock
+	private PagedResources<Resource<ReadingToJsonAdapter>> pagedResources;
 
 	@Before
 	public void setUp() {
-		doReturn(Arrays.<Reading> asList(reading1, reading2)).when(readingRepository).allBySensor(eq(SENSOR_ID), pageableCaptor.capture());
-		when(readingHateosBuilder.build(DEVICE_ID, SENSOR_ID, Arrays.asList(reading1, reading2), PAGE)).thenReturn(resources);
+		doReturn(page).when(readingRepository).allBySensor(eq(SENSOR_ID), pageableCaptor.capture());
+		when(readingHateosBuilder.build(DEVICE_ID, SENSOR_ID, page, PAGE)).thenReturn(pagedResources);
 		Whitebox.setInternalState(readingResource, "pageSize", PAGE_SIZE);
 	}
 
 	@Test
 	public void delegatesToService() {
-		Resources<Resource<ReadingToJsonAdapter>> sensorResources = readingResource.all(API_VERSION, DEVICE_ID, SENSOR_ID, PAGE);
+		PagedResources<Resource<ReadingToJsonAdapter>> result = readingResource.all(API_VERSION, DEVICE_ID, SENSOR_ID, PAGE);
 
-		assertThat(sensorResources).isSameAs(resources);
+		assertThat(result).isSameAs(pagedResources);
 		verify(sensorValidator).validate(DEVICE_ID, SENSOR_ID);
 		Pageable pageable = pageableCaptor.getValue();
 		assertThat(pageable.getPageNumber()).isEqualTo(PAGE);
