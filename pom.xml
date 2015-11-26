@@ -176,7 +176,9 @@
 			        	<ignores>
 				        	<ignore>be.tribersoft.common.testData.*</ignore>
 			        	</ignores>
-			        	<ignoreMethodAnnotation></ignoreMethodAnnotation>
+			        	<excludes>
+			        		<exclude>be.tribersoft.common.testData.*</exclude>
+			        	</excludes>
 			        </instrumentation>
 			    </configuration>
 			</plugin>
