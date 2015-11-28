@@ -100,7 +100,7 @@ public class ReadingResourcePostIT {
 		List<ReadingEntity> readings = ReadingJpaRepository.findAllBySensorIdOrderByCreationDateDesc(sensorEntity.getId());
 		assertThat(readings.size()).isEqualTo(1);
 		ReadingEntity readingEntity = readings.get(0);
-		assertThat(readingEntity.getValue()).isEqualTo(VALUE);
+		assertThat(readingEntity.getValue().doubleValue()).isEqualTo(VALUE.doubleValue());
 		assertThat(readingEntity.getSensor().getId()).isEqualTo(sensorEntity.getId());
 		assertThat(readingEntity.getId()).isNotNull();
 		assertThat(readingEntity.getVersion()).isEqualTo(0L);
