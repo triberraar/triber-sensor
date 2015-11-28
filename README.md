@@ -24,13 +24,21 @@ This will run the application with an embedded elasticsearch and embedded H2 dat
 It is also possible to run this in combination with a docker container running elasticsearch and a docker container running mysql. Run the following docker containers:
 
 ``
-docker run --name triber-sensor-db -e MYSQL_ROOT_PASSWORD=triber-sensor-root -e MYSQL_DATABASE=triber-sensor -e MYSQL_USER=triber-sensor -e MYSQL_PASSWORD=triber-sensor -d -p 3306:3306 mysql:latest
+start a mysql
+docker run --name triber-sensor-db -e MYSQL_ROOT_PASSWORD=<root> -e MYSQL_DATABASE=triber-sensor -e MYSQL_USER=<user> -e MYSQL_PASSWORD=<password> -d -p 3306:3306 mysql:latest
 ``
 
 ``
+start an elastic search node
 docker run --name triber-sensor-elastic -d -p 9200:9200 -p 9300:9300 elasticsearch:1.7.3
 ``
 
 ``
-docker run --name triber-sensor -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:mysql://<ip of docker host>:3306/triber-sensor -e SPRING_DATASOURCE_USERNAME=triber-sensor -e SPRING_DATASOURCE_PASSWORD=triber-sensor -e SPRING_DATA_ELASTICSEARCH_CLUSTER-NODES=<ip of docker host>:9300 -e SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_LOCAL=false -e SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_DATA=false -e SPRING_DATA_ELASTICSEARCH_NODE_CLIENT=true triberraar/triber-sensor
+start the application
+docker run --name triber-sensor -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:mysql://<ip of docker host>:3306/triber-sensor -e SPRING_DATASOURCE_USERNAME=<user> -e SPRING_DATASOURCE_PASSWORD=<password> -e SPRING_DATA_ELASTICSEARCH_CLUSTER-NODES=<ip of docker host>:9300 -e SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_LOCAL=false -e SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_DATA=false -e SPRING_DATA_ELASTICSEARCH_NODE_CLIENT=true triberraar/triber-sensor
+``
+
+``
+start the application with docker container linking
+docker run --name triber-sensor --link triber-sensor-db --link triber-sensor-elastic -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:mysql://triber-sensor-db:3306/triber-sensor -e SPRING_DATASOURCE_USERNAME=<user> -e SPRING_DATASOURCE_PASSWORD=<password> -e SPRING_DATA_ELASTICSEARCH_CLUSTER-NODES=triber-sensor-elastic:9300 -e SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_LOCAL=false -e SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_DATA=false -e SPRING_DATA_ELASTICSEARCH_NODE_CLIENT=true triberraar/triber-sensor
 ``
