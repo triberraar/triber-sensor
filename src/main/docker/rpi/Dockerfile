@@ -1,4 +1,4 @@
-FROM dordoka/rpi-java8
+FROM rpidockers/java
 
 EXPOSE 8080
 
