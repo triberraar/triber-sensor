@@ -21,7 +21,9 @@ docker run --name triber-sensor -d -p 8080:8080 triberraar/triber-sensor
 ```
 
 This will run the application with an embedded elasticsearch and embedded H2 database.
-It is also possible to run this in combination with a docker container running elasticsearch and a docker container running mysql. Run the following docker containers:
+It is also possible to run this in combination with a docker container running elasticsearch and a docker container running mysql.
+Just use Docker compose by saying docker-compose up
+Unless you want to launch everything seperate (eg to run different containers on different machines):
 
 ###x86
 
