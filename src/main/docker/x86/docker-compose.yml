@@ -9,8 +9,8 @@ database:
   - MYSQL_USER=triber-sensor
   - MYSQL_PASSWORD=triber-sensor
   container_name: triber-sensor-db
-  ports:
-  - "3306:3306"
+#  ports:
+#  - "3306:3306"
 elasticsearch:
   image: elasticsearch:1.7.3
   restart: always
@@ -18,9 +18,9 @@ elasticsearch:
   - "9200"
   - "9300"
   container_name: triber-sensor-elastic
-  ports:
-  - "9200:9200"
-  - "9300:9300"
+#  ports:
+#  - "9200:9200"
+#  - "9300:9300"
 application:
   image: triberraar/triber-sensor:latest
   restart: always
