@@ -1,0 +1,18 @@
+jdk:
+- oraclejdk8
+script: mvn verify
+after_success:
+- mvn cobertura:cobertura coveralls:report
+
+env:
+  global:
+    secure: eG27BRzniU3vi57DiFst7uWDq5zHckB/didEq+r6RCVvA8hvBT5lZNTMeM2eVVZKsn2ajYdQzHgGp1rKbWYOOyq3J90bl49AV/Qsu5tfxDOm9yjWFTT58SM/p1l1XAJDQbLCyxOmTpT7Xr2Hqf4n4D7osxHdIU41Xzcsw4wXF+m9FXMm5T9OASzNF65a+4dkigCSOcWB9AA4mcfRrjRQK1f3lRW/tUeoSat4HwYo9O0q0xiaWBLqWP1mVCOh5TfwdxIky6qG59QlSpthWoVYi8cttI0efClgswMstKusuq/lTr7WuwfDqXakVO8Uk8+Gg33Z9BvzA2InToTogpBOz/Pxt1FwEVf1E10umPhMufx1upxnMslYU+jMFGj4yL279JqBDUrlPa3dXZi0y9jTl6ZEqKYHeMC62Iix2T9fn9D8A/CRP66eXbHro140RB67Pnwufb1y7auHrJqgy0UgM9BFAmm5jEMiCEjPXri7RTkLQ4YbfEGGgsDWU5S8nj3XEOtBRs+7hNYiUPxwVdhhbxggaeksg7rzLesA/8Bv8B/+w8LdTGxDByvqpAmANjtPSk4SH3PzE+Mh3GkH9jsW2k+r6i3Mszctv5+iXerq7iCoXxC1SyJW5XukF/HWPo1ePZmLm2sRQ9tS28NnEtrJaD0OS+UWw25t3WOVrYWH5yw=
+
+addons:
+  coverity_scan:
+    project:
+      name: "triberraar/triber-sensor"
+      description: "Build submitted via Travis CI"
+    notification_email: geertolaerts@gmail.com
+    build_command: "mvn clean package"
+    branch_pattern: develop
