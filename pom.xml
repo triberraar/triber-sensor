@@ -173,11 +173,8 @@
 					<aggregate>true</aggregate>
 					<instrumentation>
 						<ignoreTrivial>true</ignoreTrivial>
-						<ignores>
-							<ignore>be.tribersoft.common.testData.*</ignore>
-						</ignores>
 						<excludes>
-							<exclude>be.tribersoft.common.testData.*</exclude>
+							<exclude>be/tribersoft/common/testData/*</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>
