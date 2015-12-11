@@ -174,7 +174,7 @@
 					<instrumentation>
 						<ignoreTrivial>true</ignoreTrivial>
 						<excludes>
-							<exclude>be/tribersoft/common/testData/*</exclude>
+							<exclude>be/tribersoft/common/test_data/*</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>

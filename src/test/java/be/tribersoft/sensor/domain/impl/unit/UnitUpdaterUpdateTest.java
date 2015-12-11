@@ -26,7 +26,7 @@ public class UnitUpdaterUpdateTest {
 	private UnitMessage unitMessage;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(unitMessage.getName()).thenReturn(NAME);
 		when(unitMessage.getSymbol()).thenReturn(SYMBOL);
 	}

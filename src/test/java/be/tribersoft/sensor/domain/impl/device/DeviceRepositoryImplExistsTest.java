@@ -20,7 +20,7 @@ public class DeviceRepositoryImplExistsTest {
 	private DeviceJpaRepository deviceJpaRepository;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(deviceJpaRepository.exists(ID)).thenReturn(true);
 	}
 

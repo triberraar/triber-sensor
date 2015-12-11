@@ -19,7 +19,7 @@ public class SensorRepositoryImplExistsTest {
 	private SensorJpaRepository sensorJpaRepository;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(sensorJpaRepository.exists(ID)).thenReturn(true);
 	}
 

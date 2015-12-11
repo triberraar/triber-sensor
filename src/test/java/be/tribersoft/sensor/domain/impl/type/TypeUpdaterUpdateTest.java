@@ -22,7 +22,7 @@ public class TypeUpdaterUpdateTest {
 	private TypeMessage typeMessage;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(typeMessage.getName()).thenReturn(NAME);
 	}
 

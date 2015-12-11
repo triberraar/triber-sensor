@@ -9,9 +9,6 @@ import org.springframework.context.ApplicationContextAware;
 public class BeanInjector implements ApplicationContextAware {
 	private static ApplicationContext CONTEXT;
 
-	public BeanInjector() {
-	}
-
 	@Override
 	public void setApplicationContext(final ApplicationContext context) {
 		CONTEXT = context;

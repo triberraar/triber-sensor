@@ -28,7 +28,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import be.tribersoft.sensor.domain.api.device.Device;
 import be.tribersoft.sensor.domain.api.reading.Reading;
-import be.tribersoft.sensor.domain.api.reading.ReadingRepository;
 import be.tribersoft.sensor.domain.api.sensor.Sensor;
 import be.tribersoft.sensor.rest.sensor.SensorToJsonAdapter;
 
@@ -60,8 +59,6 @@ public class ReadingHateoasBuilderBuildTest {
 	private Sensor sensor;
 	@Mock
 	private Device device;
-	@Mock
-	private ReadingRepository readingRepository;
 	@Mock
 	private Page<? extends Reading> page;
 

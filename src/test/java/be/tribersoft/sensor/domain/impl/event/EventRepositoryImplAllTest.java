@@ -29,9 +29,6 @@ public class EventRepositoryImplAllTest {
 	private EventJpaRepository eventJpaRepository;
 
 	@Mock
-	private EventDocument eventDocument1, eventDocument2;
-
-	@Mock
 	private Pageable pageable;
 
 	@Mock

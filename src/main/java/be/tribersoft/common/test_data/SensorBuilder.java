@@ -1,4 +1,4 @@
-package be.tribersoft.common.testData;
+package be.tribersoft.common.test_data;
 
 import java.util.Optional;
 

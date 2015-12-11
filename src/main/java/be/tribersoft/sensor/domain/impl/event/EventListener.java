@@ -10,9 +10,6 @@ import be.tribersoft.sensor.domain.api.event.exception.NotAnEventableException;
 
 public class EventListener {
 
-	public EventListener() {
-	}
-
 	@PostPersist
 	public void postPersist(Object input) {
 		handle(input, EventMode.CREATED);

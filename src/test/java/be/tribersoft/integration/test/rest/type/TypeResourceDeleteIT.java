@@ -23,7 +23,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.common.testData.TypeBuilder;
+import be.tribersoft.common.test_data.TypeBuilder;
 import be.tribersoft.sensor.domain.impl.type.TypeEntity;
 import be.tribersoft.sensor.domain.impl.type.TypeJpaRepository;
 

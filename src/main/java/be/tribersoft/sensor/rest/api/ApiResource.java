@@ -2,7 +2,6 @@ package be.tribersoft.sensor.rest.api;
 
 import javax.inject.Inject;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +13,6 @@ import be.tribersoft.sensor.rest.VersionValidator;
 @RestController
 @RequestMapping("/api")
 public class ApiResource {
-
-	@Value("${api.version}")
-	private String apiVersion;
 
 	@Inject
 	private ApiHateoasBuilder apiHateoasBuilder;

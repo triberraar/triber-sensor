@@ -39,7 +39,7 @@ public class EventUrlVisitorVisitDeviceTest {
 	private Device device;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		Whitebox.setInternalState(visitor, API_VERSION, API_VERSION);
 		when(event.getEventId()).thenReturn(EVENT_ID);
 		request = new MockHttpServletRequest();

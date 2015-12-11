@@ -30,7 +30,7 @@ public class NotFoundExceptionHandlerProcessTest {
 	private ErrorJson errorJson;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(notFoundException.getMessage()).thenReturn(MESSAGE);
 		when(errorJsonFactory.create(MESSAGE)).thenReturn(errorJson);
 	}

@@ -25,10 +25,10 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 
 import be.tribersoft.TriberSensorApplication;
-import be.tribersoft.common.testData.DeviceBuilder;
-import be.tribersoft.common.testData.SensorBuilder;
-import be.tribersoft.common.testData.TypeBuilder;
-import be.tribersoft.common.testData.UnitBuilder;
+import be.tribersoft.common.test_data.DeviceBuilder;
+import be.tribersoft.common.test_data.SensorBuilder;
+import be.tribersoft.common.test_data.TypeBuilder;
+import be.tribersoft.common.test_data.UnitBuilder;
 import be.tribersoft.sensor.domain.impl.device.DeviceEntity;
 import be.tribersoft.sensor.domain.impl.device.DeviceJpaRepository;
 import be.tribersoft.sensor.domain.impl.sensor.SensorEntity;

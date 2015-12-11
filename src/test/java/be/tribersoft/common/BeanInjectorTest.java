@@ -23,7 +23,7 @@ public class BeanInjectorTest {
 	private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
 	@Mock
-	private Object target, bean;
+	private Object target;
 
 	@Before
 	public void setUp() {
