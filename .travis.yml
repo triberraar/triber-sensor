@@ -1,5 +1,7 @@
 jdk:
 - oraclejdk8
+notifications:
+    email: false
 before_script:
   - pip install --user codecov
 script: mvn verify
