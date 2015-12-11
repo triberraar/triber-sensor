@@ -1,14 +1,14 @@
 # triber-sensor
 ## Development
-![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/develop.svg)
-![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/develop.svg)
-![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/develop.svg)
-![Coverity scan status](https://img.shields.io/coverity/scan/6807.svg)
-![Codacy code quality](https://img.shields.io/codacy/e27821fb6289410b8f58338c7e0bc686.svg)
+[![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/develop.svg)](https://travis-ci.org/triberraar/triber-sensor)
+[![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/develop.svg)](https://coveralls.io/github/triberraar/triber-sensor?branch=develop)
+[![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/develop.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=develop)
+[![Coverity scan status](https://img.shields.io/coverity/scan/6807.svg)](https://scan.coverity.com/projects/triberraar-triber-sensor?tab=overview)
+[![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
 ## Master
-![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/master.svg)
-![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/master.svg)
-![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/master.svg)
+[![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/master.svg)](https://travis-ci.org/triberraar/triber-sensor)
+[![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/master.svg)](https://coveralls.io/github/triberraar/triber-sensor?branch=master)
+[![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/master.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=master)
 
 ## Run with docker
 To make the docker image, be sure to have docker tools installed and then run:
@@ -29,6 +29,8 @@ Just use Docker compose by saying docker-compose up
 Unless you want to launch everything seperate (eg to run different containers on different machines):
 
 ###x86
+[![image size](https://img.shields.io/imagelayers/image-size/triberraar/triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Ftriber-sensor:latest)
+[![layers](https://img.shields.io/imagelayers/layers/triberraar/triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Ftriber-sensor:latest)
 
 ```
 start a mysql container
@@ -51,6 +53,9 @@ docker run --name triber-sensor --link triber-sensor-db --link triber-sensor-ela
 ```
 
 ###Raspberry pi
+[![image size](https://img.shields.io/imagelayers/image-size/triberraar/rpi-triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Frpi-triber-sensor:latest)
+[![layers](https://img.shields.io/imagelayers/layers/triberraar/rpi-triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Frpi-triber-sensor:latest)
+
 Use a datadirectory (eg /triber-sensor/data/elastic)
 
 ```
