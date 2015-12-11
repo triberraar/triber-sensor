@@ -4,6 +4,7 @@
 ![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/develop.svg)
 ![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/develop.svg)
 ![Coverity scan status](https://img.shields.io/coverity/scan/6807.svg)
+![Codacy code quality](https://img.shields.io/codacy/e27821fb6289410b8f58338c7e0bc686.svg)
 ## Master
 ![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/master.svg)
 ![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/master.svg)
