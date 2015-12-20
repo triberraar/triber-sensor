@@ -4,11 +4,12 @@
 [![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/develop.svg)](https://coveralls.io/github/triberraar/triber-sensor?branch=develop)
 [![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/develop.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=develop)
 [![Coverity scan status](https://img.shields.io/coverity/scan/6807.svg)](https://scan.coverity.com/projects/triberraar-triber-sensor?tab=overview)
-[![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
+[![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4/develop.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
 ## Master
 [![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/master.svg)](https://travis-ci.org/triberraar/triber-sensor)
 [![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/master.svg)](https://coveralls.io/github/triberraar/triber-sensor?branch=master)
 [![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/master.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=master)
+[![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4/master.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
 
 ## Run with docker
 To make the docker image, be sure to have docker tools installed and then run:
