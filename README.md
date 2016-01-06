@@ -11,6 +11,26 @@
 [![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/master.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=master)
 [![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4/master.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
 
+## Used technologies
+This application is build upon Spring boot. It uses a mysql database (in memory or persistent), an elasticsearch cluster and optional mqtt.
+Other parts of Spring boot are used as well (eg liquibase, hibernate, jackson, integration, ...).
+
+## Configuration
+The configuration uses Spring boot as well. So all configuration can be overridden in the Spring boot way (config file, command line arguments, ...).
+For the general properties have a look at the application.properties file.
+### Profiles
+#### MQTT
+The profile 'MQTT' activates this application as an mqtt client. A broker has to be running for this. The default connection configuration for the broker is:
+* mqtt.broker.ip=localhost
+* mqtt.broker.port=1883
+
+#### dev
+The profile 'dev' activates the MQTT profile. It also uses the H2 database (stored in ~/triberSensor) and drops and reinitiates the whole database (using liquibase). After this it populates the database with some test data.
+This is the profile that should be used during development
+
+#### test
+This profile is used during the integration tests. It clears the elasticsearch cluster.
+
 ## Run with docker
 To make the docker image, be sure to have docker tools installed and then run:
 
