@@ -95,7 +95,7 @@ public class SensorEntity implements Sensor {
 		return device;
 	}
 
-	Date getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 

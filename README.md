@@ -1,11 +1,35 @@
 # triber-sensor
 ## Development
-![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/develop.svg)
-![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/develop.svg)
-![Coverity scan status](https://img.shields.io/coverity/scan/6807.svg)
+[![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/develop.svg)](https://travis-ci.org/triberraar/triber-sensor)
+[![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/develop.svg)](https://coveralls.io/github/triberraar/triber-sensor?branch=develop)
+[![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/develop.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=develop)
+[![Coverity scan status](https://img.shields.io/coverity/scan/6807.svg)](https://scan.coverity.com/projects/triberraar-triber-sensor?tab=overview)
+[![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4/develop.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
 ## Master
-![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/master.svg)
-![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/master.svg)
+[![Travis status](https://img.shields.io/travis/triberraar/triber-sensor/master.svg)](https://travis-ci.org/triberraar/triber-sensor)
+[![Coveralls status](https://img.shields.io/coveralls/triberraar/triber-sensor/master.svg)](https://coveralls.io/github/triberraar/triber-sensor?branch=master)
+[![Codecov status](https://img.shields.io/codecov/c/github/triberraar/triber-sensor/master.svg)](https://codecov.io/github/triberraar/triber-sensor?branch=master)
+[![Codacy code quality](https://img.shields.io/codacy/5bccde56346a4e62b1c3939e39dd04b4/master.svg)](https://www.codacy.com/app/geertolaerts/triber-sensor/dashboard)
+
+## Used technologies
+This application is build upon Spring boot. It uses a mysql database (in memory or persistent), an elasticsearch cluster and optional mqtt.
+Other parts of Spring boot are used as well (eg liquibase, hibernate, jackson, integration, ...).
+
+## Configuration
+The configuration uses Spring boot as well. So all configuration can be overridden in the Spring boot way (config file, command line arguments, ...).
+For the general properties have a look at the application.properties file.
+### Profiles
+#### MQTT
+The profile 'MQTT' activates this application as an mqtt client. A broker has to be running for this. The default connection configuration for the broker is:
+* mqtt.broker.ip=localhost
+* mqtt.broker.port=1883
+
+#### dev
+The profile 'dev' activates the MQTT profile. It also uses the H2 database (stored in ~/triberSensor) and drops and reinitiates the whole database (using liquibase). After this it populates the database with some test data.
+This is the profile that should be used during development
+
+#### test
+This profile is used during the integration tests. It clears the elasticsearch cluster.
 
 ## Run with docker
 To make the docker image, be sure to have docker tools installed and then run:
@@ -26,6 +50,8 @@ Just use Docker compose by saying docker-compose up
 Unless you want to launch everything seperate (eg to run different containers on different machines):
 
 ###x86
+[![image size](https://img.shields.io/imagelayers/image-size/triberraar/triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Ftriber-sensor:latest)
+[![layers](https://img.shields.io/imagelayers/layers/triberraar/triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Ftriber-sensor:latest)
 
 ```
 start a mysql container
@@ -48,6 +74,9 @@ docker run --name triber-sensor --link triber-sensor-db --link triber-sensor-ela
 ```
 
 ###Raspberry pi
+[![image size](https://img.shields.io/imagelayers/image-size/triberraar/rpi-triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Frpi-triber-sensor:latest)
+[![layers](https://img.shields.io/imagelayers/layers/triberraar/rpi-triber-sensor/latest.svg)](https://imagelayers.io/?images=triberraar%2Frpi-triber-sensor:latest)
+
 Use a datadirectory (eg /triber-sensor/data/elastic)
 
 ```
@@ -64,3 +93,20 @@ docker run --name triber-sensor-elastic -d -p 9200:9200 -p 9300:9300 -v <data-di
 start application
 docker run --name triber-sensor -d -p 8080:8080 triberraar/rpi-triber-sensor
 ```
+
+```
+start a mqtt broker
+docker run --name mosca -d -p 1883:1883 triberraar/rpi-mosca
+```
+
+###Configuration
+If you follow the docker way and have a docker for each service, you have to pass certain configuration to docker. This can be done with linking, if the docker containers run on the same host. Pass following properties with the -e flag (-e NAME=VALUE):
+* SPRING_DATASOURCE_URL (corresponds to spring.datasource.url): jdbc:mysql://<ip of docker host OR docker-sensor-db>:<port of mysql host (usually 3306)>/triber-sensor
+* SPRING_DATASOURCE_USERNAME (corresponds to spring.datasource.username)
+* SPRING_DATASOURCE_PASSWORD (corresponds to spring.datasource.password)
+* SPRING_DATA_ELASTICSEARCH_CLUSTER-NODES (corresponds to spring.data.elasticsearch.cluster-NODES): <ip of docker host or triber-sensor-elastic>:<port of elasticsearch (usually 9300)>
+* SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_LOCAL (corresponds to spring.data.elasticsearch.properties.node.local): should be false
+* SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_DATA (corresponds to spring.data.elasticsearch.properties.node.data): should be false
+* SPRING_DATA_ELASTICSEARCH_NODE_CLIENT (corresponds to spring.data.elasticsearch.node.client): should be true
+* MQTT_BROKER_IP (corresponds to mqtt.broker.ip): ip of the mqtt broker
+* MQTT_BROKER_PORT (corresponds to mqtt.broker.port): port of the mqtt broker

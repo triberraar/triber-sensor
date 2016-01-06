@@ -62,7 +62,7 @@ public class TypeEntity implements Type {
 		return id;
 	}
 
-	Date getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 

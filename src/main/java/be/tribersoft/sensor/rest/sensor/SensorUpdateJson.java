@@ -14,10 +14,6 @@ public class SensorUpdateJson implements SensorUpdateMessage {
 	private String name;
 	@JsonProperty
 	private Optional<String> description;
-	@JsonProperty
-	private String typeId;
-	@JsonProperty
-	private String unitId;
 
 	public Long getVersion() {
 		return version;

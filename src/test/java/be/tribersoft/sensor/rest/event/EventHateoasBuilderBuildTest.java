@@ -29,7 +29,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import be.tribersoft.sensor.domain.api.event.Event;
 import be.tribersoft.sensor.domain.api.event.EventMode;
-import be.tribersoft.sensor.domain.api.event.EventRepository;
 import be.tribersoft.sensor.domain.api.event.EventSubject;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,8 +55,6 @@ public class EventHateoasBuilderBuildTest {
 
 	@Mock
 	private Event event1, event2;
-	@Mock
-	private EventRepository eventRepository;
 	@Mock
 	private Page<? extends Event> page;
 	@Mock

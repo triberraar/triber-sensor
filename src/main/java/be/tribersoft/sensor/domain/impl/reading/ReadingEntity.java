@@ -54,7 +54,7 @@ public class ReadingEntity implements Reading {
 		this.sensor = sensor;
 	}
 
-	Date getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 

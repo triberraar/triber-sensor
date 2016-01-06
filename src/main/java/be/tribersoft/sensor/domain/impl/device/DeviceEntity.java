@@ -75,7 +75,7 @@ public class DeviceEntity implements Device {
 		return name;
 	}
 
-	Date getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 

@@ -65,7 +65,7 @@ public class UnitEntity implements Unit {
 		return id;
 	}
 
-	Date getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 

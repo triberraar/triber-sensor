@@ -40,7 +40,7 @@ public class ErrorJsonFactoryCreateTest {
 	private FieldError fieldError;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(msgSource.getMessage(eq(KEY), eq(NO_PARAMETERS), eq(KEY), any(Locale.class))).thenReturn(TRANSLATED_VALUE);
 
 		when(msgSource.getMessage(eq(KEY_WITH_PARAMETERS), eq(PARAMETERS), eq(KEY_WITH_PARAMETERS), any(Locale.class))).thenReturn(TRANSLATED_VALUE_WITH_PARAMETERS);

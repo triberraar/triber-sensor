@@ -38,8 +38,6 @@ public class ReadingResourceAllTest {
 	@Mock
 	private ReadingRepository readingRepository;
 	@Mock
-	private Reading reading1, reading2;
-	@Mock
 	private ReadingHateoasBuilder readingHateosBuilder;
 	@Mock
 	private SensorValidator sensorValidator;

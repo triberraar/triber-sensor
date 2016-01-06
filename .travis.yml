@@ -1,8 +1,13 @@
 jdk:
 - oraclejdk8
+notifications:
+    email: false
+before_script:
+  - pip install --user codecov
 script: mvn verify
 after_success:
-- mvn cobertura:cobertura coveralls:report
+  - mvn cobertura:cobertura coveralls:report
+  - codecov
 
 env:
   global:

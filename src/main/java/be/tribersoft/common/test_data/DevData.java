@@ -1,4 +1,4 @@
-package be.tribersoft.common.testData;
+package be.tribersoft.common.test_data;
 
 import java.math.BigDecimal;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package be.tribersoft.common.testData;
+package be.tribersoft.common.test_data;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

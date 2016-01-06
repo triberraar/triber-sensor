@@ -19,8 +19,6 @@ public class SensorRepositoryImplTypeInUseTest {
 
 	@Mock
 	private SensorJpaRepository sensorJpaRepository;
-	@Mock
-	private SensorEntity sensorEntity;
 
 	@Test
 	public void returnsFalseWhenNoSensorsAreUsingThisType() {

@@ -19,7 +19,7 @@ public class ReadingRepositoryImplExistsTest {
 	private ReadingJpaRepository readingJpaRepository;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		when(readingJpaRepository.exists(ID)).thenReturn(true);
 	}
 

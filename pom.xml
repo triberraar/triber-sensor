@@ -4,7 +4,7 @@
 
 	<groupId>be.tribersoft</groupId>
 	<artifactId>triber-sensor</artifactId>
-	<version>1.0.1</version>
+	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>triber-sensor</name>
@@ -30,6 +30,7 @@
 		<cobertura.plugin.version>2.7</cobertura.plugin.version>
 		<jgitflow.plugin.version>1.0-m5.1</jgitflow.plugin.version>
 		<maven-replacer.plugin.version>1.5.3</maven-replacer.plugin.version>
+		<spring.integration.dsl.version>1.1.1.RELEASE</spring.integration.dsl.version>
 	</properties>
 
 	<dependencies>
@@ -77,6 +78,19 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.springframework.integration</groupId>
+        	<artifactId>spring-integration-mqtt</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.springframework.integration</groupId>
+        	<artifactId>spring-integration-java-dsl</artifactId>
+        	<version>${spring.integration.dsl.version}</version>
+        </dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -173,11 +187,8 @@
 					<aggregate>true</aggregate>
 					<instrumentation>
 						<ignoreTrivial>true</ignoreTrivial>
-						<ignores>
-							<ignore>be.tribersoft.common.testData.*</ignore>
-						</ignores>
 						<excludes>
-							<exclude>be.tribersoft.common.testData.*</exclude>
+							<exclude>be/tribersoft/common/test_data/*</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>
@@ -189,6 +200,7 @@
 				<configuration>
 					<!-- For specific plugin configuration options, see the Goals documentation 
 						page -->
+						 <noDeploy>true</noDeploy>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -24,9 +24,6 @@ public class EventListenerPostRemoveTest {
 	private Eventable eventable;
 
 	@Mock
-	private EventDocument eventDocument;
-
-	@Mock
 	private Object nonEventable;
 
 	@Test
