@@ -17,42 +17,43 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 
-import be.tribersoft.sensor.rest.reading.ReadingPostJson;
+import be.tribersoft.sensor.mqtt.reading.MQTTReadingMessageProcessor;
+import be.tribersoft.sensor.mqtt.reading.ReadingMessageJson;
 
 @Configuration
 @Profile("MQTT")
-public class MQTTConfiguration {
+public class MQTTIntegrationFlow {
 	@Inject
-	private BlaatHandler blaatHandler;
+	private MQTTReadingMessageProcessor mqttSensorMessageProcessor;
 	@Value("${mqtt.broker.ip}")
 	private String brokerIp;
 	@Value("${mqtt.broker.port}")
 	private int brokerPort;
 
 	@Bean
-	public MessageChannel inputMqttChannel() {
+	public MessageChannel inputMqttSensorChannel() {
 		return new DirectChannel();
 	}
 
 	@Bean
-	public MessageProducer inbound() {
+	public MessageProducer mqttSensorProducer() {
 		String clientName = "triber-sensor-" + UUID.randomUUID().toString();
 		MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("tcp://" + brokerIp + ":" + brokerPort, clientName, "device/+/sensor/+/reading");
 		adapter.setCompletionTimeout(5000);
 		adapter.setConverter(new DefaultPahoMessageConverter());
 		adapter.setQos(1);
-		adapter.setOutputChannel(inputMqttChannel());
+		adapter.setOutputChannel(inputMqttSensorChannel());
 
 		return adapter;
 	}
 
 	@Bean
-	public IntegrationFlow flow() {
+	public IntegrationFlow mqttSensorInputFlow() {
 		// @formatter:off
 		return IntegrationFlows
-				.from(inputMqttChannel())
-				.transform(Transformers.fromJson(ReadingPostJson.class))
-				.handle(blaatHandler).get();
+				.from(inputMqttSensorChannel())
+				.transform(Transformers.fromJson(ReadingMessageJson.class))
+				.handle(mqttSensorMessageProcessor).get();
 		// @formatter:on
 	}
 
