@@ -200,6 +200,7 @@
 				<configuration>
 					<!-- For specific plugin configuration options, see the Goals documentation 
 						page -->
+						 <noDeploy>true</noDeploy>
 				</configuration>
 			</plugin>
 			<plugin>
