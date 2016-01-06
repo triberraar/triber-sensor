@@ -93,3 +93,20 @@ docker run --name triber-sensor-elastic -d -p 9200:9200 -p 9300:9300 -v <data-di
 start application
 docker run --name triber-sensor -d -p 8080:8080 triberraar/rpi-triber-sensor
 ```
+
+```
+start a mqtt broker
+docker run --name mosca -d -p 1883:1883 triberraar/rpi-mosca
+```
+
+###Configuration
+If you follow the docker way and have a docker for each service, you have to pass certain configuration to docker. This can be done with linking, if the docker containers run on the same host. Pass following properties with the -e flag (-e NAME=VALUE):
+* SPRING_DATASOURCE_URL (corresponds to spring.datasource.url): jdbc:mysql://<ip of docker host OR docker-sensor-db>:<port of mysql host (usually 3306)>/triber-sensor
+* SPRING_DATASOURCE_USERNAME (corresponds to spring.datasource.username)
+* SPRING_DATASOURCE_PASSWORD (corresponds to spring.datasource.password)
+* SPRING_DATA_ELASTICSEARCH_CLUSTER-NODES (corresponds to spring.data.elasticsearch.cluster-NODES): <ip of docker host or triber-sensor-elastic>:<port of elasticsearch (usually 9300)>
+* SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_LOCAL (corresponds to spring.data.elasticsearch.properties.node.local): should be false
+* SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_DATA (corresponds to spring.data.elasticsearch.properties.node.data): should be false
+* SPRING_DATA_ELASTICSEARCH_NODE_CLIENT (corresponds to spring.data.elasticsearch.node.client): should be true
+* MQTT_BROKER_IP (corresponds to mqtt.broker.ip): ip of the mqtt broker
+* MQTT_BROKER_PORT (corresponds to mqtt.broker.port): port of the mqtt broker
