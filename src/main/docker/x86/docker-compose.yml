@@ -1,3 +1,9 @@
+mosca:
+  image: matteocollina/mosca
+  restart: always
+  expose:
+  - "1883"
+  container_name: mosca
 database:
   image: mysql:latest
   restart: always
@@ -34,8 +40,11 @@ application:
   - SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_LOCAL=false
   - SPRING_DATA_ELASTICSEARCH_PROPERTIES_NODE_DATA=false
   - SPRING_DATA_ELASTICSEARCH_NODE_CLIENT=true
-  - SPRING_PROFILES_ACTIVE=dev
+  - SPRING_PROFILES_ACTIVE=MQTT
+  - MQTT_BROKER_IP=mosca
+  - MQTT_BROKER_PORT=1883
   links:
   - database
   - elasticsearch
+  - mosca
   container_name: triber-sensor
