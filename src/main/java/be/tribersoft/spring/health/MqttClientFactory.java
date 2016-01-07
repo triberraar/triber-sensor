@@ -5,8 +5,10 @@ import javax.inject.Named;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 
 @Named
+@Profile("MQTT")
 public class MqttClientFactory {
 
 	@Value("${mqtt.broker.ip}")
