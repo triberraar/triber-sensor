@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Value;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MqttClientFactoryCreateTest {
@@ -19,10 +18,6 @@ public class MqttClientFactoryCreateTest {
 	private static final String IP = "localhost";
 	@InjectMocks
 	private MqttClientFactory mqttClientFactory;
-	@Value("${mqtt.broker.ip}")
-	private String brokerIp;
-	@Value("${mqtt.broker.port}")
-	private int brokerPort;
 
 	@Before
 	public void setUp() {
