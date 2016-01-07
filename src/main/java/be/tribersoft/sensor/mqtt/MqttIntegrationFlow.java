@@ -17,14 +17,14 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 
-import be.tribersoft.sensor.mqtt.reading.MQTTReadingMessageProcessor;
+import be.tribersoft.sensor.mqtt.reading.MqttReadingMessageProcessor;
 import be.tribersoft.sensor.mqtt.reading.ReadingMessageJson;
 
 @Configuration
 @Profile("MQTT")
-public class MQTTIntegrationFlow {
+public class MqttIntegrationFlow {
 	@Inject
-	private MQTTReadingMessageProcessor mqttSensorMessageProcessor;
+	private MqttReadingMessageProcessor mqttSensorMessageProcessor;
 	@Value("${mqtt.broker.ip}")
 	private String brokerIp;
 	@Value("${mqtt.broker.port}")

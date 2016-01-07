@@ -6,9 +6,9 @@ import org.junit.Test;
 import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 
-public class MQTTIntegrationFlowMqttSensorProducerTest {
+public class MqttIntegrationFlowMqttSensorProducerTest {
 
-	private MQTTIntegrationFlow flow = new MQTTIntegrationFlow();
+	private MqttIntegrationFlow flow = new MqttIntegrationFlow();
 
 	@Test
 	public void createsAPRoducerThatTakesMQTTMessageAndPassesThemToTheInputChannel() {
