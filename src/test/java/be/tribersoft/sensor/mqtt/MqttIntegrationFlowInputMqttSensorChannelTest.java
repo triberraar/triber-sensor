@@ -6,9 +6,9 @@ import org.junit.Test;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageChannel;
 
-public class MQTTIntegrationFlowInputMqttSensorChannelTest {
+public class MqttIntegrationFlowInputMqttSensorChannelTest {
 
-	private MQTTIntegrationFlow flow = new MQTTIntegrationFlow();
+	private MqttIntegrationFlow flow = new MqttIntegrationFlow();
 
 	@Test
 	public void returnsADireChannel() {
