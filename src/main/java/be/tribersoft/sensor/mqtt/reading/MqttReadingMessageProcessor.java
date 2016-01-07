@@ -16,7 +16,7 @@ import be.tribersoft.sensor.rest.sensor.SensorValidator;
 import be.tribersoft.sensor.service.api.reading.ReadingService;
 
 @Named
-public class MQTTReadingMessageProcessor implements MessageHandler {
+public class MqttReadingMessageProcessor implements MessageHandler {
 
 	private static final String TOPIC_REGEX = "device\\/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})\\/sensor\\/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})\\/reading";
 	private static final String MQTT_TOPIC = "mqtt_topic";

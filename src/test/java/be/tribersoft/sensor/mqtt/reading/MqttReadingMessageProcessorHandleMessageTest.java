@@ -21,12 +21,12 @@ import be.tribersoft.sensor.rest.sensor.SensorValidator;
 import be.tribersoft.sensor.service.api.reading.ReadingService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MQTTReadingMessageProcessorHandleMessageTest {
+public class MqttReadingMessageProcessorHandleMessageTest {
 	private static final String INVALID_TOPIC = "invalid topic";
 	private static final String MQTT_TOPIC = "mqtt_topic";
 
 	@InjectMocks
-	private MQTTReadingMessageProcessor mqttReadingMessageProcessor;
+	private MqttReadingMessageProcessor mqttReadingMessageProcessor;
 
 	@Mock
 	private ReadingService readingService;
