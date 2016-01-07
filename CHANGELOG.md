@@ -1,3 +1,8 @@
+# 1.3.1
+
+## Bug-fix
+* restored code that was deleted by accident
+
 # 1.3.0
 
 ## Feature
